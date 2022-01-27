@@ -9,13 +9,13 @@ public class PlayerMouvement : MonoBehaviour
     public Rigidbody rb;
     public bool canMove;
     public Vector3 angleInput;
-    public float jumpForce = 50f;
+    public float jumpForce = 30f;
     public Vector3 angle;
     public float sensibiliter = 1.5f;
     public float speed = 8f;
     public GameObject Camera; //faire manuellement car trop chiant
     public bool isRunning = false;
-    private float addForceForce = 35f;
+    private float addForceForce = 45;
     // Start is called before the first frame update
 
     void Start()
@@ -72,8 +72,8 @@ public class PlayerMouvement : MonoBehaviour
         }
         else
         {
-            deplacement = new Vector3(deplacement.x * Mathf.Cos(angle.y) - deplacement.z * Mathf.Sin(angle.y), 0,
-                           deplacement.x * Mathf.Sin(angle.y) + deplacement.z * Mathf.Cos(angle.y)); 
+            deplacement = new Vector3(deplacement.x * Mathf.Cos(angle.y) + (deplacement.z * Mathf.Sin(angle.y)), 0,
+                           deplacement.x * Mathf.Sin(-angle.y) + deplacement.z * Mathf.Cos(angle.y)); 
             //ajouter la force de deplacement dans le sens du regard
             rb.AddForce(deplacement * addForceForce); //la force ==> en grappin ou en l'air
         }
@@ -89,7 +89,10 @@ public class PlayerMouvement : MonoBehaviour
     }
     void RotationSet()
     {
-        Camera.transform.Rotate(angleInput.x, 0, 0);
+        if (!(Camera.transform.eulerAngles.x < -85 & angleInput.x < 0)) //pour eviter les coups qui craque ^^ 
+        {
+            Camera.transform.Rotate(angleInput.x, 0, 0); 
+        }
         transform.Rotate(0, angleInput.y, 0);
         angle = new Vector3(Camera.transform.eulerAngles.x, transform.eulerAngles.y, 0) * Mathf.Deg2Rad; ;
 
@@ -102,7 +105,7 @@ public class PlayerMouvement : MonoBehaviour
             speed *= 2;
             isRunning = true;
         }
-        if (Input.GetKeyUp(KeyCode.LeftShift) & isRunning | isRunning & !isGrounded())
+        if (Input.GetKeyUp(KeyCode.LeftShift) & isRunning)
         {
             speed /= 2;
             isRunning = false;
@@ -113,7 +116,7 @@ public class PlayerMouvement : MonoBehaviour
         //script pour gere le saut
         if (isGrounded())
         {
-            rb.AddForce(new Vector3(0, jumpForce, 0));
+            rb.AddForce(new Vector3(rb.velocity.x, jumpForce, rb.velocity.z));
         }
     }
     private bool isGrounded()
