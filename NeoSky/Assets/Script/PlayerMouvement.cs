@@ -16,7 +16,7 @@ public class PlayerMouvement : MonoBehaviour
     public GameObject Camera; //faire manuellement car trop chiant
     public bool isRunning = false;
     private float addForceForce = 45;
-    public float capMoveHead = 5;
+    public float capMoveHead = 90;
     public float visioCap = 85;
 
    
@@ -85,24 +85,39 @@ public class PlayerMouvement : MonoBehaviour
     void RotationManager()
     {
         rotationUpdate(); // avoire la MAJ du client
-        RotationSet(); //mettre la valeur de la rotation correct
+        RotationSet(Camera.transform.localEulerAngles.x, angleInput.x); //mettre la valeur de la rotation correct
     }
     void rotationUpdate()
     {
         angleInput = new Vector3(Input.GetAxis("Mouse Y") * -1 * sensibiliter, Input.GetAxis("Mouse X") * sensibiliter, 0);
-        if (angleInput.x > capMoveHead)
-        {
-            angleInput.x = capMoveHead; //pour eviter les cours craquer, la vitesse de monter / decente de la tete est limitée.
-        }
-        if (angleInput.x < -capMoveHead)
-        {
-            angleInput.x = -capMoveHead;
-        }
     }
-    void RotationSet()
+    void RotationSet(float currentRotationX, float inputRotationX)
     {
+        //systeme anti cou qui craque
+        float newRotationX = currentRotationX + inputRotationX;
+        if (((newRotationX >= visioCap * -1 & newRotationX <= visioCap) | (newRotationX <= 444 & newRotationX >= 360 - visioCap) & newRotationX != currentRotationX)) 
+        {
+            Camera.transform.localEulerAngles = new Vector3(newRotationX, 0, 0);
+            Debug.Log("normal rotation");
+        } 
+        else if(275 > newRotationX & newRotationX > 180)
+        {
+            Camera.transform.localEulerAngles = new Vector3(-visioCap, 0, 0);
+        }
+        else if(visioCap < newRotationX & newRotationX <= 180)
+        {
+            Camera.transform.localEulerAngles = new Vector3(visioCap, 0, 0);
+        }
+        else
+        {
+            Debug.Log(newRotationX); //mouvement de camera qui ne sont pas pris en compte par le jeu (trop vite)
+        }
 
-        // faire le systeme de lock de la camera pour eviter les coups qui craquent
+
+
+
+
+
 
 
 
