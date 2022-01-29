@@ -7,6 +7,7 @@ public class PlayerMouvement : MonoBehaviour
     public Vector3 mouvement;
     public Vector3 deplacement;
     public Rigidbody rb;
+    public bool isGrappin = false;
     public bool canMove;
     public Vector3 angleInput;
     public float jumpForce = 30f;
@@ -18,6 +19,7 @@ public class PlayerMouvement : MonoBehaviour
     private float addForceForce = 45;
     public float capMoveHead = 90;
     public float visioCap = 85;
+    public Grapin grappin;
 
    
     // Start is called before the first frame update
@@ -34,12 +36,14 @@ public class PlayerMouvement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        isGrappin = grappin.isGrappin;
         RotationManager();
         if (canMove)
         {
             InputMouvement(angle, speed);
             Debug.Log("can move");
         }
+
     }
     void InputMouvement(Vector3 angle, float speed)
     {
@@ -74,7 +78,7 @@ public class PlayerMouvement : MonoBehaviour
                 JumpManager(); //le saut quand le personnage touche le sol
             }
         }
-        else
+        else if (isGrappin)
         {
             deplacement = new Vector3(deplacement.x * Mathf.Cos(angle.y) + (deplacement.z * Mathf.Sin(angle.y)), 0,
                            deplacement.x * Mathf.Sin(-angle.y) + deplacement.z * Mathf.Cos(angle.y)); 
@@ -112,18 +116,8 @@ public class PlayerMouvement : MonoBehaviour
         {
             Debug.Log(newRotationX); //mouvement de camera qui ne sont pas pris en compte par le jeu (trop vite)
         }
-
-
-
-
-
-
-
-
-
         transform.Rotate(0, angleInput.y, 0);
         angle = new Vector3(Camera.transform.localEulerAngles.x, transform.eulerAngles.y, 0) * Mathf.Deg2Rad; ;
-
     }
     void RunManager()
     {
