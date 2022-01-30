@@ -20,12 +20,16 @@ public class PlayerMouvement : MonoBehaviour
     public float capMoveHead = 90;
     public float visioCap = 85;
     public Grapin grappin;
+    public bool canRotate;
+    public bool isGrounded = true;
 
-   
+
+
     // Start is called before the first frame update
 
     void Start()
     {
+        canRotate = true;
         canMove = true;
         rb = GetComponent<Rigidbody>();
         transform.eulerAngles = new Vector3(0, 0, 0);
@@ -37,11 +41,13 @@ public class PlayerMouvement : MonoBehaviour
     void Update()
     {
         isGrappin = grappin.isGrappin;
-        RotationManager();
+        if (canRotate)
+        {
+            RotationManager();
+        }
         if (canMove)
         {
             InputMouvement(angle, speed);
-            Debug.Log("can move");
         }
 
     }
@@ -69,7 +75,7 @@ public class PlayerMouvement : MonoBehaviour
         RunManager(); //permet au joureur de courir (oubligatoirement sur terre)
 
 
-        if (isGrounded())
+        if (isGrounded)
         {
             transform.Translate(deplacement); //la marchche
             Debug.Log("deplacement fait");
@@ -122,7 +128,7 @@ public class PlayerMouvement : MonoBehaviour
     void RunManager()
     {
         //gere entierement la course
-        if (Input.GetKey(KeyCode.LeftShift) & !isRunning & isGrounded())
+        if (Input.GetKey(KeyCode.LeftShift) & !isRunning & isGrounded)
         {
             speed *= 2;
             isRunning = true;
@@ -136,15 +142,10 @@ public class PlayerMouvement : MonoBehaviour
     void JumpManager()
     {
         //script pour gere le saut
-        if (isGrounded())
+        if (isGrounded)
         {
             rb.AddForce(new Vector3(rb.velocity.x, jumpForce, rb.velocity.z));
         }
-    }
-    private bool isGrounded()
-    {
-        return Physics.Raycast(transform.position, -Vector3.up, 1.1f); //check si le personnage est au sol ou pas
-        // la taille du personnage, plus 1.1 pour faire resortir le verteur du personnage
     }
 }
 
