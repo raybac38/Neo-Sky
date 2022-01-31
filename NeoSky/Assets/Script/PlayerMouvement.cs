@@ -10,7 +10,7 @@ public class PlayerMouvement : MonoBehaviour
     public bool isGrappin = false;
     public bool canMove;
     public Vector3 angleInput;
-    public float jumpForce = 30f;
+    public float jumpForce = 50f;
     public Vector3 angle;
     public float sensibiliter = 1.5f;
     public float speed = 8f;

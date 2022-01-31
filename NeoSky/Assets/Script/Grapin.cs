@@ -22,6 +22,8 @@ public class Grapin : MonoBehaviour
     public float ropeMinDistance = 0.25f;
     public PlayerMouvement playerMouvement;
     public Rigidbody rb;
+    public GameObject anchorPoint;
+    public GameObject parentAnchorPoint;
 
     private void Start()
     {
@@ -45,6 +47,8 @@ public class Grapin : MonoBehaviour
         if (isGrappin)
         {
             DistanceRopeFlood();
+            joint.connectedAnchor = anchorPoint.transform.position;
+
             GrappinDistanceMove();
         }
 
@@ -55,10 +59,14 @@ public class Grapin : MonoBehaviour
         RaycastHit hit;
         if(Physics.Raycast(Camera.transform.position, Camera.transform.forward, out hit, ropeMaxDistance, fixePoint))
         {
+            SetAnchorPoint(hit.collider.transform);
+
             pointAncrage = hit.point;
+            anchorPoint.transform.position = pointAncrage;
+
             joint = player.AddComponent<SpringJoint>();
             joint.autoConfigureConnectedAnchor = false;
-            joint.connectedAnchor = pointAncrage;
+            joint.connectedAnchor = anchorPoint.transform.position;
 
             float distanceFromPoint = Vector3.Distance(player.transform.position, pointAncrage);
 
@@ -83,12 +91,13 @@ public class Grapin : MonoBehaviour
         isGrappin = false;
         lr.positionCount = 0;
         Destroy(joint);
+        RemoveAnchorPoint();
     }
     void DrawRope()
     {
         if (!joint) return; //ne pas dessiner une corde si tu n'as pas d'ancre
         lr.SetPosition(0, ropeStarter.transform.position);
-        lr.SetPosition(1, pointAncrage);
+        lr.SetPosition(1, anchorPoint.transform.position);
 
     }
     private void LateUpdate()
@@ -134,4 +143,13 @@ public class Grapin : MonoBehaviour
             }
         }
     }
+    void SetAnchorPoint(Transform parent)
+    {
+        anchorPoint.transform.SetParent(parent);
+    }
+    void RemoveAnchorPoint()
+    {
+        anchorPoint.transform.SetParent(player.transform);
+    }
+    
 }
