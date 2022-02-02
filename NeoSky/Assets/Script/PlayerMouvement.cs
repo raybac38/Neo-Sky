@@ -22,11 +22,14 @@ public class PlayerMouvement : MonoBehaviour
     public Grapin grappin;
     public bool canRotate;
     public bool isGrounded = true;
+    public Vector3 Velocity;
 
 
 
     // Start is called before the first frame update
-
+    private void Awake()
+    {
+    }
     void Start()
     {
         canRotate = true;
@@ -50,6 +53,10 @@ public class PlayerMouvement : MonoBehaviour
             InputMouvement(angle, speed);
         }
 
+    }
+    private void LateUpdate()
+    {
+        Velocity = rb.velocity;
     }
     void InputMouvement(Vector3 angle, float speed)
     {
@@ -147,5 +154,7 @@ public class PlayerMouvement : MonoBehaviour
             rb.AddForce(new Vector3(rb.velocity.x, jumpForce, rb.velocity.z));
         }
     }
+
+
 }
 
