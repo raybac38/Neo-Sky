@@ -15,7 +15,7 @@ public class Inventory : MonoBehaviour
         }
         for (int i = 0; i < largeur * hauteur; i++)
         {
-            data = data +  2;
+            
         }
     }
 }
