@@ -55,6 +55,7 @@ public class NewBehaviourScript : MonoBehaviour, IPointerDownHandler
         if (follow)
         {
             transform.position = Input.mousePosition;
+            BackGround.transform.localScale = transform.localScale;
             BackGround.transform.localPosition = new Vector3(Mathf.RoundToInt(transform.localPosition.x), Mathf.RoundToInt(transform.localPosition.y), 0);
 
         }
