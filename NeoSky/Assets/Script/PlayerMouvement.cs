@@ -23,16 +23,19 @@ public class PlayerMouvement : MonoBehaviour
     public bool canRotate;
     public bool isGrounded = true;
     public Vector3 Velocity;
-
+    public bool cursorLock = false;
+    public Inventory inventory;
 
 
     // Start is called before the first frame update
     private void Awake()
     {
+
     }
     void Start()
     {
         canRotate = true;
+        Cursor.lockState = CursorLockMode.Locked;
         canMove = true;
         rb = GetComponent<Rigidbody>();
         transform.eulerAngles = new Vector3(0, 0, 0);
@@ -43,6 +46,10 @@ public class PlayerMouvement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetMouseButton(0))
+        {
+            inventory.LeftClic();
+        }
         isGrappin = grappin.isGrappin;
         if (canRotate)
         {
@@ -51,6 +58,10 @@ public class PlayerMouvement : MonoBehaviour
         if (canMove)
         {
             InputMouvement(angle, speed);
+        }
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            ToggleCursorMode();
         }
 
     }
@@ -85,7 +96,6 @@ public class PlayerMouvement : MonoBehaviour
         if (isGrounded)
         {
             transform.Translate(deplacement); //la marchche
-            Debug.Log("deplacement fait");
             if (Input.GetKey(KeyCode.Space))
             {
                 JumpManager(); //le saut quand le personnage touche le sol
@@ -127,7 +137,6 @@ public class PlayerMouvement : MonoBehaviour
         }
         else
         {
-            Debug.Log(newRotationX); //mouvement de camera qui ne sont pas pris en compte par le jeu (trop vite)
         }
         transform.Rotate(0, angleInput.y, 0);
         angle = new Vector3(Camera.transform.localEulerAngles.x, transform.eulerAngles.y, 0) * Mathf.Deg2Rad; ;
@@ -152,6 +161,21 @@ public class PlayerMouvement : MonoBehaviour
         if (isGrounded)
         {
             rb.AddForce(new Vector3(rb.velocity.x, jumpForce, rb.velocity.z));
+        }
+    }
+    void ToggleCursorMode()
+    {
+        if (cursorLock)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            cursorLock = false;
+            canRotate = false;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            cursorLock = true;
+            canRotate = true;
         }
     }
 

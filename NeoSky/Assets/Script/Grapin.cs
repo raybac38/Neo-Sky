@@ -24,6 +24,7 @@ public class Grapin : MonoBehaviour
     public Rigidbody rb;
     public GameObject anchorPoint;
     public GameObject parentAnchorPoint;
+    public LayerMask haverstable;
 
     private void Start()
     {
@@ -57,7 +58,7 @@ public class Grapin : MonoBehaviour
     void StartGrappin()
     {
         RaycastHit hit;
-        if(Physics.Raycast(Camera.transform.position, Camera.transform.forward, out hit, ropeMaxDistance, fixePoint))
+        if(Physics.Raycast(Camera.transform.position, Camera.transform.forward, out hit, ropeMaxDistance, fixePoint | haverstable))
         {
             SetAnchorPoint(hit.collider.transform);
 
@@ -150,6 +151,18 @@ public class Grapin : MonoBehaviour
     void RemoveAnchorPoint()
     {
         anchorPoint.transform.SetParent(player.transform);
+    }
+
+    public Transform requestSphereCast(float distance)
+    {
+        RaycastHit raycastHit;
+        if(Physics.SphereCast(Camera.transform.position, 0.25f, Camera.transform.eulerAngles, out raycastHit, distance, haverstable)){
+            return raycastHit.transform;
+        }
+        else
+        {
+            return null;
+        }
     }
     
 }
