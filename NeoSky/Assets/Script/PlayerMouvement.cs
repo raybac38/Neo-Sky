@@ -193,12 +193,16 @@ public class PlayerMouvement : MonoBehaviour
         if (Physics.Raycast(niveauMarche.transform.position, new Vector3(deplacement.x * Mathf.Cos(angle.y) + (deplacement.z * Mathf.Sin(angle.y)), 0,
                            deplacement.x * Mathf.Sin(-angle.y) + deplacement.z * Mathf.Cos(angle.y)) * 20, out hit, fixePoint))
         {
-            distance = Vector3.Distance(transform.position, hit.transform.position);
+            distance = Vector3.Distance(transform.position, hit.point);
             Debug.Log(distance);
-
-            if (distance < 10)
+            if (Input.GetKeyDown(KeyCode.A))
             {
-                deplacement = new Vector3(Mathf.Abs(deplacement.x - 0.5f) * deplacement.normalized.x, Mathf.Abs(deplacement.y - 0.5f) * deplacement.normalized.y, Mathf.Abs(deplacement.z - 0.5f) * deplacement.normalized.z);
+                Debug.Log(hit.transform.name);
+            }
+
+            if (distance < 0.7f)
+            {
+                deplacement = Vector3.zero;
                 
             }
         }
