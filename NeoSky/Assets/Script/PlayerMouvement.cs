@@ -6,26 +6,28 @@ public class PlayerMouvement : MonoBehaviour
 {
     public Vector3 mouvement;
     public Vector3 deplacement;
+    public Vector3 angleInput;
+    public Vector3 angle;
+    public Vector3 Velocity;
     public Rigidbody rb;
     public bool isGrappin = false;
     public bool canMove;
-    public Vector3 angleInput;
+    public bool cursorLock = false;
+    public bool isRunning = false;
+    public bool canRotate;
+    public bool isGrounded = true;
     public float jumpForce = 50f;
-    public Vector3 angle;
     public float sensibiliter = 1.5f;
     public float speed = 8f;
-    public GameObject Camera; //faire manuellement car trop chiant
-    public bool isRunning = false;
     private float addForceForce = 45;
     public float capMoveHead = 90;
     public float visioCap = 85;
+    public GameObject Camera; //faire manuellement car trop chiant
+    public GameObject niveauMarche;
     public Grapin grappin;
-    public bool canRotate;
-    public bool isGrounded = true;
-    public Vector3 Velocity;
-    public bool cursorLock = false;
     public Inventory inventory;
-
+    public LayerMask fixePoint;
+    
 
     // Start is called before the first frame update
     private void Awake()
@@ -88,13 +90,15 @@ public class PlayerMouvement : MonoBehaviour
         {
             deplacement.x--;
         }
+        deplacement = deplacement.normalized;
 
         deplacement = deplacement * speed * Time.deltaTime;  //calcule du vecteur de deplacement
         RunManager(); //permet au joureur de courir (oubligatoirement sur terre)
 
-
         if (isGrounded)
         {
+            CollisionCheck(); //pour faire les deplacement limiter envers les murs
+
             transform.Translate(deplacement); //la marchche
             if (Input.GetKey(KeyCode.Space))
             {
@@ -178,7 +182,26 @@ public class PlayerMouvement : MonoBehaviour
             canRotate = true;
         }
     }
+    private void CollisionCheck()
+    {
+        RaycastHit hit;
 
+        float distance;
+        Debug.DrawRay(niveauMarche.transform.position, new Vector3(deplacement.x * Mathf.Cos(angle.y) + (deplacement.z * Mathf.Sin(angle.y)), 0,
+                           deplacement.x * Mathf.Sin(-angle.y) + deplacement.z * Mathf.Cos(angle.y)) * 20, Color.red, 10f);
 
+        if (Physics.Raycast(niveauMarche.transform.position, new Vector3(deplacement.x * Mathf.Cos(angle.y) + (deplacement.z * Mathf.Sin(angle.y)), 0,
+                           deplacement.x * Mathf.Sin(-angle.y) + deplacement.z * Mathf.Cos(angle.y)) * 20, out hit, fixePoint))
+        {
+            distance = Vector3.Distance(transform.position, hit.transform.position);
+            Debug.Log(distance);
+
+            if (distance < 10)
+            {
+                deplacement = new Vector3(Mathf.Abs(deplacement.x - 0.5f) * deplacement.normalized.x, Mathf.Abs(deplacement.y - 0.5f) * deplacement.normalized.y, Mathf.Abs(deplacement.z - 0.5f) * deplacement.normalized.z);
+                
+            }
+        }
+    }
 }
 
