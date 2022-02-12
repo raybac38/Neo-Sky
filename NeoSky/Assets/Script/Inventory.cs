@@ -6,8 +6,9 @@ using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
-    public float harvestRange;
+    public float harvestRange = 20f;
     public int hotBarState = 0;
+    public float interactionDistance = 4f;
     public Text hotBarIndicator;
     public Grapin grapin;
     public Transform objectDevantMoi;
@@ -21,17 +22,17 @@ public class Inventory : MonoBehaviour
     }
     public void Harvest()
     {
-        objectDevantMoi = grapin.requestSphereCast(harvestRange);
-        if(objectDevantMoi != null & canHarvest)
+        GameObject game = grapin.inFrontOfMe;
+        if(game != null & canHarvest)
         {
             StartCoroutine(HarvesteTimer());
-            
         }
     }
-    void Update()
+    private void Update()
     {
+        Debug.Log("tt");
         UpdateHotBar();
-        
+        CheckInteraction();
     }
     public void UpdateHotBar()
     {
@@ -49,10 +50,7 @@ public class Inventory : MonoBehaviour
             {
                 hotBarState += mouseDelta;
             }
-            hotBarIndicator.text = hotBarState.ToString();
         }
-
-        
     }
     IEnumerator HarvesteTimer()
     {
@@ -65,5 +63,27 @@ public class Inventory : MonoBehaviour
     {
         Debug.Log("can i add some object ?");
 
+    }
+    void CheckInteraction()
+    {
+        GameObject gameObject = grapin.inFrontOfMe;
+        if(gameObject == null)
+        {
+            hotBarIndicator.text = hotBarState.ToString();
+            return;
+        }
+        else
+        {
+            Debug.Log(gameObject.GetComponent<ShipCrafting>());
+            if(gameObject.GetComponent<ShipCrafting>() != null)
+            {
+                hotBarIndicator.text = "press e to use : ShipCraft";
+
+            }else if(gameObject.GetComponent<ShipDoking>() != null)
+            {
+                hotBarIndicator.text = " press e to use : ShipDock";
+            }
+
+        }
     }
 }

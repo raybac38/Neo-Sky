@@ -129,7 +129,6 @@ public class PlayerMouvement : MonoBehaviour
         if (((newRotationX >= visioCap * -1 & newRotationX <= visioCap) | (newRotationX <= 444 & newRotationX >= 360 - visioCap) & newRotationX != currentRotationX)) 
         {
             Camera.transform.localEulerAngles = new Vector3(newRotationX, 0, 0);
-            Debug.Log("normal rotation");
         } 
         else if(275 > newRotationX & newRotationX > 180)
         {
@@ -164,7 +163,7 @@ public class PlayerMouvement : MonoBehaviour
         //script pour gere le saut
         if (isGrounded)
         {
-            rb.AddForce(new Vector3(rb.velocity.x, jumpForce, rb.velocity.z));
+            rb.AddForce(new Vector3(0, jumpForce, 0));
         }
     }
     void ToggleCursorMode()
@@ -186,24 +185,21 @@ public class PlayerMouvement : MonoBehaviour
     {
         RaycastHit hit;
 
+
         float distance;
         Debug.DrawRay(niveauMarche.transform.position, new Vector3(deplacement.x * Mathf.Cos(angle.y) + (deplacement.z * Mathf.Sin(angle.y)), 0,
                            deplacement.x * Mathf.Sin(-angle.y) + deplacement.z * Mathf.Cos(angle.y)) * 20, Color.red, 10f);
 
-        if (Physics.Raycast(niveauMarche.transform.position, new Vector3(deplacement.x * Mathf.Cos(angle.y) + (deplacement.z * Mathf.Sin(angle.y)), 0,
+        if (Physics.SphereCast(niveauMarche.transform.position,0.5f,  new Vector3(deplacement.x * Mathf.Cos(angle.y) + (deplacement.z * Mathf.Sin(angle.y)), 0,
                            deplacement.x * Mathf.Sin(-angle.y) + deplacement.z * Mathf.Cos(angle.y)) * 20, out hit, fixePoint))
         {
             distance = Vector3.Distance(transform.position, hit.point);
-            Debug.Log(distance);
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                Debug.Log(hit.transform.name);
-            }
+            
 
-            if (distance < 0.7f)
+            if (distance < 0.8f)
             {
                 deplacement = Vector3.zero;
-                
+ 
             }
         }
     }

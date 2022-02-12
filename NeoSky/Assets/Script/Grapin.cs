@@ -7,23 +7,29 @@ using UnityEngine;
 public class Grapin : MonoBehaviour
 {
     [SerializeField]
-    private Vector3 pointAncrage;
-    public bool isGrappin;
-    public float ropeMaxDistance;
-    public LineRenderer lr;
     public GameObject Camera;
-    public LayerMask fixePoint;
-    private SpringJoint joint;
     public GameObject player;
     public GameObject ropeStarter;
+    public GameObject anchorPoint;
+    public GameObject parentAnchorPoint;
+    public GameObject inFrontOfMe;
+    private Vector3 pointAncrage;
     public Vector3 angle;
+    public Vector3 placementPoint;
+    public bool isGrappin;
+    public bool canPlace;
     public float ropeDistance;
     public float ropeMoveSpeed = 0.5f;
     public float ropeMinDistance = 0.25f;
+    public float ropeMaxDistance;
+    public float interactionDistance = 2f;
+    public float placementDistanceMax = 10f;
+    public float placementDistanceMin = 1f;
+    public LineRenderer lr;
+    private SpringJoint joint;
     public PlayerMouvement playerMouvement;
     public Rigidbody rb;
-    public GameObject anchorPoint;
-    public GameObject parentAnchorPoint;
+    public LayerMask fixePoint;
     public LayerMask haverstable;
 
     private void Start()
@@ -33,12 +39,13 @@ public class Grapin : MonoBehaviour
     }
     void Update()
     {
+        CheckInFrontOfMe();
+        CheckPlacementPoint();
         if (Input.GetMouseButtonDown(1))
         {
             if (!isGrappin)
             {
                 StartGrappin();
-                Debug.Log("tentatide grappin");
             }
             else
             {
@@ -110,8 +117,6 @@ public class Grapin : MonoBehaviour
         if (!isGrappin) return; // si il n'y a pas de joint, y a rien a voire
         joint = player.GetComponent<SpringJoint>();
 
-        Debug.Log("modification longeur");
-
 
         ropeDistance = joint.maxDistance;
         if (Input.GetKey(KeyCode.LeftShift))
@@ -153,16 +158,37 @@ public class Grapin : MonoBehaviour
         anchorPoint.transform.SetParent(player.transform);
     }
 
-    public Transform requestSphereCast(float distance)
+    void CheckInFrontOfMe()
     {
-        RaycastHit raycastHit;
-        if(Physics.SphereCast(Camera.transform.position, 0.25f, Camera.transform.eulerAngles, out raycastHit, distance, haverstable)){
-            return raycastHit.transform;
+        RaycastHit hit;
+        if (Physics.Raycast(Camera.transform.position, Camera.transform.forward, out hit, interactionDistance, haverstable))
+        {
+            inFrontOfMe = hit.transform.gameObject;
         }
         else
         {
-            return null;
+            inFrontOfMe = null;
         }
     }
-    
+
+    void CheckPlacementPoint()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(Camera.transform.position, Camera.transform.forward, out hit, placementDistanceMax, haverstable))
+        {
+            inFrontOfMe = hit.transform.gameObject;
+            if(Vector3.Distance(hit.transform.position, Camera.transform.position) < placementDistanceMin)
+            {
+                placementPoint = Vector3.zero;
+                canPlace = false;
+
+            }else if(Vector3.Distance(hit.transform.position, Camera.transform.position) < placementDistanceMax)
+            {
+                placementPoint = hit.point;
+                canPlace = true;
+            }else
+            canPlace = false;               
+        }
+
+    }
 }
