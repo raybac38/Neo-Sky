@@ -13,6 +13,12 @@ public class Inventory : MonoBehaviour
     public Grapin grapin;
     public Transform objectDevantMoi;
     public bool canHarvest = true;
+    public string interactableObject;
+    public bool inInterface;
+    private void Awake()
+    {
+        inInterface = false;
+    }
     public void LeftClic()
     {
         if(hotBarState == 1)
@@ -78,12 +84,36 @@ public class Inventory : MonoBehaviour
             if(gameObject.GetComponent<ShipCrafting>() != null)
             {
                 hotBarIndicator.text = "press e to use : ShipCraft";
+                interactableObject = "ShipCraft";
 
             }else if(gameObject.GetComponent<ShipDoking>() != null)
             {
                 hotBarIndicator.text = " press e to use : ShipDock";
+                interactableObject = "ShipDoking";
+            }
+            else
+            {
+                interactableObject = null;
             }
 
+        }
+    }
+    public void Interactable()
+    {
+        if (inInterface)
+        {
+            return;
+        }
+        if(interactableObject == "ShipCraft")
+        {
+            //shipcraft interface
+        }else if(interactableObject == "ShipDock")
+        {
+            //shipdock interface
+        }
+        else
+        {
+            return;
         }
     }
 }

@@ -7,7 +7,7 @@ using UnityEngine;
 public class Grapin : MonoBehaviour
 {
     [SerializeField]
-    public GameObject Camera;
+    public GameObject pivotCamera;
     public GameObject player;
     public GameObject ropeStarter;
     public GameObject anchorPoint;
@@ -65,7 +65,7 @@ public class Grapin : MonoBehaviour
     void StartGrappin()
     {
         RaycastHit hit;
-        if(Physics.Raycast(Camera.transform.position, Camera.transform.forward, out hit, ropeMaxDistance, fixePoint | haverstable))
+        if(Physics.Raycast(pivotCamera.transform.position, pivotCamera.transform.forward, out hit, ropeMaxDistance, fixePoint | haverstable))
         {
             SetAnchorPoint(hit.collider.transform);
 
@@ -161,7 +161,7 @@ public class Grapin : MonoBehaviour
     void CheckInFrontOfMe()
     {
         RaycastHit hit;
-        if (Physics.Raycast(Camera.transform.position, Camera.transform.forward, out hit, interactionDistance, haverstable))
+        if (Physics.Raycast(pivotCamera.transform.position, pivotCamera.transform.forward, out hit, interactionDistance, haverstable))
         {
             inFrontOfMe = hit.transform.gameObject;
         }
@@ -174,15 +174,15 @@ public class Grapin : MonoBehaviour
     void CheckPlacementPoint()
     {
         RaycastHit hit;
-        if (Physics.Raycast(Camera.transform.position, Camera.transform.forward, out hit, placementDistanceMax, haverstable))
+        if (Physics.Raycast(pivotCamera.transform.position, pivotCamera.transform.forward, out hit, placementDistanceMax, haverstable))
         {
             inFrontOfMe = hit.transform.gameObject;
-            if(Vector3.Distance(hit.transform.position, Camera.transform.position) < placementDistanceMin)
+            if(Vector3.Distance(hit.transform.position, pivotCamera.transform.position) < placementDistanceMin)
             {
                 placementPoint = Vector3.zero;
                 canPlace = false;
 
-            }else if(Vector3.Distance(hit.transform.position, Camera.transform.position) < placementDistanceMax)
+            }else if(Vector3.Distance(hit.transform.position, pivotCamera.transform.position) < placementDistanceMax)
             {
                 placementPoint = hit.point;
                 canPlace = true;

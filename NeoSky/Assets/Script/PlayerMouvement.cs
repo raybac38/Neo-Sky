@@ -27,6 +27,7 @@ public class PlayerMouvement : MonoBehaviour
     public Grapin grappin;
     public Inventory inventory;
     public LayerMask fixePoint;
+    public CameraManager cameraManager;
     
 
     // Start is called before the first frame update
@@ -61,11 +62,14 @@ public class PlayerMouvement : MonoBehaviour
         {
             InputMouvement(angle, speed);
         }
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
             ToggleCursorMode();
         }
-
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            inventory.Interactable();
+        }
     }
     private void LateUpdate()
     {
@@ -116,34 +120,16 @@ public class PlayerMouvement : MonoBehaviour
     void RotationManager()
     {
         rotationUpdate(); // avoire la MAJ du client
-        RotationSet(Camera.transform.localEulerAngles.x, angleInput.x); //mettre la valeur de la rotation correct
+        cameraManager.CameraUpdater(angleInput.x);
+        transform.Rotate(0, angleInput.y, 0);
+        angle = new Vector3(cameraManager.transform.eulerAngles.x, transform.eulerAngles.y, 0) * Mathf.Deg2Rad; ;
+
     }
     void rotationUpdate()
     {
         angleInput = new Vector3(Input.GetAxis("Mouse Y") * -1 * sensibiliter, Input.GetAxis("Mouse X") * sensibiliter, 0);
     }
-    void RotationSet(float currentRotationX, float inputRotationX)
-    {
-        //systeme anti cou qui craque
-        float newRotationX = currentRotationX + inputRotationX;
-        if (((newRotationX >= visioCap * -1 & newRotationX <= visioCap) | (newRotationX <= 444 & newRotationX >= 360 - visioCap) & newRotationX != currentRotationX)) 
-        {
-            Camera.transform.localEulerAngles = new Vector3(newRotationX, 0, 0);
-        } 
-        else if(275 > newRotationX & newRotationX > 180)
-        {
-            Camera.transform.localEulerAngles = new Vector3(-visioCap, 0, 0);
-        }
-        else if(visioCap < newRotationX & newRotationX <= 180)
-        {
-            Camera.transform.localEulerAngles = new Vector3(visioCap, 0, 0);
-        }
-        else
-        {
-        }
-        transform.Rotate(0, angleInput.y, 0);
-        angle = new Vector3(Camera.transform.localEulerAngles.x, transform.eulerAngles.y, 0) * Mathf.Deg2Rad; ;
-    }
+
     void RunManager()
     {
         //gere entierement la course
