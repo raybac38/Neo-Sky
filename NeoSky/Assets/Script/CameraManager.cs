@@ -9,6 +9,7 @@ public class CameraManager : MonoBehaviour
     public GameObject CameraPivot;
     public float visioCap = 85;
     public float currentRotationX;
+    public CameraPosition cameraPosition;
     
 
     private void Awake()
@@ -36,11 +37,13 @@ public class CameraManager : MonoBehaviour
             cameraPlayer.transform.localPosition = new Vector3(0, 0, 0);
             CameraPivot.transform.localPosition = new Vector3(0, 1.1f, 0);
             cameraPlayer.transform.localEulerAngles = Vector3.zero;
+            cameraPosition.enabled = false;
         }else if(state == 0)
         {
             state = 1;
             cameraPlayer.transform.localPosition = new Vector3(0f, 0, -6f);
             CameraPivot.transform.localPosition = new Vector3(0.9f, 1.1f, 0);
+            cameraPosition.enabled = true;
         }
     }
     public void CameraUpdater(float rotationX)
