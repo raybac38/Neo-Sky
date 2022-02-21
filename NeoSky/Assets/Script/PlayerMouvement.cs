@@ -12,7 +12,7 @@ public class PlayerMouvement : MonoBehaviour
     public Rigidbody rb;
     public bool isGrappin = false;
     public bool canMove;
-    public bool cursorLock = false;
+    public bool cursorLock = true;
     public bool isRunning = false;
     public bool canRotate;
     public bool isGrounded = true;
@@ -28,6 +28,12 @@ public class PlayerMouvement : MonoBehaviour
     public Inventory inventory;
     public LayerMask fixePoint;
     public CameraManager cameraManager;
+
+
+    public GameObject ItemTestePrefab;
+    public GameObject playerUI;
+    public GameObject playerInventory;
+    public GameObject ItemTeste;
     
 
     // Start is called before the first frame update
@@ -40,6 +46,7 @@ public class PlayerMouvement : MonoBehaviour
         canRotate = true;
         Cursor.lockState = CursorLockMode.Locked;
         canMove = true;
+        
         rb = GetComponent<Rigidbody>();
         transform.eulerAngles = new Vector3(0, 0, 0);
         angle = new Vector3(0, 0, 0);
@@ -65,10 +72,17 @@ public class PlayerMouvement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             ToggleCursorMode();
+            inventory.InventoryRequest();
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            inventory.Interactable();
+            inventory.InteractionRequest();
+        }
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            ItemTeste = Instantiate(ItemTestePrefab);
+            ItemTeste.GetComponent<ItemController>().CreateNewItem("caca", 9, 21, new Vector2(0, 0), false, playerInventory);
+
         }
     }
     private void LateUpdate()
@@ -156,15 +170,15 @@ public class PlayerMouvement : MonoBehaviour
     {
         if (cursorLock)
         {
-            Cursor.lockState = CursorLockMode.None;
+            Cursor.lockState = CursorLockMode.Locked;
             cursorLock = false;
-            canRotate = false;
+            canRotate = true;
         }
         else
         {
-            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.lockState = CursorLockMode.None;
             cursorLock = true;
-            canRotate = true;
+            canRotate = false;
         }
     }
     private void CollisionCheck()

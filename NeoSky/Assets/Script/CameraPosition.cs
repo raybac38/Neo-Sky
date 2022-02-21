@@ -38,7 +38,6 @@ public class CameraPosition : MonoBehaviour
             else
             {
                 cameraPlayer.transform.localPosition = new Vector3(0, 0, distanceMax);
-
             }
         }
         else

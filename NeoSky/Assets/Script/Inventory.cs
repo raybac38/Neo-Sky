@@ -15,9 +15,14 @@ public class Inventory : MonoBehaviour
     public bool canHarvest = true;
     public string interactableObject;
     public bool inInterface;
+
+    public Canvas inventoryObject;
+    public Image viseurObject;
+
     private void Awake()
     {
         inInterface = false;
+        viseurObject.enabled = true;
     }
     public void LeftClic()
     {
@@ -98,7 +103,7 @@ public class Inventory : MonoBehaviour
 
         }
     }
-    public void Interactable()
+    public void InteractionRequest()
     {
         if (inInterface)
         {
@@ -115,5 +120,32 @@ public class Inventory : MonoBehaviour
         {
             return;
         }
+    }
+    public void InventoryRequest()
+    {
+        if (inInterface)
+        {
+            CloseInventory();
+            //quitter l'interface
+        }
+        else
+        {
+            inInterface = true;
+            OpenInventory();
+            //ouverture de l'inventaire 
+        }
+    }
+
+    private void OpenInventory()
+    {
+        inventoryObject.enabled = true;
+        viseurObject.enabled = false;
+    }
+    private void CloseInventory()
+    {
+        inInterface = false;
+        inventoryObject.enabled = false; ;
+        viseurObject.enabled = true;
+
     }
 }
