@@ -10,12 +10,14 @@ public class ItemController : MonoBehaviour
     public int hauteurItem;
     public Vector2 positionActuel;
     public bool rotation; // true si tournée a 90°
+    public GameObject tuile;
     public GameObject[] listeObjetc;
     public GameObject playerUI;
     // Start is called before the first frame update
     void Start()
     {
         
+        transform.localPosition = Vector3.zero;
     }
 
     // Update is called once per frame
@@ -32,6 +34,8 @@ public class ItemController : MonoBehaviour
         rotation = rotation_;
         playerUI = playerUI_;
         transform.SetParent(playerUI_.transform);
+        transform.localPosition = Vector3.zero;
+
         transform.localScale = new Vector3(1, 1, 1);
         CreateAffichage();
     }
@@ -40,26 +44,16 @@ public class ItemController : MonoBehaviour
     {
         listeObjetc = new GameObject[largeurItem * hauteurItem];
         int nb = 0;
-        RectTransform SetHauteurLargeur;
         for (int i = 0; i < largeurItem; i++)
         {
             for (int k = 0; k < hauteurItem; k++)
             {
-                listeObjetc[nb] = new GameObject("image");
-                SetHauteurLargeur = listeObjetc[nb].AddComponent<RectTransform>();
-                listeObjetc[nb].AddComponent<CanvasRenderer>();
-                listeObjetc[nb].AddComponent<RawImage>();
-                SetHauteurLargeur.sizeDelta = new Vector2(1, 1);
-                SetHauteurLargeur.localPosition = new Vector2(-i, -k);
-                
+                listeObjetc[nb] = Instantiate(tuile);
+                listeObjetc[nb].transform.localPosition = new Vector2(-i - 240, -k - 250);                
                 listeObjetc[nb].transform.SetParent(this.transform);
                 nb++;
             }
         }
-        transform.localScale = new Vector3(30, 30, 30);
-        transform.position = new Vector3(774, 474, 0);
-
+        transform.localPosition = Vector3.zero;
     }
-
-
 }

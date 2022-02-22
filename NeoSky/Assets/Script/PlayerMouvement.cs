@@ -31,7 +31,6 @@ public class PlayerMouvement : MonoBehaviour
 
 
     public GameObject ItemTestePrefab;
-    public GameObject playerUI;
     public GameObject playerInventory;
     public GameObject ItemTeste;
     
