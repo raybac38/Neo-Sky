@@ -50,46 +50,62 @@ public class MenuPresentation : MonoBehaviour
     {
         LancementEvenement();
         numeroEvenement = 1;
+        LanchEvent(0);
+
     }
     public void Evenement2()
     {
         LancementEvenement();
         numeroEvenement = 2;
+        LanchEvent(1);
+
     }
     public void Evenement3()
     {
         LancementEvenement();
         numeroEvenement = 3;
+        LanchEvent(2);
+
     }
     public void Evenement4()
     {
         LancementEvenement();
         numeroEvenement = 4;
+        LanchEvent(3);
+
     }
     public void Evenement5()
     {
         LancementEvenement();
         numeroEvenement = 5;
+        LanchEvent(4);
+
     }
     public void Evenement6()
     {
         LancementEvenement();
-        numeroEvenement = 6;
+        numeroEvenement = 6; 
+        LanchEvent(5);
+
     }
     public void Evenement7()
     {
         LancementEvenement();
         numeroEvenement = 7;
+        LanchEvent(6);
+
     }
     public void Evenement8()
     {
         LancementEvenement();
         numeroEvenement = 8;
+        LanchEvent(7);
     }
     public void Evenement9()
     {
         LancementEvenement();
         numeroEvenement = 9;
+        LanchEvent(8); 
     }
 
     public void LancementEvenement()
@@ -130,5 +146,15 @@ public class MenuPresentation : MonoBehaviour
                 buttons[i].SetActive(false);
             }
         }
+    }
+
+    public void LanchEvent(int indice)
+    {
+        for (int i = 0; i < evenementArray.Length; i++)
+        {
+            evenementArray[i].SetActive(false);
+        }
+        evenementArray[indice].SetActive(true);
+        
     }
 }

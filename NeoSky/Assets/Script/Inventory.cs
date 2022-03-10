@@ -19,6 +19,9 @@ public class Inventory : MonoBehaviour
     public Canvas inventoryObject;
     public Image viseurObject;
 
+    [SerializeField]
+    public GameObject[,] caseInventaire;
+
     private void Awake()
     {
         inInterface = false;

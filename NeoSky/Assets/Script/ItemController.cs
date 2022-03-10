@@ -13,6 +13,8 @@ public class ItemController : MonoBehaviour
     public GameObject tuile;
     public GameObject[] listeObjetc;
     public GameObject playerUI;
+
+    
     // Start is called before the first frame update
     void Start()
     {
