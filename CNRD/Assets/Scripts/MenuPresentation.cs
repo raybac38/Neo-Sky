@@ -108,6 +108,19 @@ public class MenuPresentation : MonoBehaviour
         LanchEvent(8); 
     }
 
+    public void Evenement10()
+    {
+        LancementEvenement();
+        numeroEvenement = 10;
+        LanchEvent(9);
+    }
+    public void Evenement11()
+    {
+        LancementEvenement();
+        numeroEvenement = 11;
+        LanchEvent(10);
+    }
+
     public void LancementEvenement()
     {
         PartiDroiteEcran.SetBool("isEvenement", true);
