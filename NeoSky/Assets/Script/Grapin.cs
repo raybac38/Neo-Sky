@@ -32,6 +32,8 @@ public class Grapin : MonoBehaviour
     public LayerMask fixePoint;
     public LayerMask haverstable;
 
+    private List<GameObject> anchorPositionListe = new List<GameObject>();
+
     private void Start()
     {
         lr = GetComponent<LineRenderer>();
@@ -56,8 +58,9 @@ public class Grapin : MonoBehaviour
         {
             DistanceRopeFlood();
             joint.connectedAnchor = anchorPoint.transform.position;
-
+            jointManager();
             GrappinDistanceMove();
+            CheckNewAnchorPoint();
         }
 
     }
@@ -67,31 +70,13 @@ public class Grapin : MonoBehaviour
         RaycastHit hit;
         if(Physics.Raycast(pivotCamera.transform.position, pivotCamera.transform.forward, out hit, ropeMaxDistance, fixePoint | haverstable))
         {
-            SetAnchorPoint(hit.collider.transform);
-
-            pointAncrage = hit.point;
-            anchorPoint.transform.position = pointAncrage;
-
-            joint = player.AddComponent<SpringJoint>();
-            joint.autoConfigureConnectedAnchor = false;
-            joint.connectedAnchor = anchorPoint.transform.position;
-
-            float distanceFromPoint = Vector3.Distance(player.transform.position, pointAncrage);
-
-            //la distance sur laquelle on vas rester du point d'ancrage
-
-            joint.maxDistance = distanceFromPoint;
-            joint.minDistance = 0f;
-
-            //reglage de la corde
-            joint.spring = 4.5f;
-            joint.damper = 7f;
-            joint.massScale = 4.5f;
-
+            SetFirstAnchorPoint(hit.collider.transform, hit.point);
             isGrappin = true;
-            lr.positionCount = 2;
 
-            
+            lr.positionCount = 2;
+            jointManager();
+
+
         }
     }
     void StopGrappin()
@@ -99,14 +84,17 @@ public class Grapin : MonoBehaviour
         isGrappin = false;
         lr.positionCount = 0;
         Destroy(joint);
-        RemoveAnchorPoint();
+        RemoveAllAnchorPoint();
     }
     void DrawRope()
     {
         if (!joint) return; //ne pas dessiner une corde si tu n'as pas d'ancre
+        lr.positionCount = 1 + anchorPositionListe.Count;
         lr.SetPosition(0, ropeStarter.transform.position);
-        lr.SetPosition(1, anchorPoint.transform.position);
-
+        for (int i = 0; i < anchorPositionListe.Count; i++)
+        {
+            lr.SetPosition(i + 1, anchorPositionListe[i].transform.position);
+        }
     }
     private void LateUpdate()
     {
@@ -149,13 +137,34 @@ public class Grapin : MonoBehaviour
             }
         }
     }
-    void SetAnchorPoint(Transform parent)
+    void SetFirstAnchorPoint(Transform parent, Vector3 position)
     {
-        anchorPoint.transform.SetParent(parent);
+        if(anchorPositionListe.Count != 0)
+        {
+            return;
+        }
+        anchorPositionListe.Add(ropeStarter);
+        anchorPositionListe.Add(Instantiate(anchorPoint, parent));
+        anchorPositionListe[1].transform.position = position;
+        //premier point d'ancrage
     }
-    void RemoveAnchorPoint()
+    void RemoveAllAnchorPoint()
     {
-        anchorPoint.transform.SetParent(player.transform);
+        for (int i = 0; i < anchorPositionListe.Count; i++)
+        {
+            if(anchorPositionListe[i] == ropeStarter)
+            {
+
+            }
+            else
+            {
+            Destroy(anchorPositionListe[i], 0.1f);
+
+            }
+        }
+        anchorPositionListe = new List<GameObject>();
+        
+        //suppresion de TOUT les points d'ancrage
     }
 
     void CheckInFrontOfMe()
@@ -189,6 +198,93 @@ public class Grapin : MonoBehaviour
             }else
             canPlace = false;               
         }
+
+    }
+
+    void CheckNewAnchorPoint()
+    {
+        if(anchorPositionListe.Count == 1 & isGrappin == false)
+        {
+            
+            return;
+        }
+        for (int i = 0; i < anchorPositionListe.Count - 1 ; i++)
+        {
+            RaycastHit raycastHit;
+            RaycastHit ray;
+            anchorPositionListe[i].transform.LookAt(anchorPositionListe[i + 1].transform);
+            Debug.DrawRay(anchorPositionListe[i].transform.position, anchorPositionListe[i].transform.eulerAngles);
+            if (Physics.Raycast(anchorPositionListe[i].transform.position, anchorPositionListe[i].transform.forward, out raycastHit, 100f, fixePoint | haverstable))
+            {
+                //il a toucher quellque chose
+                if(!(raycastHit.transform == anchorPositionListe[i + 1].transform) & anchorPositionListe.Count < 10)
+                {
+                    //sa a toucher un truc, mais c'est pas bon ... 
+                    if(Vector3.Distance(raycastHit.point, anchorPositionListe[i].transform.position) < 0.1 | Vector3.Distance(raycastHit.point, anchorPositionListe[i +1 ].transform.position) < 0.1)
+                    {
+                    }
+                    else
+                    {
+                        if(Physics.SphereCast(anchorPositionListe[i].transform.position, 0.2f, anchorPositionListe[i].transform.forward, out ray, 100f, fixePoint | haverstable))
+                        {
+                        StartCoroutine(createMiddleAchorPoint(ray, i));
+                            //on crée un sphere cast pour que le point ne soit pas sur la surface
+
+                        }
+
+                    }
+                }
+                if(anchorPositionListe[i].transform.eulerAngles == anchorPositionListe[i + 1].transform.eulerAngles)
+                {
+                    //un point d'ancrage est devenu inutile
+                    StartCoroutine(SuppresMiddleAnchorPoint(i));
+                }
+            }
+        }
+    }
+
+
+    IEnumerator createMiddleAchorPoint(RaycastHit hit, int i)
+    {
+        yield return new WaitForFixedUpdate();
+        anchorPositionListe.Insert(i +1 , Instantiate(anchorPoint, hit.transform));
+        anchorPositionListe[i + 1].transform.position = hit.point;
+        Debug.Log("creation d'un point d'ancrage");
+
+    }
+    IEnumerator SuppresMiddleAnchorPoint(int i)
+    {
+        yield return new WaitForFixedUpdate();
+        anchorPositionListe.RemoveAt(i);
+        Debug.Log("suppresion d'un point d'ancrage");
+
+    }
+
+    void jointManager()
+    {
+        if(!(player.TryGetComponent<SpringJoint>(out joint)))
+        {
+            joint = player.AddComponent<SpringJoint>();
+            joint.autoConfigureConnectedAnchor = false;
+            Debug.Log("1er joint crée");
+
+        }
+
+        joint.connectedAnchor = anchorPositionListe[anchorPositionListe.Count - 1].transform.position;
+
+        float distanceFromPoint = Vector3.Distance(player.transform.position, anchorPositionListe[anchorPositionListe.Count - 1].transform.position);
+
+        //la distance sur laquelle on vas rester du point d'ancrage
+
+        joint.maxDistance = distanceFromPoint;
+        joint.minDistance = 0f;
+
+        //reglage de la corde
+        joint.spring = 4.5f;
+        joint.damper = 7f;
+        joint.massScale = 4.5f;
+
+
 
     }
 }

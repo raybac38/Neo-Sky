@@ -1262,7 +1262,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6470182883899186640}
-  m_Layer: 2
+  - component: {fileID: 2563719188950650770}
+  m_Layer: 7
   m_Name: ropeStarter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1283,6 +1284,19 @@ Transform:
   m_Father: {fileID: 5035813550367234785}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &2563719188950650770
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7508517962104066379}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8292056536794160532
 GameObject:
   m_ObjectHideFlags: 0
@@ -1464,7 +1478,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 43367286647096828}
-  m_Layer: 2
+  - component: {fileID: 3055091735547848452}
+  m_Layer: 7
   m_Name: anchorPoint
   m_TagString: Untagged
   m_Icon: {fileID: 7866945982896999795, guid: 0000000000000000d000000000000000, type: 0}
@@ -1485,3 +1500,16 @@ Transform:
   m_Father: {fileID: 5035813550367234785}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &3055091735547848452
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9201802303459712269}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.1
+  m_Center: {x: 0, y: 0, z: 0}
