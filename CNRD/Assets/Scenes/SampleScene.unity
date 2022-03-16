@@ -140,7 +140,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1242656
 RectTransform:
   m_ObjectHideFlags: 0
@@ -180,7 +180,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Le premier Acte :'
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1071,7 +1071,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &80418894
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7681,7 +7681,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &555375993
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7721,10 +7721,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Le 7 mai 1945 \xE0 2h15 (heure local), a Reims dans la salle de l'actuelle
-    mus\xE9e de la Reddition, est signi\xE9e par une delagation Allemand la reddition
-    sans condition des forces arm\xE9es allemandes. Se document sera redig\xE9e en
-    4 langue mais seul l'exemplaire en Anglais fait autorit\xE9e."
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -18878,7 +18875,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1509189807
 RectTransform:
   m_ObjectHideFlags: 0
@@ -18918,7 +18915,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Le premier Acte :'
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -22899,7 +22896,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Le Debarquement en Normandie
+  m_text: "L\u2019op\xE9ration \xAB Overlord \xBB"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -25431,7 +25428,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2023028445
 RectTransform:
   m_ObjectHideFlags: 0
@@ -25448,8 +25445,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -16.66, y: -54.07}
-  m_SizeDelta: {x: 343.1, y: 341.64}
+  m_AnchoredPosition: {x: -16.66, y: -27.203}
+  m_SizeDelta: {x: 343.1, y: 395.38}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2023028446
 MonoBehaviour:
@@ -25471,10 +25468,21 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Le 7 mai 1945 \xE0 2h15 (heure local), a Reims dans la salle de l'actuelle
-    mus\xE9e de la Reddition, est signi\xE9e par une delagation Allemand la reddition
-    sans condition des forces arm\xE9es allemandes. Se document sera redig\xE9e en
-    4 langue mais seul l'exemplaire en Anglais fait autorit\xE9e."
+  m_text: "\tL\u2019op\xE9ration \xAB Overlord \xBB, ou la Bataille de Normandie,
+    fut l\u2019une des plus vastes offensives militaires de la seconde guerre mondiale.
+    \r\nPrenant place entre juin et ao\xFBt 1944, dans le Nord-Ouest de la France,
+    alors zone d\u2019occupation allemande, elle avait pour double objectif de reconqu\xE9rir
+    les territoires perdus de l\u2019Europe de l\u2019Ouest pour permettre un acc\xE8s
+    rapide \xE0 Berlin, ainsi que de cr\xE9er un troisi\xE8me front en Europe afin
+    de diviser les forces allemandes et de soulager les fronts russes et italiens.\r\n\n\n\tDurant
+    plusieurs mois apr\xE8s le \xAB D-Day \xBB, jour du fameux d\xE9barquement en
+    Normandie le 6 juin 1944, ce seront pr\xE8s de 400 000 allemands qui devront
+    faire face et ralentir la progression \u2013 certes lente, mais in\xE9luctable
+    \u2013 des quelque 1 000 000 \xE0 2 800 000 soldats anglais, am\xE9ricains, canadiens,
+    australiens, FFL et autres, tous d\xE9termin\xE9s \xE0 la reconqu\xEAte.\r\n\n\n\tOn
+    donne commun\xE9ment sa fin \xE0 la Bataille de Normandie le 29 ao\xFBt 1944,
+    jour auquel les arm\xE9es allemandes ont int\xE9gralement franchi la Seine, en
+    direction de l\u2019Est."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -25509,7 +25517,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
