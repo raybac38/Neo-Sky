@@ -814,7 +814,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &70061484
 RectTransform:
   m_ObjectHideFlags: 0
@@ -831,8 +831,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -16.66, y: -54.07}
-  m_SizeDelta: {x: 343.1, y: 341.64}
+  m_AnchoredPosition: {x: -16.66, y: -27.203}
+  m_SizeDelta: {x: 343.1, y: 395.38}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &70061485
 MonoBehaviour:
@@ -854,10 +854,17 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Le 7 mai 1945 \xE0 2h15 (heure local), a Reims dans la salle de l'actuelle
-    mus\xE9e de la Reddition, est signi\xE9e par une delagation Allemand la reddition
-    sans condition des forces arm\xE9es allemandes. Se document sera redig\xE9e en
-    4 langue mais seul l'exemplaire en Anglais fait autorit\xE9e."
+  m_text: "\tLe d\xE9barquement de Provence est la phase d\u2019assaut de la plus
+    grande op\xE9ration \xAB Dragoon \xBB. \r\n\n\n\tIl permit aux Alli\xE9s de faire
+    d\xE9barquer sur les c\xF4tes du Sud de la France pr\xE8s de 100 000 hommes le
+    premier jour, dont une majorit\xE9 de troupes fran\xE7aises, et devait amener
+    \xE0 la lib\xE9ration du Sud de la France ainsi qu\u2019\xE0 une jonction avec
+    les troupes du Front Normand et du Front Italien, avant une marche d\xE9cisive
+    sur Berlin. \r\n\t\n\n\tLe succ\xE8s de cette op\xE9ration men\xE9e sur les c\xF4tes
+    du Var fut en grande partie li\xE9 \xE0 l\u2019absence de nombreuses troupes
+    allemandes, d\xE9j\xE0 envoy\xE9es combattre sur les autres fronts de combats.\r\n\n\n\tCe
+    d\xE9barquement, bien que plut\xF4t m\xE9connu du grand public, a jou\xE9 un
+    r\xF4le d\xE9cisif dans la Lib\xE9ration de la France."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -892,7 +899,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -1071,7 +1078,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &80418894
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7855,7 +7862,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Le premier Acte :'
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
