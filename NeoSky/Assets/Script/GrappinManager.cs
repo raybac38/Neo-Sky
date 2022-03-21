@@ -42,6 +42,6 @@ public class GrappinManager : MonoBehaviour
 
     void StartGrappin()
     {
-        if(Physic.
+
     }
 }

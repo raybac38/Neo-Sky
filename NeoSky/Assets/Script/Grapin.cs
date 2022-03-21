@@ -21,7 +21,7 @@ public class Grapin : MonoBehaviour
     public float ropeDistance;
     public float ropeMoveSpeed = 0.5f;
     public float ropeMinDistance = 0.25f;
-    public float ropeMaxDistance;
+    public float ropeMaxDistance = 50f;
     public float interactionDistance = 2f;
     public float placementDistanceMax = 10f;
     public float placementDistanceMin = 1f;
@@ -34,6 +34,76 @@ public class Grapin : MonoBehaviour
 
     private List<GameObject> anchorPositionListe = new List<GameObject>();
 
+
+    //nouvelle variables
+    public List<Vector3> appartientAuPlan = new List<Vector3>();
+    public float tolerancePlan = 0.2f;
+
+    public void CommenceGrappin()
+    {
+        RaycastHit raycast;
+        if(Physics.Raycast(pivotCamera.transform.position, pivotCamera.transform.eulerAngles, out raycast, ropeMaxDistance, fixePoint | haverstable))
+        {
+            FindAnchorPointLocation(raycast);
+        }
+    }
+
+    public void FindAnchorPointLocation(RaycastHit raycast)
+    {
+        // crée un plan
+        Vector3 normal = raycast.normal;
+        Vector3 point = raycast.point;
+        float d = -normal.x * point.x - normal.y * point.y - normal.z * point.z;
+        Vector4 plan = new Vector4(normal.x, normal.y, normal.z, d);
+
+        //chercher TOUT les points appartenant au plan
+        Vector3[] vertices;
+        Mesh mesh;
+        mesh = raycast.transform.GetComponent<MeshFilter>().mesh;
+        vertices = mesh.vertices;
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            Vector3 coordonnee = vertices[i];
+
+            float nb = plan.x * coordonnee.x + plan.y * coordonnee.y + plan.z * coordonnee.z + plan.w;
+            if (-tolerancePlan < nb & nb < tolerancePlan)
+            {
+                appartientAuPlan.Add(vertices[i]);
+            }
+        }
+
+        print(appartientAuPlan);
+        //retourne tout les coordonnée de point appartenant a la liste
+        print(appartientAuPlan.Count);
+        //retourne le nb de sommet
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     private void Start()
     {
         lr = GetComponent<LineRenderer>();
@@ -43,6 +113,10 @@ public class Grapin : MonoBehaviour
     {
         CheckInFrontOfMe();
         CheckPlacementPoint();
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            CommenceGrappin();
+        }
         if (Input.GetMouseButtonDown(1))
         {
             if (!isGrappin)
