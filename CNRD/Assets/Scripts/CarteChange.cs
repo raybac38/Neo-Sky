@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class CarteChange : MonoBehaviour
 {
     public GameObject RubanChoixCarte;
@@ -13,14 +14,13 @@ public class CarteChange : MonoBehaviour
 
     public GameObject CarteSatelite2022;
     public GameObject TesteCarteVirge;
-
     private void Awake()
     {
         MapChange();
         CarteSatelite2022.SetActive(true);
         visible = false;
         RubanAnimator.SetBool("See", false);
-
+        
     }
     public void ToggleRubanChoixCarte()
     {
