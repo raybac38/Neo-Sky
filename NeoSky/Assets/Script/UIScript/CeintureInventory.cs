@@ -18,6 +18,7 @@ public class CeintureInventory : MonoBehaviour
     private void Awake()
     {
         itemNumber = new int[dimmensionDuDammier.x, dimmensionDuDammier.y];
+        //itemNumber prend la valeur de -1 quand il n'y a pas d'item
     }
 
     public void InventoryScaleUpdater()
@@ -28,7 +29,26 @@ public class CeintureInventory : MonoBehaviour
 
     public RequestAddItem(int largeur, int hauteur, int nombre)
     {
-        //avancer sur le scripts pour les items
+        //rechercher tout les endroits disponible pour l'item. on prend comme point de reference, le bord en haut a gauche.
+        for (int i = 0; i < dimmensionDuDammier.y - (hauteur - 1); i++)
+        {
+            // recherche pour tout y
+            for (int j = 0; j < dimmensionDuDammier.x - (largeur - 1); j++)
+            {
+                //recherche pour tout les x
+                if(itemNumber[j,i] == -1)
+                {
+                    //si la place est libre
+                    //recherche si les places aux alantour 
+                    for (int o = 0; o < hauteur; o++)
+                    {
+                        for (int k = 0; k < largeur; k++)
+                        {
 
+                        }
+                    }
+                }
+            }
+        }
     }
 }
