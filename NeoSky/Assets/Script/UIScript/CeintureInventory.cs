@@ -27,9 +27,12 @@ public class CeintureInventory : MonoBehaviour
         yScale = Mathf.Abs(borneInf.transform.position.y - borneSup.transform.position.y);
     }
 
-    public RequestAddItem(int largeur, int hauteur, int nombre)
+    public bool RequestAddItem(int largeur, int hauteur, int nombre, ItemManager itemManager)
     {
         //rechercher tout les endroits disponible pour l'item. on prend comme point de reference, le bord en haut a gauche.
+        bool canPlace = false;
+        Vector2 positionPlace = new Vector2(0, 0);
+
         for (int i = 0; i < dimmensionDuDammier.y - (hauteur - 1); i++)
         {
             // recherche pour tout y
@@ -38,17 +41,44 @@ public class CeintureInventory : MonoBehaviour
                 //recherche pour tout les x
                 if(itemNumber[j,i] == -1)
                 {
+                    canPlace = true;
                     //si la place est libre
                     //recherche si les places aux alantour 
-                    for (int o = 0; o < hauteur; o++)
+                    for (int o = 0; o < hauteur; o++) //pout tout les y que contient l'item
                     {
-                        for (int k = 0; k < largeur; k++)
+                        for (int k = 0; k < largeur; k++) //pour tout les x que contient l'item
                         {
-
+                            if(itemNumber[j + k, i + o] != -1)
+                            {
+                                canPlace = false; //si il y a UNE place impossible, skip
+                            }
                         }
+                    }
+                    if(canPlace == true)
+                    {
+                        positionPlace = new Vector2(j, i);
+                        PlaceItem(positionPlace, largeur, hauteur, nombre, itemManager);
+                        return true;
                     }
                 }
             }
         }
+        if(canPlace == false)
+        {
+            Debug.Log("pas de place dans l'inventaire");
+            return false;
+        }
+        else
+        {
+            Debug.LogError("item ni placée, ni full");
+            return false;
+        }
+    }
+
+
+
+    public void PlaceItem(Vector2 position, int largeur, int hauteur, int nombreItem, ItemManager itemManager)
+    {
+
     }
 }
