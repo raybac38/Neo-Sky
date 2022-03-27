@@ -10,19 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ec59623369493e94c864617fab810838, type: 3}
-  m_Name: Wood
+  m_Name: Cuivre
   m_EditorClassIdentifier: 
-  name: Wood
-  icon: {fileID: 0}
+  name: Cuivre
+  icon: {fileID: 2800000, guid: b012946c6da35794e9d18383cebf027d, type: 3}
   handItem: {fileID: 0}
-  item: 1
-  itemSize: {x: 5, y: 3}
+  item: 0
+  itemSize: {x: 3, y: 2}
   pixelSize: {x: 0, y: 0}
   prefabRessource:
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  masseVolumique: 0
+  masseVolumique: 8.96
   capaciterThermique: 0
   conductiviterThermique: 0
   pointDeFusion: 0

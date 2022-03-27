@@ -21,6 +21,15 @@ public class Inventory : MonoBehaviour
 
     [SerializeField]
     public GameObject[,] caseInventaire;
+    public CeintureInventory ceintureInventory;
+
+    public float time;
+
+    IEnumerator coldown()
+    {
+        yield return new WaitForSeconds(2);
+        canHarvest = true;
+    }
 
     private void Awake()
     {
@@ -29,17 +38,36 @@ public class Inventory : MonoBehaviour
     }
     public void LeftClic()
     {
-        if(hotBarState == 1)
+        if(hotBarState == 1 && canHarvest)
         {
             Harvest();
         }
     }
     public void Harvest()
     {
+
         GameObject game = grapin.inFrontOfMe;
-        if(game != null & canHarvest)
+        if(game == null)
         {
-            StartCoroutine(HarvesteTimer());
+            return;
+        }
+        if (!canHarvest)
+        {
+            return;
+        }
+        else
+        {
+            canHarvest = false;
+        }
+        Ressource ressource;
+        Debug.Log("harvers");
+        if(game.TryGetComponent<Ressource>(out ressource))
+        {
+            ItemManager itemManager = ressource.itemManager;
+            ceintureInventory.RequestAddItem(1, itemManager);
+            Debug.Log("add " + ressource.name);
+            StartCoroutine(coldown());
+            objectDevantMoi = null;
         }
     }
     private void Update()
@@ -66,18 +94,7 @@ public class Inventory : MonoBehaviour
             }
         }
     }
-    IEnumerator HarvesteTimer()
-    {
-        canHarvest = false;
-        yield return new WaitForSeconds(2);
-        objectDevantMoi = null;
-        canHarvest = true;
-    }
-    private void RequestAddObject()
-    {
-        Debug.Log("can i add some object ?");
 
-    }
     void CheckInteraction()
     {
         GameObject gameObject = grapin.inFrontOfMe;
