@@ -14,6 +14,7 @@ public class CarteChange : MonoBehaviour
 
     public GameObject CarteSatelite2022;
     public GameObject TesteCarteVirge;
+    public GameObject EntreDeuxGuerre;
     private void Awake()
     {
         MapChange();
@@ -48,6 +49,19 @@ public class CarteChange : MonoBehaviour
         closeRubanChoixCarte();
 
     }
+    public void SelectEntreDeuxGuerre()
+    {
+        if (typeCarte == "EntreDeuxGuerre")
+        {
+            closeRubanChoixCarte();
+            return;
+        }
+        MapChange();
+        typeCarte = "EntreDeuxGuerre";
+        EntreDeuxGuerre.SetActive(true);
+        closeRubanChoixCarte();
+
+    }
     public void SelectTesteCarteVirge()
     {
         if (typeCarte == "TesteCarteVirge")
@@ -65,7 +79,7 @@ public class CarteChange : MonoBehaviour
     {
         CarteSatelite2022.SetActive(false);
         TesteCarteVirge.SetActive(false);
-
+        EntreDeuxGuerre.SetActive(false);
     }
 
 }
