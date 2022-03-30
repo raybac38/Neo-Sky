@@ -6,9 +6,7 @@ using UnityEngine.UI;
 public class MenuPrincipale : MonoBehaviour
 {
     public Animator source;
-    public Animator credit;
    
-    public GameObject credits;
     public GameObject sources;
 
     public Button[] buttonMenuPrincipale;
@@ -21,7 +19,6 @@ public class MenuPrincipale : MonoBehaviour
     {
         State = 1;
         sources.SetActive(false);
-        credits.SetActive(false);
         StateChange();
     }
     public void Source()
@@ -30,12 +27,7 @@ public class MenuPrincipale : MonoBehaviour
         StateChange();
 
     }
-    public void Credits()
-    {
-        State = 3;
-        StateChange();
 
-    }
     public void LauncheCarteInteractive()
     {
         //mettre un fondu en noire
@@ -72,11 +64,6 @@ public class MenuPrincipale : MonoBehaviour
             //dans les sources
             sources.SetActive(true);
             source.SetBool("Open", true);
-        }if(State == 3)
-        {
-            //dans les credits
-            credits.SetActive(true);
-            credit.SetBool("Open", true);
         }
     }
     public void retour()
@@ -87,12 +74,10 @@ public class MenuPrincipale : MonoBehaviour
     IEnumerator closeWindows()
     {
      
-        credit.SetBool("Open", false);
         Debug.Log("open = false");
         source.SetBool("Open", false);
         yield return new WaitForSeconds(1.05f);
 
-        credits.SetActive(false);
         Debug.Log("false");
         sources.SetActive(false);
 

@@ -15,6 +15,8 @@ public class CarteChange : MonoBehaviour
     public GameObject CarteSatelite2022;
     public GameObject TesteCarteVirge;
     public GameObject EntreDeuxGuerre;
+
+
     private void Awake()
     {
         MapChange();
@@ -33,7 +35,7 @@ public class CarteChange : MonoBehaviour
     {
         visible = false;
         RubanAnimator.SetBool("See", false);
-        
+
     }
 
     public void SelectSatelite2022Map()

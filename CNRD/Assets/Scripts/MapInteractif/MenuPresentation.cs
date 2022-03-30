@@ -19,6 +19,7 @@ public class MenuPresentation : MonoBehaviour
     public Animator PartiDroiteEcran;
     public Animator ButtonRetour;
     public Animator ChangementDeCarte;
+    public Animator maison;
 
 
     public GameObject[] buttons;
@@ -31,6 +32,7 @@ public class MenuPresentation : MonoBehaviour
         PartiDroiteEcran.SetBool("isEvenement", false);
         ButtonRetour.SetBool("isShow", false);
         ChangementDeCarte.SetBool("isShow", true);
+        maison.SetBool("Open", true);
         ShowButtons(true);
         numeroEvenement = 0;
     }
@@ -108,24 +110,12 @@ public class MenuPresentation : MonoBehaviour
         LanchEvent(8); 
     }
 
-    public void Evenement10()
-    {
-        LancementEvenement();
-        numeroEvenement = 10;
-        LanchEvent(9);
-    }
-    public void Evenement11()
-    {
-        LancementEvenement();
-        numeroEvenement = 11;
-        LanchEvent(10);
-    }
-
     public void LancementEvenement()
     {
         PartiDroiteEcran.SetBool("isEvenement", true);
         ButtonRetour.SetBool("isShow", true);
         ChangementDeCarte.SetBool("isShow", false);
+        maison.SetBool("Open", false);
 
         isEvenement = true;
         ShowButtons(false);
@@ -136,6 +126,7 @@ public class MenuPresentation : MonoBehaviour
         PartiDroiteEcran.SetBool("isEvenement", false);
         ButtonRetour.SetBool("isShow", false);
         ChangementDeCarte.SetBool("isShow", true);
+        maison.SetBool("Open", true);
 
         isEvenement = false;
         numeroEvenement = 0;
