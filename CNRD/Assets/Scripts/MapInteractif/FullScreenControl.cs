@@ -12,8 +12,5 @@ public class FullScreenControl : MonoBehaviour
             Screen.fullScreen = !Screen.fullScreen;
         }
     }
-    private void Start()
-    {
-        rubanFiction.SetActive(false);
-    }
+
 }
