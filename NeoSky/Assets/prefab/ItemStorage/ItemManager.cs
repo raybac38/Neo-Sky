@@ -8,6 +8,7 @@ public class ItemManager : ScriptableObject
     public GameObject handItem = null;
 
     public bool item = false;
+    public int stackNumber;
     
     public Vector2Int itemSize;
     public Vector2Int pixelSize;

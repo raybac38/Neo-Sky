@@ -16,6 +16,7 @@ MonoBehaviour:
   icon: {fileID: 2800000, guid: f3674971c2ba65646bb28978f24ec7fa, type: 3}
   handItem: {fileID: 0}
   item: 1
+  stackNumber: 10
   itemSize: {x: 3, y: 2}
   pixelSize: {x: 0, y: 0}
   prefabRessource:

@@ -17,6 +17,7 @@ public class Inventory : MonoBehaviour
     public bool inInterface;
 
     public Canvas inventoryObject;
+    public GameObject UI;
     public Image viseurObject;
 
     [SerializeField]
@@ -35,6 +36,7 @@ public class Inventory : MonoBehaviour
     {
         inInterface = false;
         viseurObject.enabled = true;
+        CloseInventory();
     }
     public void LeftClic()
     {
@@ -160,11 +162,14 @@ public class Inventory : MonoBehaviour
     {
         inventoryObject.enabled = true;
         viseurObject.enabled = false;
+        UI.SetActive(true);
+
     }
     private void CloseInventory()
     {
         inInterface = false;
-        inventoryObject.enabled = false; ;
+        inventoryObject.enabled = false;
+        UI.SetActive(false);
         viseurObject.enabled = true;
 
     }

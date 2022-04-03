@@ -183,4 +183,11 @@ public class CeintureInventory : MonoBehaviour
     public void CreateGameObjectItem(ItemManager itemManager)
     {
     }
+
+
+
+
+
 }
+
+
