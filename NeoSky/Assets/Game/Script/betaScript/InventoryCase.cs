@@ -15,6 +15,8 @@ public class InventoryCase : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public TextMeshProUGUI conteur;
     public int MyItemNumber;
 
+    public IconFollow iconFollow;
+
     public Collider2D collider2;
     // Start is called before the first frame update
     public void resetCase()
@@ -117,6 +119,16 @@ public class InventoryCase : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         Debug.Log("Mouse exit");
         onMe = false;
+    }
+
+    public void ToggleOnFollowMouse()
+    {
+        iconFollow.gameObject.transform.SetSiblingIndex(1);
+        iconFollow.enabled = true;       
+    }
+    public void ToggleOffFollowMouse()
+    {
+        iconFollow.enabled = false;
     }
 
 }

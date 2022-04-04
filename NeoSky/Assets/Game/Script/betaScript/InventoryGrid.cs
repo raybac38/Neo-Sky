@@ -29,6 +29,10 @@ public class InventoryGrid : MonoBehaviour
     IEnumerator SupressUslessDrag()
     {
         yield return new WaitForEndOfFrame();
+        if(dragPoint != null)
+        {
+        dragPoint.ToggleOffFollowMouse();
+        }
         dragPoint = null;
         dropPoint = null;
     }
@@ -69,6 +73,7 @@ public class InventoryGrid : MonoBehaviour
     public void DragOnMe(InventoryCase inventoryCase)
     {
         dragPoint = inventoryCase;
+        dragPoint.ToggleOnFollowMouse();
     }
     public void DropOnMe(InventoryCase invetoryCase)
     {
@@ -76,28 +81,59 @@ public class InventoryGrid : MonoBehaviour
 
         if(dragPoint == null | dropPoint == null | dragPoint == dropPoint)
         {
+            if (dragPoint != null)
+            {
+                dragPoint.ToggleOffFollowMouse();
+            }
             dragPoint = null;
             dropPoint = null;
             return;
         }
         else
         {
-            ItemManager drop;
-            ItemManager drag;
-            int nombreDrop;
-            int nombreDrag;
-            drop = dropPoint.myItem;
-            drag = dragPoint.myItem;
-            nombreDrop = dropPoint.MyItemNumber;
-            nombreDrag = dragPoint.MyItemNumber;
+            if(dragPoint.myItem.name != dragPoint.myItem.name)
+            {
+                ItemManager drop;
+                ItemManager drag;
+                int nombreDrop;
+                int nombreDrag;
+                drop = dropPoint.myItem;
+                drag = dragPoint.myItem;
+                nombreDrop = dropPoint.MyItemNumber;
+                nombreDrag = dragPoint.MyItemNumber;
 
-            dragPoint.RequestItemErase();
-            dropPoint.RequestItemErase();
-            
-            dropPoint.RequestAddItem(drag, nombreDrag);
-            dragPoint.RequestAddItem(drop, nombreDrop);
-            dragPoint = null;
-            dropPoint = null;
+                dragPoint.RequestItemErase();
+                dropPoint.RequestItemErase();
+
+                dropPoint.RequestAddItem(drag, nombreDrag);
+                dragPoint.RequestAddItem(drop, nombreDrop);
+                dragPoint.ToggleOffFollowMouse();
+                dragPoint = null;
+                dropPoint = null;
+            }
+            else
+            {
+                //stack l'item a l'autre stack
+                ItemManager drag;
+                drag = dragPoint.myItem; 
+                int totalNombreItem;
+                totalNombreItem = dropPoint.MyItemNumber + dragPoint.MyItemNumber;
+
+                dragPoint.RequestItemErase();
+                dropPoint.RequestItemErase();
+
+                if(totalNombreItem <= drag.stackNumber)
+                {
+                    dropPoint.RequestAddItem(drag, totalNombreItem);
+                }
+                else
+                {
+                    dropPoint.RequestAddItem(drag, drag.stackNumber);
+                    dragPoint.RequestAddItem(drag, totalNombreItem - drag.stackNumber);
+                }
+
+            }
+
 
             return;
         }
