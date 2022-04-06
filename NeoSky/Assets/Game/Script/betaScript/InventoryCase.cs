@@ -123,7 +123,7 @@ public class InventoryCase : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void ToggleOnFollowMouse()
     {
-        iconFollow.gameObject.transform.SetSiblingIndex(1);
+        iconFollow.gameObject.transform.SetAsLastSibling();
         iconFollow.enabled = true;       
     }
     public void ToggleOffFollowMouse()
