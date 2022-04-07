@@ -72,10 +72,12 @@ public class PlayerMouvement : MonoBehaviour
         {
             ToggleCursorMode();
             inventory.InventoryRequest();
+
         }
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKey(KeyCode.E))
         {
             inventory.InteractionRequest();
+            //interaction faite
         }
         if (Input.GetKeyDown(KeyCode.C))
         {

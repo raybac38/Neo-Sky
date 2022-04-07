@@ -9,6 +9,9 @@ public class InventoryGrid : MonoBehaviour
     public InventoryCase dropPoint;
 
     public InventoryCase[] cases; //deux ligne de 4 case
+
+    public Inventory inventory;
+    public Grapin grapin;
     // Start is called before the first frame update
 
     /// <summary>
@@ -19,6 +22,7 @@ public class InventoryGrid : MonoBehaviour
     /// <returns></returns>
 
     public ItemManager testeItem;
+
     private void Update()
     {
         if (Input.GetMouseButtonUp(0))
@@ -58,7 +62,7 @@ public class InventoryGrid : MonoBehaviour
             {
                 return true;
             }
-            if(valeurDeRetour < 2)
+            if(valeurDeRetour > 1)
             {
                 nombre = valeurDeRetour - 10;
             }

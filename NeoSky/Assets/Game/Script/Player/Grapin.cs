@@ -31,6 +31,7 @@ public class Grapin : MonoBehaviour
     public LayerMask fixePoint;
     public LayerMask haverstable;
     public LayerMask anchorPointLayer;
+    public bool canUseGrappin = true;
 
     private List<GameObject> anchorPositionListe = new List<GameObject>();
 
@@ -45,7 +46,7 @@ public class Grapin : MonoBehaviour
         CheckInFrontOfMe();
         CheckPlacementPoint();
 
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1) & canUseGrappin)
         {
             if (!isGrappin)
             {

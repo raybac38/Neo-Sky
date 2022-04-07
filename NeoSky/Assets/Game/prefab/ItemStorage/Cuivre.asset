@@ -15,7 +15,8 @@ MonoBehaviour:
   name: Cuivre
   icon: {fileID: 2800000, guid: b012946c6da35794e9d18383cebf027d, type: 3}
   handItem: {fileID: 0}
-  item: 0
+  item: 1
+  stackNumber: 20
   itemSize: {x: 3, y: 2}
   pixelSize: {x: 0, y: 0}
   prefabRessource:

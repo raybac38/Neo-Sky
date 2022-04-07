@@ -25,7 +25,8 @@ public class Inventory : MonoBehaviour
     public CeintureInventory ceintureInventory;
 
     public float time;
-
+    public Grapin grapinScript;
+    public InventoryGrid inventoryGrid;
     IEnumerator coldown()
     {
         yield return new WaitForSeconds(2);
@@ -47,7 +48,6 @@ public class Inventory : MonoBehaviour
     }
     public void Harvest()
     {
-
         GameObject game = grapin.inFrontOfMe;
         if(game == null)
         {
@@ -66,7 +66,7 @@ public class Inventory : MonoBehaviour
         if(game.TryGetComponent<Ressource>(out ressource))
         {
             ItemManager itemManager = ressource.itemManager;
-            ceintureInventory.RequestAddItem(1, itemManager);
+            inventoryGrid.AddItemInInventory(itemManager, Random.Range(1, 3));
             Debug.Log("add " + ressource.name);
             StartCoroutine(coldown());
             objectDevantMoi = null;
@@ -148,11 +148,16 @@ public class Inventory : MonoBehaviour
         if (inInterface)
         {
             CloseInventory();
+            canHarvest = true;
+            grapinScript.canUseGrappin = true;
             //quitter l'interface
         }
         else
         {
             inInterface = true;
+            canHarvest = false;
+            grapinScript.canUseGrappin = false;
+            
             OpenInventory();
             //ouverture de l'inventaire 
         }

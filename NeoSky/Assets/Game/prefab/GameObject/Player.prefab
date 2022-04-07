@@ -2263,6 +2263,7 @@ GameObject:
   - component: {fileID: 2895111787127574935}
   - component: {fileID: 7272794827809470409}
   - component: {fileID: 4582374542028663671}
+  - component: {fileID: 607383596928873946}
   m_Layer: 2
   m_Name: Player
   m_TagString: Untagged
@@ -2468,6 +2469,7 @@ MonoBehaviour:
   anchorPointLayer:
     serializedVersion: 2
     m_Bits: 0
+  canUseGrappin: 1
 --- !u!114 &8886896057547422769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2646,6 +2648,20 @@ MonoBehaviour:
   viseurObject: {fileID: 5217332527374224402}
   ceintureInventory: {fileID: 0}
   time: 0
+  grapinScript: {fileID: 1760200306982451605}
+  inventoryGrid: {fileID: 8342319328182381782}
+--- !u!114 &607383596928873946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5035813550367234791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09fcc297f874dd94eba1aaf5f7c379ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5068673989710806485
 GameObject:
   m_ObjectHideFlags: 0
@@ -4914,6 +4930,8 @@ MonoBehaviour:
   - {fileID: 3487980573891221452}
   - {fileID: 9101024349371423011}
   - {fileID: 5283333531522069134}
+  inventory: {fileID: 4582374542028663671}
+  grapin: {fileID: 1760200306982451605}
   testeItem: {fileID: 11400000, guid: 0417a880a081c7347b8314a69cef2548, type: 2}
 --- !u!222 &6085043038661161923
 CanvasRenderer:
