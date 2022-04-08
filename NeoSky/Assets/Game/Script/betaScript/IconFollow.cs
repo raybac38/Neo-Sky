@@ -15,6 +15,10 @@ public class IconFollow : MonoBehaviour
     public void Update()
     {
         transform.position = Input.mousePosition;
+        if (!Input.GetMouseButton(1) & !Input.GetMouseButton(0))
+        {
+            this.enabled = false;
+        }
     }
     public void OnDisable()
     {
