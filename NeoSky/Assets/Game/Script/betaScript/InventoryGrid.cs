@@ -29,6 +29,10 @@ public class InventoryGrid : MonoBehaviour
         {
             StartCoroutine(SupressUslessDrag());
         }
+        if (Input.GetMouseButtonUp(1))
+        {
+            StartCoroutine(SupressUslessDrag());
+        }
     }
     IEnumerator SupressUslessDrag()
     {
@@ -60,26 +64,127 @@ public class InventoryGrid : MonoBehaviour
 
             if (valeurDeRetour == 1)
             {
+                Debug.Log("ajout d'un item");
                 return true;
             }
             if(valeurDeRetour > 1)
             {
+                Debug.Log("divise le stack");
                 nombre = valeurDeRetour - 10;
             }
 
         }
+        Debug.Log("plus de place");
         return false;
     }
 
+    public void DragOnMeRightClic(InventoryCase inventoryCase)
+    {
+        dragPoint = inventoryCase;
+        Debug.Log("drag on me in InventoryGrid");
+        //faire en sorte que 1/2 du stack est drag
+    }
+    public void DropOnMeRightClic(InventoryCase inventoryCase)
+    {
+        dropPoint = inventoryCase;
 
+        Debug.Log(dragPoint == null);
+        Debug.Log(dropPoint == null);
+        Debug.Log(dragPoint == dropPoint);
+
+
+        if (dragPoint == null | dropPoint == null | dragPoint == dropPoint)
+        {
+            dragPoint = null;
+            dropPoint = null;
+            Debug.Log("cancel right clic because");
+            return;
+        }
+
+
+        if(dropPoint.myItem == null)
+        {
+            ItemManager drop;
+            ItemManager drag;
+            int nombreDrag;
+            int nombreDrop;
+            drag = dragPoint.myItem;
+            drop = dropPoint.myItem;
+            nombreDrag = dragPoint.MyItemNumber;
+            nombreDrop = Mathf.FloorToInt(nombreDrag / 2);
+            nombreDrag -= nombreDrop;
+
+            dragPoint.RequestItemErase();
+            dropPoint.RequestItemErase();
+
+            if (nombreDrag != 0)
+            {
+                dropPoint.RequestAddItem(drag, nombreDrag);
+            }
+            if (nombreDrop != 0)
+            {
+                dragPoint.RequestAddItem(drag, nombreDrop);
+            }
+            dragPoint.ToggleOffFollowMouse();
+            dragPoint = null;
+            dropPoint = null;
+            return;
+        }
+        if (dragPoint.myItem.name != dropPoint.myItem.name)
+        {
+            dragPoint = null;
+            dropPoint = null;
+            Debug.Log("can't do anythings");
+            return;
+        }
+        if (dragPoint.myItem.name == dropPoint.myItem.name)
+        {
+            Debug.Log("same");
+            ItemManager drop;
+            ItemManager drag;
+            int nombreDrag;
+            int nombreDrop;
+            drag = dragPoint.myItem;
+            drop = dropPoint.myItem;
+            nombreDrag = dragPoint.MyItemNumber;
+            nombreDrop = dropPoint.MyItemNumber;
+
+            int ram;
+
+            ram = Mathf.FloorToInt(nombreDrag / 2);
+            nombreDrop += ram;
+            if(nombreDrop > drop.stackNumber)
+            {
+                ram = nombreDrop - drop.stackNumber;
+                nombreDrop = drop.stackNumber;
+            }
+            nombreDrag -= ram;          
+
+            dragPoint.RequestItemErase();
+            dropPoint.RequestItemErase();
+            if (nombreDrag != 0)
+            {
+                dropPoint.RequestAddItem(drag, nombreDrag);
+            }
+            if (nombreDrop != 0)
+            {
+                dragPoint.RequestAddItem(drag, nombreDrop);
+            }
+            dragPoint.ToggleOffFollowMouse();
+            dragPoint = null;
+            dropPoint = null;
+            return;
+        }
+        
+    }
 
     //script de drag and drop d'item
-    public void DragOnMe(InventoryCase inventoryCase)
+    public void DragOnMeLeftClic(InventoryCase inventoryCase)
     {
         dragPoint = inventoryCase;
         dragPoint.ToggleOnFollowMouse();
     }
-    public void DropOnMe(InventoryCase invetoryCase)
+    public void DropOnMeLeftClic(InventoryCase invetoryCase)
     {
         dropPoint = invetoryCase;
 
@@ -93,27 +198,21 @@ public class InventoryGrid : MonoBehaviour
             dropPoint = null;
             return;
         }
+        
         else
         {
-            if(dragPoint.myItem.name != dragPoint.myItem.name)
+            if(dropPoint.myItem == null)
             {
-                ItemManager drop;
-                ItemManager drag;
-                int nombreDrop;
-                int nombreDrag;
-                drop = dropPoint.myItem;
-                drag = dragPoint.myItem;
-                nombreDrop = dropPoint.MyItemNumber;
-                nombreDrag = dragPoint.MyItemNumber;
-
-                dragPoint.RequestItemErase();
-                dropPoint.RequestItemErase();
-
-                dropPoint.RequestAddItem(drag, nombreDrag);
-                dragPoint.RequestAddItem(drop, nombreDrop);
-                dragPoint.ToggleOffFollowMouse();
-                dragPoint = null;
-                dropPoint = null;
+                ItemSwamp();
+                return;
+            }
+            //drapPoint name n'existe pas a se moment t
+            //trouver pourquoi;
+            Debug.Log(dragPoint.myItem.name);
+            if(dragPoint.myItem.name != dropPoint.myItem.name)
+            {
+                ItemSwamp();
+                return;
             }
             else
             {
@@ -141,6 +240,32 @@ public class InventoryGrid : MonoBehaviour
 
             return;
         }
+    }
+    public void ItemSwamp()
+    {
+        ItemManager drop;
+        ItemManager drag;
+        int nombreDrop;
+        int nombreDrag;
+        drop = dropPoint.myItem;
+        drag = dragPoint.myItem;
+        nombreDrop = dropPoint.MyItemNumber;
+        nombreDrag = dragPoint.MyItemNumber;
+
+        dragPoint.RequestItemErase();
+        dropPoint.RequestItemErase();
+
+        if (nombreDrop != 0)
+        {
+            dragPoint.RequestAddItem(drag, nombreDrop);
+        }
+        if (nombreDrag != 0)
+        {
+            dropPoint.RequestAddItem(drag, nombreDrag);
+        }
+        dragPoint = null;
+        dropPoint = null;
+        return;
     }
 
 }

@@ -67,7 +67,7 @@ public class Inventory : MonoBehaviour
         {
             ItemManager itemManager = ressource.itemManager;
             inventoryGrid.AddItemInInventory(itemManager, Random.Range(1, 3));
-            Debug.Log("add " + ressource.name);
+            Debug.Log("add " + itemManager.name);
             StartCoroutine(coldown());
             objectDevantMoi = null;
         }

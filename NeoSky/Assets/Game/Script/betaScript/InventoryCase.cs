@@ -14,6 +14,7 @@ public class InventoryCase : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public RawImage itemIcon;
     public TextMeshProUGUI conteur;
     public int MyItemNumber;
+    public bool ghostTouch = false;
 
     public IconFollow iconFollow;
 
@@ -54,24 +55,39 @@ public class InventoryCase : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         return 0;
     }
 
-    public void SourisCliqueUp()
+    public void SourisLeftCliqueUp()
     {
         Debug.Log(this.gameObject.name);
-        myInventoryGrid.DropOnMe(this);
+        myInventoryGrid.DropOnMeLeftClic(this);
     }
-    public void SourisCliqueDown()
+    public void SourisLeftCliqueDown()
     {
-        
         if (myItem == null)
         {
             return;
         }
         Debug.Log(this.gameObject.name);
-        myInventoryGrid.DragOnMe(this);
+        myInventoryGrid.DragOnMeLeftClic(this);
+
+    }
+    public void SourisRightCliqueUp()
+    {
+        Debug.Log(this.gameObject.name);
+        myInventoryGrid.DropOnMeRightClic(this);
+    }
+    public void SourisRightCliqueDown()
+    {
+
+        if (myItem == null)
+        {
+            return;
+        }
+        Debug.Log(this.gameObject.name);
+        myInventoryGrid.DragOnMeRightClic(this);
 
     }
 
-    
+
     private void SetItemIcon(ItemManager item)
     {
         if(item == null)
@@ -97,15 +113,35 @@ public class InventoryCase : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     private void Update()
     {
+        if(Input.GetMouseButton(0) | Input.GetMouseButtonDown(1))
+        {
+            ghostTouch = true;
+        }
+        else
+        {
+            ghostTouch = false;
+        }
         if (onMe)
         {
             if (Input.GetMouseButtonDown(0))
             {
-                SourisCliqueDown();
+                SourisLeftCliqueDown();
+                ghostTouch = true;
             }
             if (Input.GetMouseButtonUp(0))
             {
-                SourisCliqueUp();
+                SourisLeftCliqueUp();
+                ghostTouch = false;
+            }
+            if (Input.GetMouseButtonDown(1))
+            {
+                SourisRightCliqueDown();
+                ghostTouch = true;
+            }
+            if (Input.GetMouseButtonUp(1))
+            {
+                SourisRightCliqueUp();
+                ghostTouch = false;
             }
         }
     }
