@@ -18,4 +18,8 @@ public class ItemManager : ScriptableObject
     public float capaciterThermique = 0f;
     public float conductiviterThermique = 0f;
     public float pointDeFusion = 0f;
+
+    public bool craftableItem;
+    public ItemManager[] elementForCraft;
+    public int[] nombreElementForCraft;
 }

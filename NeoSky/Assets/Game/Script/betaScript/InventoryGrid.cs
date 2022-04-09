@@ -44,18 +44,12 @@ public class InventoryGrid : MonoBehaviour
         dragPoint = null;
         dropPoint = null;
     }
-    public void teste()
+    public int AddItemInInventory(ItemManager item, int nombre)
     {
-        bool ram;
-
-        ram = AddItemInInventory(testeItem, 1);
-        if (!ram)
+        if(item == null)
         {
-            Debug.LogError("plus de place");
+            return 0;
         }
-    }
-    public bool AddItemInInventory(ItemManager item, int nombre)
-    {
         int valeurDeRetour;
 
         for (int i = 0; i < cases.Length; i++)
@@ -65,7 +59,7 @@ public class InventoryGrid : MonoBehaviour
             if (valeurDeRetour == 1)
             {
                 Debug.Log("ajout d'un item");
-                return true;
+                return 0;
             }
             if(valeurDeRetour > 1)
             {
@@ -75,7 +69,7 @@ public class InventoryGrid : MonoBehaviour
 
         }
         Debug.Log("plus de place");
-        return false;
+        return nombre;
     }
 
     public void DragOnMeRightClic(InventoryCase inventoryCase)
@@ -257,7 +251,7 @@ public class InventoryGrid : MonoBehaviour
 
         if (nombreDrop != 0)
         {
-            dragPoint.RequestAddItem(drag, nombreDrop);
+            dragPoint.RequestAddItem(drop, nombreDrop);
         }
         if (nombreDrag != 0)
         {
