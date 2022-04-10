@@ -1,7 +1,8 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
-public class CraftingSlots : MonoBehaviour
+public class CraftingSlots : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public Animator myAnimator;
     public int myItemNumber;
@@ -16,14 +17,18 @@ public class CraftingSlots : MonoBehaviour
     public TextMeshProUGUI UIItemName;
 
     public GameObject progressionBar;
-    public InventoryGrid inventoryGrid;
+    public InventoryGrid myInventoryGrid;
     public GameObject dropedItem;
     public GameObject player;
 
+    public RectTransform fond;
+
+    public bool onMe;
     public bool full = false;
 
     private void Start()
     {
+        UpdateItemSlots();
         if (requiredItemNumber > 0)
         {
             progressionBar.transform.localScale = new Vector3(requiredItemNumber / myItemNumber, 1, 1);
@@ -52,6 +57,7 @@ public class CraftingSlots : MonoBehaviour
             if (myItemNumber > requiredItemNumber)
             {
                 int difference = myItemNumber - requiredItemNumber;
+                myItem = itemManager;
                 myItemNumber = requiredItemNumber;
                 UpdateItemSlots();
                 return difference;
@@ -73,6 +79,10 @@ public class CraftingSlots : MonoBehaviour
             itemSlots.color = new Color(itemSlots.color.r, itemSlots.color.g, itemSlots.color.b, 0.5f);
             UINombreItem.color = new Color(UINombreItem.color.r, UINombreItem.color.g, UINombreItem.color.b, 0.5f);
             UIItemName.color = new Color(UIItemName.color.r, UIItemName.color.g, UIItemName.color.b, 0.5f);
+
+            fond.localScale = new Vector3(0, 1, 1);
+            UINombreItem.text = null;
+            UIItemName.text = null;
         }
         else
         {
@@ -82,27 +92,13 @@ public class CraftingSlots : MonoBehaviour
             UINombreItem.color = new Color(UINombreItem.color.r, UINombreItem.color.g, UINombreItem.color.b, 1f);
             UIItemName.color = new Color(UIItemName.color.r, UIItemName.color.g, UIItemName.color.b, 1f);
 
-            //information pour le joueur;
-            if (requiredItemNumber > 0)
-            {
-                if(myItemNumber > 0)
-                {
-                    progressionBar.transform.localScale = new Vector3(requiredItemNumber / myItemNumber, 1, 1);
-                }
-                else
-                {
-                    progressionBar.transform.localScale = new Vector3(0, 1, 1);
-                    UINombreItem.text = myItemNumber + "/" + requiredItemNumber;
-                    UIItemName.text = myItem.name;
-                }
+            UIItemName.text = requiredMyItem.name;
+            UINombreItem.text = myItemNumber + "/" + requiredItemNumber;
+            float scaleFactor;
+            scaleFactor = myItemNumber / requiredItemNumber;
+            fond.localScale = new Vector3(scaleFactor, 1, 1);
+            Debug.Log("scale at 0" + scaleFactor);
 
-            }
-            else
-            {
-                progressionBar.transform.localScale = new Vector3(0, 1, 1);
-                UINombreItem.text = null;
-                UIItemName.text = null;
-            }
             if (requiredItemNumber == myItemNumber)
             {
                 full = true;
@@ -125,8 +121,8 @@ public class CraftingSlots : MonoBehaviour
         if(itemManager == null)
         {
             requiredItemNumber = 0;
-            myItem = itemManager;
-
+            myItem = null;
+            myItemNumber = 0;
             requiredMyItem = null;
             UpdateItemSlots();
             return;
@@ -144,11 +140,13 @@ public class CraftingSlots : MonoBehaviour
     {
         if(myItemNumber == 0)
         {
-            return;
+            myItem = null;
+            requiredItemNumber = 0;
+            requiredMyItem = null;
         }
-        int nombreEnTrop = inventoryGrid.AddItemInInventory(myItem, myItemNumber);
-        if (nombreEnTrop != 0)
+        else
         {
+            int nombreEnTrop = myInventoryGrid.AddItemInInventory(myItem, myItemNumber);
             for (int i = 0; i < nombreEnTrop; i++)
             {
                 GameObject ram;
@@ -156,7 +154,54 @@ public class CraftingSlots : MonoBehaviour
                 ram.GetComponent<Ressource>().itemManager = myItem;
                 ram.transform.position = player.transform.position;
             }
+
+        }
+        myItemNumber = 0;
+        myItem = null;
+        requiredItemNumber = 0;
+        requiredMyItem = null;
+        UpdateItemSlots();
+
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        onMe = true;
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        onMe = false;
+    }
+    public void Update()
+    {
+
+
+        if (onMe)
+        {
+            if (Input.GetMouseButtonUp(1))
+            {
+                myInventoryGrid.DropOnMeRightClicCraft(this);
+                Debug.Log("drop on me");
+            }
+            if (Input.GetMouseButtonUp(0))
+            {
+                myInventoryGrid.DropOnMeLeftClicCraft(this);
+
+            }
         }
     }
-    
+    public void RemoveCraftItem()
+    {
+        int nombreEnTrop = myInventoryGrid.AddItemInInventory(myItem, myItemNumber);
+        for (int i = 0; i < nombreEnTrop; i++)
+        {
+            GameObject ram;
+            ram = Instantiate(dropedItem);
+            ram.GetComponent<Ressource>().itemManager = myItem;
+            ram.transform.position = player.transform.position;
+        }
+        myItemNumber = 0;
+        UpdateItemSlots();
+    }
 }

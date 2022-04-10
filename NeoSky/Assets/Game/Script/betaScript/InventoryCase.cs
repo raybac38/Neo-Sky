@@ -138,9 +138,9 @@ public class InventoryCase : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 SourisRightCliqueDown();
                 ghostTouch = true;
             }
-            if (Input.GetMouseButtonUp(1))
+            if (Input.GetMouseButtonUp(0))
             {
-                SourisRightCliqueUp();
+                SourisLeftCliqueUp();
                 ghostTouch = false;
             }
         }
@@ -166,5 +166,6 @@ public class InventoryCase : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         iconFollow.enabled = false;
     }
+
 
 }

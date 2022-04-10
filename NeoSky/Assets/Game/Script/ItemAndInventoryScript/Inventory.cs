@@ -27,6 +27,7 @@ public class Inventory : MonoBehaviour
     public float time;
     public Grapin grapinScript;
     public InventoryGrid inventoryGrid;
+    public CraftManager craftManager;
     IEnumerator coldown()
     {
         yield return new WaitForSeconds(2);
@@ -74,7 +75,6 @@ public class Inventory : MonoBehaviour
     }
     private void Update()
     {
-        Debug.Log("tt");
         UpdateHotBar();
         CheckInteraction();
     }
@@ -176,6 +176,8 @@ public class Inventory : MonoBehaviour
         inventoryObject.enabled = false;
         UI.SetActive(false);
         viseurObject.enabled = true;
+        craftManager.DeselectionCraft();
 
     }
+    
 }

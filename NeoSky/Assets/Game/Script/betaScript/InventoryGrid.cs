@@ -178,6 +178,57 @@ public class InventoryGrid : MonoBehaviour
         dragPoint = inventoryCase;
         dragPoint.ToggleOnFollowMouse();
     }
+    public void DropOnMeLeftClicCraft(CraftingSlots craftingSlots)
+    {
+        if (dragPoint == null)
+        {
+            dragPoint = null;
+            dropPoint = null;
+            return;
+        }
+        int nombre;
+        ItemManager drag;
+        int dragNumber = dragPoint.MyItemNumber;
+        drag = dragPoint.myItem;
+        nombre = craftingSlots.AddItem(dragPoint.MyItemNumber, dragPoint.myItem);
+        dragPoint.RequestItemErase();
+        if(nombre != 0)
+        {
+            dragPoint.RequestAddItem(drag, nombre);
+        }
+        dragPoint = null;
+        dropPoint = null;
+        return;
+    }
+    public void DropOnMeRightClicCraft(CraftingSlots craftingSlots)
+    {
+        if(dragPoint == null)
+        {
+            dragPoint = null;
+            dropPoint = null;
+            return;
+        }
+        int nombre;
+        ItemManager drag;
+        int ram;
+        int dragNumber = dragPoint.MyItemNumber;
+        drag = dragPoint.myItem;
+        ram = Mathf.FloorToInt(dragNumber / 2);
+        if(ram == 0)
+        {
+            dragPoint = null;
+            dropPoint = null;
+            return;
+        }
+        nombre = craftingSlots.AddItem(ram, dragPoint.myItem);
+        dragPoint.RequestItemErase();
+        nombre += (dragNumber - ram);
+        dragPoint.RequestAddItem(drag, nombre);
+    }
+    /// <summary>
+    /// la case ou l'item est drop
+    /// </summary>
+    /// <param name="invetoryCase">ce qu'il y a dans cette case</param>
     public void DropOnMeLeftClic(InventoryCase invetoryCase)
     {
         dropPoint = invetoryCase;

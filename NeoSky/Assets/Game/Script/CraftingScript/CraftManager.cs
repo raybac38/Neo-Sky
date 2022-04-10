@@ -59,6 +59,7 @@ public class CraftManager : MonoBehaviour
             //rien, peu pas craft du con
         }
     }
+
     /// <summary>
     /// temps de repos entre 2 craft
     /// </summary>
@@ -100,13 +101,19 @@ public class CraftManager : MonoBehaviour
             craftingSlots[i].ChangeRequieredItem(item.elementForCraft[i], item.nombreElementForCraft[i]);
         }
     }
+    public void OnDisable()
+    {
+        DeselectionCraft();
+    }
     public void DeselectionCraft()
     {
         for (int i = 0; i < craftingSlots.Length; i++)
         {
             
             craftingSlots[i].ChangeRequieredItem(null, 0);
+            craftingSlots[i].UpdateItemSlots();
         }
+        
     }
     
 }
