@@ -17,6 +17,7 @@ MonoBehaviour:
   handItem: {fileID: 0}
   item: 0
   stackNumber: 0
+  needCraftingStation: 1
   itemSize: {x: 0, y: 0}
   pixelSize: {x: 0, y: 0}
   prefabRessource: []
@@ -33,3 +34,4 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   nombreElementForCraft: 020000000500000000000000000000000000000000000000
+  prefab: {fileID: 1047164943209710694, guid: 0a27eaf74f7a6874aa286d6bc68054e5, type: 3}

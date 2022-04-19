@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
+    public PlayerMouvement playerMouvement;
     public float harvestRange = 20f;
     public int hotBarState = 0;
     public float interactionDistance = 4f;
@@ -28,6 +29,9 @@ public class Inventory : MonoBehaviour
     public Grapin grapinScript;
     public InventoryGrid inventoryGrid;
     public CraftManager craftManager;
+
+    public IntercalaireDesCrafts IntercalaireDesCrafts;
+    private CraftingStationControler craftingStation1;
     IEnumerator coldown()
     {
         yield return new WaitForSeconds(2);
@@ -45,6 +49,10 @@ public class Inventory : MonoBehaviour
         if(hotBarState == 1 && canHarvest)
         {
             Harvest();
+        }
+        if(hotBarState == 2)
+        {
+
         }
     }
     public void Harvest()
@@ -107,11 +115,12 @@ public class Inventory : MonoBehaviour
         }
         else
         {
-            Debug.Log(gameObject.GetComponent<ShipCrafting>());
-            if(gameObject.GetComponent<ShipCrafting>() != null)
+            CraftingStationControler craftingStation;
+            if(gameObject.TryGetComponent<CraftingStationControler>(out craftingStation))
             {
-                hotBarIndicator.text = "press e to use : ShipCraft";
-                interactableObject = "ShipCraft";
+                hotBarIndicator.text = "press e to use : Crafting Station";
+                interactableObject = "CraftingStation";
+                craftingStation1 = craftingStation;
 
             }else if(gameObject.GetComponent<ShipDoking>() != null)
             {
@@ -121,6 +130,7 @@ public class Inventory : MonoBehaviour
             else
             {
                 interactableObject = null;
+                craftingStation1 = null;
             }
 
         }
@@ -131,10 +141,16 @@ public class Inventory : MonoBehaviour
         {
             return;
         }
-        if(interactableObject == "ShipCraft")
+        if(interactableObject == "CraftingStation")
         {
             //shipcraft interface
-        }else if(interactableObject == "ShipDock")
+            IntercalaireDesCrafts.unlockStationCraft = true;
+            craftManager.OpenInCraftingStation(craftingStation1);
+            
+            OpenInventory();
+
+        }
+        else if(interactableObject == "ShipDock")
         {
             //shipdock interface
         }
@@ -154,10 +170,8 @@ public class Inventory : MonoBehaviour
         }
         else
         {
-            inInterface = true;
-            canHarvest = false;
-            grapinScript.canUseGrappin = false;
-            
+            IntercalaireDesCrafts.unlockStationCraft = false;
+
             OpenInventory();
             //ouverture de l'inventaire 
         }
@@ -165,6 +179,10 @@ public class Inventory : MonoBehaviour
 
     private void OpenInventory()
     {
+        inInterface = true;
+        canHarvest = false;
+        grapinScript.canUseGrappin = false;
+        playerMouvement.ToggleCursorMode(false);
         inventoryObject.enabled = true;
         viseurObject.enabled = false;
         UI.SetActive(true);
@@ -172,6 +190,8 @@ public class Inventory : MonoBehaviour
     }
     private void CloseInventory()
     {
+        IntercalaireDesCrafts.unlockStationCraft = false;
+        playerMouvement.ToggleCursorMode(true);
         inInterface = false;
         inventoryObject.enabled = false;
         UI.SetActive(false);
@@ -179,5 +199,5 @@ public class Inventory : MonoBehaviour
         craftManager.DeselectionCraft();
 
     }
-    
+
 }

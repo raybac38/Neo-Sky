@@ -26,6 +26,7 @@ public class CraftingSlots : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public bool onMe;
     public bool full = false;
 
+
     private void Start()
     {
         UpdateItemSlots();
@@ -33,10 +34,6 @@ public class CraftingSlots : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             progressionBar.transform.localScale = new Vector3(requiredItemNumber / myItemNumber, 1, 1);
         }
-    }
-    private void OnDisable()
-    {
-        DumpItem();
     }
     /// <summary>
     /// Permet l'ajout d'item dans un slots de craft

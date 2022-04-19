@@ -70,7 +70,6 @@ public class PlayerMouvement : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            ToggleCursorMode();
             inventory.InventoryRequest();
 
         }
@@ -167,9 +166,13 @@ public class PlayerMouvement : MonoBehaviour
             rb.AddForce(new Vector3(0, jumpForce, 0));
         }
     }
-    void ToggleCursorMode()
+    /// <summary>
+    /// permte de lock la souris ou de l'unlock
+    /// </summary>
+    /// <param name="etat">true = lock, false = unlock</param>
+    public void ToggleCursorMode(bool etat)
     {
-        if (cursorLock)
+        if (etat)
         {
             Cursor.lockState = CursorLockMode.Locked;
             cursorLock = false;

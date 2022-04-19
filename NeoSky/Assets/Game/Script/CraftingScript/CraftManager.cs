@@ -7,10 +7,31 @@ public class CraftManager : MonoBehaviour
     public CraftingSlots[] craftingSlots;
     public bool canCraft;
     public float cooldownTimer = 5f;
-
+    public bool inCraftingStation;
     public ItemManager itemManagerCraft;
 
     public ItemManager teste;
+    private CraftingStationControler craftingStation;
+    public IntercalaireDesCrafts IntercalaireDesCrafts;
+    /// <summary>
+    /// ouvrir l'inventaire de craft POUR la crafting station
+    /// </summary>
+    /// <param name="craftingStationControler">la station de craft en question</param>
+    public void OpenInCraftingStation(CraftingStationControler craftingStationControler)
+    {
+        inCraftingStation = true;
+        craftingStation = craftingStationControler;
+        DeselectionCraft();
+        if(craftingStation.myItem == null)
+        {
+
+        }
+        else
+        {
+            ChangeItemToCraft(craftingStation.myItem);
+            AddSavedItem();
+        }
+    }
     /// <summary>
     /// Detecte si tout les items nessessaires sont présent
     /// </summary>
@@ -39,10 +60,24 @@ public class CraftManager : MonoBehaviour
         canCraft = true;
         return true;
     }
-    public void TesteCraftItem()
+
+    public void AddSavedItem()
     {
-        itemManagerCraft = teste;
+        for (int i = 0; i < craftingStation.ingredient.Length; i++)
+        {
+            craftingSlots[i].AddItem(craftingStation.nbIngredient[i], craftingStation.ingredient[i]);
+
+        }
+    }
+    /// <summary>
+    /// changée l'item a craft
+    /// </summary>
+    /// <param name="item">quelle item craft ?</param>
+    public void ChangeItemToCraft(ItemManager item)
+    {
+        itemManagerCraft = item;
         RefreshCraftingSlots(itemManagerCraft);
+        IntercalaireDesCrafts.RefreshState();
     }
     /// <summary>
     /// boutton de craft
@@ -103,7 +138,24 @@ public class CraftManager : MonoBehaviour
     }
     public void OnDisable()
     {
-        DeselectionCraft();
+        inCraftingStation = false;
+
+        if (craftingStation != null)
+        {
+            for (int i = 0; i < craftingStation.ingredient.Length; i++)
+            {
+                craftingStation.nbIngredient[i] = craftingSlots[i].myItemNumber;
+                craftingSlots[i].myItemNumber = 0;
+                craftingSlots[i].DumpItem();
+            }
+            craftingStation = null;
+
+        }
+        else
+        {
+            DeselectionCraft(); 
+        }
+
     }
     public void DeselectionCraft()
     {

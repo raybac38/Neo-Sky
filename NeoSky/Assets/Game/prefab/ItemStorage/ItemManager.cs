@@ -9,6 +9,7 @@ public class ItemManager : ScriptableObject
 
     public bool item = false;
     public int stackNumber;
+    public bool needCraftingStation;
     
     public Vector2Int itemSize;
     public Vector2Int pixelSize;
@@ -22,4 +23,6 @@ public class ItemManager : ScriptableObject
     public bool craftableItem;
     public ItemManager[] elementForCraft;
     public int[] nombreElementForCraft;
+
+    public GameObject prefab;
 }

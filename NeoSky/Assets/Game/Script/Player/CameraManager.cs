@@ -10,6 +10,8 @@ public class CameraManager : MonoBehaviour
     public float visioCap = 85;
     public float currentRotationX;
     public CameraPosition cameraPosition;
+
+    private Camera cameraUse;
     
 
     private void Awake()
@@ -66,6 +68,23 @@ public class CameraManager : MonoBehaviour
         else
         {
 
+        }
+
+        
+    }
+    public void SwapCamera(Camera camera)
+    {
+        if (cameraUse != cameraPlayer)
+        {
+            cameraUse.enabled = false;
+            cameraPlayer.enabled = true;
+            cameraUse = cameraPlayer;
+        }
+        else
+        {
+            cameraPlayer.enabled = false;
+            cameraUse = camera;
+            camera.enabled = true;
         }
     }
 }
