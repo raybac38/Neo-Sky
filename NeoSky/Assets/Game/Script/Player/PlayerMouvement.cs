@@ -117,7 +117,7 @@ public class PlayerMouvement : MonoBehaviour
         {
             CollisionCheck(); //pour faire les deplacement limiter envers les murs
 
-            transform.Translate(deplacement); //la marchche
+            rb.MovePosition(transform.position + deplacement); //la marchche
             if (Input.GetKey(KeyCode.Space))
             {
                 JumpManager(); //le saut quand le personnage touche le sol
@@ -136,7 +136,7 @@ public class PlayerMouvement : MonoBehaviour
         rotationUpdate(); // avoire la MAJ du client
         cameraManager.CameraUpdater(angleInput.x);
         transform.Rotate(0, angleInput.y, 0);
-        angle = new Vector3(cameraManager.transform.eulerAngles.x, transform.eulerAngles.y, 0) * Mathf.Deg2Rad; ;
+        angle = new Vector3(cameraManager.transform.eulerAngles.x, transform.eulerAngles.y, 0) * Mathf.Deg2Rad;
 
     }
     void rotationUpdate()
@@ -166,6 +166,8 @@ public class PlayerMouvement : MonoBehaviour
             rb.AddForce(new Vector3(0, jumpForce, 0));
         }
     }
+    
+
     /// <summary>
     /// permte de lock la souris ou de l'unlock
     /// </summary>
@@ -185,6 +187,7 @@ public class PlayerMouvement : MonoBehaviour
             canRotate = false;
         }
     }
+    
     private void CollisionCheck()
     {
         RaycastHit hit;
