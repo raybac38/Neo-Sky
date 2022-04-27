@@ -16,8 +16,8 @@ public class PlayerMove : MonoBehaviour
 
     // zone des constantes
     private float forceMultiplier = 45f;
-    private float defaultSpeed = 8f;
-    private float jumpForce = 50f;
+    private float defaultSpeed = 15f;
+    private float jumpForce = 80f;
     private float ghostJumpCooldownTimer = 2f;
 
     private void Awake()
@@ -26,6 +26,7 @@ public class PlayerMove : MonoBehaviour
     }
     private void Update()
     {
+        mouvement = Vector3.zero;
         if (Input.GetKey(KeyCode.Z))
         {
             mouvement.z++;
@@ -80,6 +81,7 @@ public class PlayerMove : MonoBehaviour
     private void UpdateDeplacement()
     {
         float angle = transform.eulerAngles.y;
+        angle = Mathf.Deg2Rad * angle;
         mouvement = mouvement.normalized;
         mouvement *= speed * Time.deltaTime;
 

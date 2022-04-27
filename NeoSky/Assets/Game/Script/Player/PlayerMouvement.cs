@@ -134,7 +134,6 @@ public class PlayerMouvement : MonoBehaviour
     void RotationManager()
     {
         rotationUpdate(); // avoire la MAJ du client
-        cameraManager.CameraUpdater(angleInput.x);
         transform.Rotate(0, angleInput.y, 0);
         angle = new Vector3(cameraManager.transform.eulerAngles.x, transform.eulerAngles.y, 0) * Mathf.Deg2Rad;
 

@@ -7,9 +7,9 @@ public class PlayerRotation : MonoBehaviour
     private Vector3 angleInput;
     private float sensibiliter = 1.5f;
     private float visioCap = 85f;
+    public GameObject player;
 
     public GameObject cameraPivot;
-    public GameObject player;
     private void Update()
     {
         angleInput = new Vector3(Input.GetAxis("Mouse Y") * -1 * sensibiliter, Input.GetAxis("Mouse X") * sensibiliter, 0);
@@ -29,6 +29,8 @@ public class PlayerRotation : MonoBehaviour
         {
             cameraPivot.transform.localEulerAngles = new Vector3(visioCap, 0, 0);
         }
+        transform.Rotate(0 , angleInput.y, 0);
+
     }
 
 

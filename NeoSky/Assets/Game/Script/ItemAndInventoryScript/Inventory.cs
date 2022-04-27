@@ -107,7 +107,6 @@ public class Inventory : MonoBehaviour
 
     void CheckInteraction()
     {
-        GameObject gameObject = grapin.inFrontOfMe;
         if(gameObject == null)
         {
             hotBarIndicator.text = hotBarState.ToString();
@@ -182,7 +181,7 @@ public class Inventory : MonoBehaviour
         inInterface = true;
         canHarvest = false;
         grapinScript.canUseGrappin = false;
-        playerMouvement.ToggleCursorMode(false);
+        Cursor.lockState = CursorLockMode.None;
         inventoryObject.enabled = true;
         viseurObject.enabled = false;
         UI.SetActive(true);
@@ -191,7 +190,7 @@ public class Inventory : MonoBehaviour
     private void CloseInventory()
     {
         IntercalaireDesCrafts.unlockStationCraft = false;
-        playerMouvement.ToggleCursorMode(true);
+        Cursor.lockState = CursorLockMode.Locked;
         inInterface = false;
         inventoryObject.enabled = false;
         UI.SetActive(false);

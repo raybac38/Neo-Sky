@@ -40,7 +40,6 @@ public class CameraDock : MonoBehaviour
     }
     public void TakeControleOfMe()
     {
-        cameraManager.SwapCamera(dockCamera);
         
     }
 
