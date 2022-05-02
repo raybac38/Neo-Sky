@@ -13,9 +13,12 @@ public class GrappinHock : MonoBehaviour
     //variable
 
     public List<GameObject> anchorPoint = new List<GameObject>();
+    private bool coolDown = false;
     private bool isGrappin = false;
     private float ropeDistance = 0;
     private bool destroyFrame = false;
+
+    private bool alterne = false;
 
     //les depandances
     public PlayerMove playerMove;
@@ -33,19 +36,23 @@ public class GrappinHock : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetMouseButtonDown(1) & !isGrappin)
+        if (Input.GetMouseButtonDown(1) & !isGrappin & !coolDown)
         {
             CreateFirtsPoint();
+            StartCoroutine(CoolDownTimer());
         }
         else
         {
-            if (Input.GetMouseButtonDown(1) & isGrappin)
+            if (Input.GetMouseButtonDown(1) & isGrappin & !coolDown)
             {
                 StartCoroutine(EraseAllAnchorPoint());
+                StartCoroutine(CoolDownTimer());
+
             }
         }
         if (isGrappin)
         {
+            anchorPoint.RemoveAll(x => !x);
             destroyFrame = false;
             DetecteNewAnchorPoint();
             RemoveUselessAnchorPoint();
@@ -66,6 +73,12 @@ public class GrappinHock : MonoBehaviour
         isGrappin = false;
 
     }
+    IEnumerator CoolDownTimer()
+    {
+        coolDown = true;
+        yield return new WaitForSeconds(0.25f);
+        coolDown = false;
+    }
     private void CreateFirtsPoint()
     {
 
@@ -83,16 +96,24 @@ public class GrappinHock : MonoBehaviour
             return;
         }
 
+        int breakPoint = 0;
         for (int k = 0; k < anchorPoint.Count - 1; k++)
         {
-
+            breakPoint++;
+            if(breakPoint == 500)
+            {
+                Debug.LogError("break");
+                break;
+            }
             Vector3 direction = anchorPoint[k + 1].transform.position - anchorPoint[k].transform.position;
             //mettre
+
             RaycastHit hit;
-            if (Physics.SphereCast(anchorPoint[k].transform.position, 0.2f, direction, out hit, grappinMaxLenght - ropeDistance, isGrappinable))
+            Debug.DrawRay(anchorPoint[k].transform.position, direction, Color.cyan, 0.5f);
+            if (Physics.Raycast(anchorPoint[k].transform.position, direction, out hit, grappinMaxLenght - ropeDistance, isGrappinable))
             {
-                if (!hit.transform.CompareTag("anchorPoint") & Vector3.Distance(hit.point, anchorPoint[k+1].transform.position) > 0.2 & Vector3.Distance(hit.point, anchorPoint[k].transform.position) > 0.2)
-                {
+                if (!hit.transform.CompareTag("anchorPoint"))
+                {// & Vector3.Distance(hit.point, anchorPoint[k+1].transform.position) > 0.5 & Vector3.Distance(hit.point, anchorPoint[k].transform.position) > 0.5
                     GameObject newAnchoirPoint = Instantiate(anchorPointPrefab, hit.transform);
                     newAnchoirPoint.transform.position = hit.point;
                     temporaryAnchorPoint.Insert(k + 1, newAnchoirPoint);
@@ -112,23 +133,32 @@ public class GrappinHock : MonoBehaviour
         for (int i = 0; i < anchorPoint.Count - 2; i++)
         {
             Vector3 pointC = new Vector3(0, 0, 0);
-            Vector3 pointA = anchorPoint[i].transform.position;
-            Vector3 pointB = anchorPoint[i + 1].transform.position;
-            Mesh meshC = anchorPoint[i + 1].transform.parent.GetComponent<Mesh>();
+            Vector3 pointA = transform.TransformPoint(anchorPoint[i].transform.position);
+            Vector3 pointB = transform.TransformPoint(anchorPoint[i + 1].transform.position);
+            MeshFilter meshFilter = anchorPoint[i + 1].transform.parent.GetComponent<MeshFilter>();
+            Mesh meshC = meshFilter.mesh;
             if (meshC == null)
             {
                 Debug.LogError("Cmesh Missing");
                 return;
             }
-            foreach (Vector3 vertex in meshC.vertices)
+            Debug.Log(pointB);
+            for (int o = 0; o < meshC.vertexCount; o++)
             {
-                float distance = 9999f;
-                if (Vector3.Distance(pointB, vertex) < distance)
+                float distance = 99999f;
+                Vector3[] vertexPosition = meshC.vertices;
+                if (Vector3.Distance(pointB, vertexPosition[o]) < distance)
                 {
-                    distance = Vector3.Distance(pointB, vertex);
-                    pointC = vertex;
+                    distance = Vector3.Distance(pointB, vertexPosition[o]);
+                    pointC = transform.TransformPoint(meshC.vertices[o]);
                 }
             }
+            //GameObject ram = Instantiate(anchorPointPrefab);
+            //ram.transform.position = pointC;
+
+
+
+
             Vector3 normal;
             Vector3 side1 = pointB - pointA;
             Vector3 side2 = pointC - pointA;
@@ -140,8 +170,8 @@ public class GrappinHock : MonoBehaviour
             Vector4 equationPlan = new Vector4(normal.x, normal.y, normal.z, d);
             Vector3 pointD = anchorPoint[i + 2].transform.position;
             float resultat = equationPlan.x * pointD.x + equationPlan.y * pointD.y * equationPlan.z * pointD.z + equationPlan.w;
-
-            if (resultat > 0)
+            Debug.Log("resultat" + resultat);
+            if (resultat > 0f)
             {
                 indiceAnchorPoint.Add(i + 1);
                 Debug.Log("supresse");
@@ -149,9 +179,24 @@ public class GrappinHock : MonoBehaviour
         }
         for (int i = 0; i < indiceAnchorPoint.Count; i++)
         {
-            anchorPoint.RemoveAt(indiceAnchorPoint[indiceAnchorPoint.Count - i]);
+            Debug.Log("point n°" + indiceAnchorPoint[i]);
+            Destroy(anchorPoint[indiceAnchorPoint.Count - i]);
         }
         indiceAnchorPoint.Clear();
+        for (int i = 0; i < anchorPoint.Count; i++)
+        {
+            if(anchorPoint[i] == null)
+            {
+                GameObject gameObject = anchorPoint[i];
+                anchorPoint.RemoveAt(i);
+                anchorPoint.Remove(null);
+                Destroy(gameObject);
+            }
+            anchorPoint.Remove(null);
+
+        }
+        anchorPoint.RemoveAll(x => !x);
+
     }
 
     private GameObject RequestRaycastForAnchorPoint(Vector3 origin, Vector3 direction, float maxDistance, LayerMask layer)
@@ -175,9 +220,13 @@ public class GrappinHock : MonoBehaviour
     public LineRenderer lineRenderer;
     private void LateUpdate()
     {
+        anchorPoint.RemoveAll(x => !x);
+
+        DrawRope();
     }
     private void DrawRope()
     {
+
         if (destroyFrame) return;
         if (!isGrappin)
         {
@@ -191,4 +240,5 @@ public class GrappinHock : MonoBehaviour
             lineRenderer.SetPosition(i + 1, anchorPoint[i].transform.position);
         }
     }
+
 }
