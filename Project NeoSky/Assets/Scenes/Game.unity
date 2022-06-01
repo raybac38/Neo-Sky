@@ -340,14 +340,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 661927386278960131, guid: 76552ab732130b643986e19b52fe352d, type: 3}
-      propertyPath: sphere
-      value: 
-      objectReference: {fileID: 831427221022525803, guid: d042ab37a52d6b5478e845e417ab8be3, type: 3}
-    - target: {fileID: 661927386278960131, guid: 76552ab732130b643986e19b52fe352d, type: 3}
-      propertyPath: renderDistance
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 3849899223948263137, guid: 76552ab732130b643986e19b52fe352d, type: 3}
       propertyPath: m_Name
       value: ChunkLoader

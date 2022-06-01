@@ -43,6 +43,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 799a3073828ad18409869de7f02f40e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sphere: {fileID: 0}
+  sphere: {fileID: 831427221022525803, guid: d042ab37a52d6b5478e845e417ab8be3, type: 3}
   actualChunk: {x: 0, y: 0}
-  renderDistance: 5
+  renderDistance: 7
