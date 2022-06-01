@@ -13,14 +13,15 @@ public class ChunkShow : MonoBehaviour
 
     private int[] table = { 1, 72, 95, 4, 92, 89, 74, 18, 18, 9, 10, 11, 43, 78, 89, 63, 15, 15, 7, 30, 74, 75, 31, 95, 61, 57, 48, 76, 48, 18, 89, 76, 10, 30, 18, 75, 31, 32, 63, 74, 15, 92, 81, 70, 39, 48, 95, 42, 84, 89, 15, 39, 33, 53, 46, 76, 18, 33, 57, 76, 46, 43,
  10, 30, 59, 7, 89, 63, 64, 89, 75, 84, 89, 53, 76, 30, 31, 33, 89, 5, 57, 81, 81, 89, 30, 30, 84, 86, 18, 7, 76, 95, 7, 63, 39, 97, 48, 89};
-    public Vector2[] affectingZonePoint = new Vector2[9];
+    public Vector2[] affectingZonePoint = new Vector2[25];
     private float[,] baseMap = new float[16, 16];
     private void Awake()
     {
-
+        
     }
     private void Start()
     {
+        
         Refresh();
     }
     public void Refresh()
@@ -34,12 +35,13 @@ public class ChunkShow : MonoBehaviour
     }
     public void CalculateAffectingZonePoint()
     {
-
+        affectingZonePoint = new Vector2[25];
         int i = 0;
-        for (float x = -1f; x < 2f; x++)
+        for (float x = -2f; x < 3f; x++)
         {
-            for (float y = -1f; y < 2f; y++)
+            for (float y = -2f; y < 3f; y++)
             {
+                Debug.Log(i);
                 affectingZonePoint[i] = (16 * AffectiongScaleIsland) * (myAffectingZone + new Vector2(x, y));
                 affectingZonePoint[i] = affectingZonePoint[i] + GenerationPseudoAleatoire((new Vector2(x,y) + myAffectingZone) * AffectiongScaleIsland * 16f);
                 i++;
@@ -69,7 +71,6 @@ public class ChunkShow : MonoBehaviour
             {
                 float firstValue = ClosestPoint(new Vector2(position.x + x, position.y + y));
                 baseMap[x, y] = SecondeClosestPoint(firstValue, new Vector2(position.x + x, position.y + y)) - firstValue;
-
             }
         }
     }
@@ -111,7 +112,7 @@ public class ChunkShow : MonoBehaviour
         {
             for (int y = 0; y < baseMap.GetLength(1); y++)
             {
-                if(baseMap[x,y] > 60f) //metre a 60 en temps normal voir plus
+                if(baseMap[x,y] > -20f) //metre a 60 en temps normal voir plus
 
                 {
                     GameObject obj = Instantiate(cubePreview, transform);
@@ -131,7 +132,6 @@ public class ChunkShow : MonoBehaviour
 
         float x = position.x;
         float y = position.y;
-        Debug.Log(y);
         if (Mathf.CeilToInt(x % 96) < 0)
         {
             x = x % 96;
@@ -152,7 +152,6 @@ public class ChunkShow : MonoBehaviour
             y = y % 96;
             y = y % 2;
             y = 96 - y;
-            Debug.Log(y);
             y = table[Mathf.CeilToInt(y)];
 
         }
@@ -164,10 +163,10 @@ public class ChunkShow : MonoBehaviour
         }
 
         float value = x + y + Mathf.Sqrt(x * x + y * y);
-        x = value % 90;
-        y = (value / 90) % 90;
-        x /= 120;
-        y /= 120;
+        x = value % 99;
+        y = (value / 99) % 99;
+        x = x / 20;
+        y = y / 20;
         return new Vector2(x, y) * AffectiongScaleIsland * 16f;
     }
 }
