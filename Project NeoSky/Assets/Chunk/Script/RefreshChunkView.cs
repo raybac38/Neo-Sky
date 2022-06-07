@@ -5,34 +5,18 @@ public class RefreshChunkView : MonoBehaviour
 {
     public GameObject sphere;
     List<Transform> chunkLoad = new List<Transform>();
+
+    
     public Vector2Int actualChunk;
     public int renderDistance = 5;
     private void Start()
     {
-        actualChunk = new Vector2Int(-22, -22);
+        actualChunk = CalculeChunk();
         FirtsChunkLoad();
 
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            transform.Translate(Vector3.left * 16);
-        }
-        if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            transform.Translate(Vector3.right * 16);
-        }
-        if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            transform.Translate(Vector3.forward * 16);
-        }
-        if (Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            transform.Translate(Vector3.back * 16);
-        }
-
-
         if (actualChunk != CalculeChunk())
         {
             if(Vector2.Distance(actualChunk, CalculeChunk()) > 3)

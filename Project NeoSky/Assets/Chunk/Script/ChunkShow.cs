@@ -10,28 +10,34 @@ public class ChunkShow : MonoBehaviour
     public GameObject islandPreview;
     List<Transform> previewThinks = new List<Transform>();
 
+    List<Vector3> verticies = new List<Vector3>();
+    List<int> triangles = new List<int>();
+
+    public int seed = 4267984;
+
+    Mesh mesh;
 
     private int[] table = { 1, 72, 95, 4, 92, 89, 74, 18, 18, 9, 10, 11, 43, 78, 89, 63, 15, 15, 7, 30, 74, 75, 31, 95, 61, 57, 48, 76, 48, 18, 89, 76, 10, 30, 18, 75, 31, 32, 63, 74, 15, 92, 81, 70, 39, 48, 95, 42, 84, 89, 15, 39, 33, 53, 46, 76, 18, 33, 57, 76, 46, 43,
  10, 30, 59, 7, 89, 63, 64, 89, 75, 84, 89, 53, 76, 30, 31, 33, 89, 5, 57, 81, 81, 89, 30, 30, 84, 86, 18, 7, 76, 95, 7, 63, 39, 97, 48, 89};
     public Vector2[] affectingZonePoint = new Vector2[25];
-    private float[,] baseMap = new float[16, 16];
+    private float[,] baseMap = new float[17, 17];
     private void Awake()
     {
-        
+        mesh = GetComponent<MeshFilter>().mesh;
     }
     private void Start()
     {
-        
+
         Refresh();
     }
     public void Refresh()
     {
-        myAffectingZone = myChunk = new Vector2Int(Mathf.FloorToInt(transform.position.x / (16 * AffectiongScaleIsland)) , Mathf.FloorToInt(transform.position.z / (16 * AffectiongScaleIsland))) ;
+        myAffectingZone = myChunk = new Vector2Int(Mathf.FloorToInt(transform.position.x / (16 * AffectiongScaleIsland)), Mathf.FloorToInt(transform.position.z / (16 * AffectiongScaleIsland)));
         myChunk = new Vector2Int(Mathf.FloorToInt(transform.position.x / 16), Mathf.FloorToInt(transform.position.z / 16));
         CalculateAffectingZonePoint();
 
         CalculateBaseMap();
-        GeneratePreview();
+        GenerateMeshPreview();
     }
     public void CalculateAffectingZonePoint()
     {
@@ -43,7 +49,7 @@ public class ChunkShow : MonoBehaviour
             {
                 Debug.Log(i);
                 affectingZonePoint[i] = (16 * AffectiongScaleIsland) * (myAffectingZone + new Vector2(x, y));
-                affectingZonePoint[i] = affectingZonePoint[i] + GenerationPseudoAleatoire((new Vector2(x,y) + myAffectingZone) * AffectiongScaleIsland * 16f);
+                affectingZonePoint[i] += GenerationPseudoAleatoire((new Vector2(x, y) + myAffectingZone) * AffectiongScaleIsland * 16f);
                 i++;
 
             }
@@ -79,10 +85,11 @@ public class ChunkShow : MonoBehaviour
         float distance = 50000f;
         for (int i = 0; i < affectingZonePoint.Length; i++)
         {
-            if(Vector2.Distance(position, affectingZonePoint[i]) == closestDistance)
+            if (Vector2.Distance(position, affectingZonePoint[i]) == closestDistance)
             {
 
-            }else if (Vector2.Distance(position, affectingZonePoint[i]) < distance)
+            }
+            else if (Vector2.Distance(position, affectingZonePoint[i]) < distance)
             {
                 distance = Vector2.Distance(position, affectingZonePoint[i]);
             }
@@ -94,79 +101,128 @@ public class ChunkShow : MonoBehaviour
         float distance = 50000f;
         for (int i = 0; i < affectingZonePoint.Length; i++)
         {
-            if(Vector2.Distance(position, affectingZonePoint[i]) < distance)
+            if (Vector2.Distance(position, affectingZonePoint[i]) < distance)
             {
                 distance = Vector2.Distance(position, affectingZonePoint[i]);
             }
         }
         return distance;
     }
-    public void GeneratePreview()
+    public void GenerateMeshPreview()
     {
         for (int i = 0; i < previewThinks.Count; i++)
         {
             Destroy(previewThinks[i].gameObject);
         }
         previewThinks.Clear();
-        for (int x = 0; x < baseMap.GetLength(0); x++)
+        for (int i = 0; i < baseMap.GetLength(0) - 1; i++)
         {
-            for (int y = 0; y < baseMap.GetLength(1); y++)
+            for (int j = 0; j < baseMap.GetLength(1) - 1; j++)
             {
-                if(baseMap[x,y] > -20f) //metre a 60 en temps normal voir plus
-
+                Vector2[] positionTemporaire = new Vector2[4];
+                int value = 0;
+                if (baseMap[i, j] > 60f)
                 {
-                    GameObject obj = Instantiate(cubePreview, transform);
+                    positionTemporaire[value] = new Vector2(i, j);
 
-                    obj.transform.position = new Vector3(myChunk.x * 16f + x, baseMap[x,y], myChunk.y * 16f + y);
-                    previewThinks.Add(obj.transform);
+                    value++;
+                }
+                if (baseMap[i , j + 1] > 60f)
+                {
+                    positionTemporaire[value] = new Vector2(i, j + 1);
 
+                    value++;
+                }
+                if (baseMap[i + 1, j + 1] > 60f)
+                {
+                    positionTemporaire[value] = new Vector2(i + 1, j + 1);
+
+                    value++;
+                }
+                if (baseMap[i + 1, j] > 60f)
+                {
+                    positionTemporaire[value] = new Vector2(i + 1, j);
+
+                    value++;
+                }
+                if (value == 3)
+                {
+                    /// make a triagle shape
+                    /// 
+                    for (int w = 0; w < 3; w++)
+                    {
+                        if (!verticies.Contains(positionTemporaire[w]))
+                        {
+                            verticies.Add(new Vector3(positionTemporaire[w].x, 1, positionTemporaire[w].y));
+                        }
+                    }
+                    for (int w = 0; w < 3; w++)
+                    {
+                        triangles.Add(verticies.IndexOf(positionTemporaire[w]));
+                    }
+                    
+                }else if(value == 4)
+                {
+                    for (int w = 0; w < 4; w++)
+                    {
+                        if (!verticies.Contains(positionTemporaire[w]))
+                        {
+                            verticies.Add(new Vector3(positionTemporaire[w].x, 1, positionTemporaire[w].y));
+                        }
+                    }
+                    ///triangles.Add(verticies.IndexOf(positionTemporaire[0]));
+                    ///Debug.Log(verticies.IndexOf(positionTemporaire[0]));
+                    ///Debug.Log(verticies.IndexOf(positionTemporaire[1]));
+                    ///Debug.Log(verticies.IndexOf(positionTemporaire[2]));
+                    ///Debug.Log(verticies.IndexOf(positionTemporaire[3]));
+                    ///
+                    ///triangles.Add(verticies.IndexOf(positionTemporaire[1]));
+                    ///triangles.Add(verticies.IndexOf(positionTemporaire[2]));
+                    ///triangles.Add(verticies.IndexOf(positionTemporaire[2]));
+                    ///triangles.Add(verticies.IndexOf(positionTemporaire[3]));
+                    ///triangles.Add(verticies.IndexOf(positionTemporaire[0]));
                 }
 
-                
+
             }
         }
+
+        Vector3[] positionTempo = new Vector3[verticies.Count];
+        int[] triangleTempo = new int[triangles.Count];
+        for (int i = 0; i < verticies.Count; i++)
+        {
+            positionTempo[i] = verticies[i];
+        }
+        for (int i = 0; i < triangles.Count; i++)
+        {
+            triangleTempo[i] = triangles[i];
+        }
+
+        mesh.vertices = positionTempo;
+        mesh.triangles = triangleTempo;
     }
 
+    public int VonNeumanNumber(float value)
+    {
+        value = value * seed;
+        value *= value;
+        value = value % 1000000;
+        value = value / 100;
+        return Mathf.CeilToInt(value);
+
+    }
     public Vector2 GenerationPseudoAleatoire(Vector2 position)
     {
 
-        float x = position.x;
-        float y = position.y;
-        if (Mathf.CeilToInt(x % 96) < 0)
-        {
-            x = x % 96;
-            x = 96 - x;
-            x = x % 96;
-            x = table[Mathf.CeilToInt(x)];
+        float x = VonNeumanNumber(position.x);
+        float y = VonNeumanNumber(position.y);
 
-        }
-        else
-        {
-            x = x % 96;
-            x = table[Mathf.CeilToInt(x)];
-
-        }
-        if (Mathf.CeilToInt(y % 96) < 0)
-        {
-            y = Mathf.CeilToInt(y);
-            y = y % 96;
-            y = y % 2;
-            y = 96 - y;
-            y = table[Mathf.CeilToInt(y)];
-
-        }
-        else
-        {
-            y = y % 96;
-            y = table[Mathf.CeilToInt(y)];
-
-        }
-
-        float value = x + y + Mathf.Sqrt(x * x + y * y);
+        float value = x + y + (x * x) + (y * y);
         x = value % 99;
         y = (value / 99) % 99;
-        x = x / 20;
-        y = y / 20;
+        x = x / 50;
+        y = y / 50;
+
         return new Vector2(x, y) * AffectiongScaleIsland * 16f;
     }
 }
