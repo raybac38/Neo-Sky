@@ -45,4 +45,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sphere: {fileID: 831427221022525803, guid: d042ab37a52d6b5478e845e417ab8be3, type: 3}
   actualChunk: {x: 0, y: 0}
-  renderDistance: 7
+  renderDistance: 12

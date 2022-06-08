@@ -87,7 +87,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myAffectingZone: {x: 0, y: 0}
-  AffectiongScaleIsland: 8
+  AffectiongScaleIsland: 16
   cubePreview: {fileID: 3779004532629654556, guid: d343c912a91af1d44b2dc864640fcefa, type: 3}
   islandPreview: {fileID: 2273103507493847013, guid: f62c344e545aaf04badd4d479746fa7b, type: 3}
   seed: 4267984

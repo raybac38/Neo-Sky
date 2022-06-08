@@ -8,14 +8,14 @@ public class ChunkShow : MonoBehaviour
 
     public GameObject cubePreview;
     public GameObject islandPreview;
-    List<Transform> previewThinks = new List<Transform>();
+    private List<Transform> previewThinks = new List<Transform>();
 
-    List<Vector3> verticies = new List<Vector3>();
-    List<int> triangles = new List<int>();
+    private List<Vector3> verticies = new List<Vector3>();
+    private List<int> triangles = new List<int>();
 
     public int seed = 4267984;
 
-    Mesh mesh;
+    private Mesh mesh;
 
     private int[] table = { 1, 72, 95, 4, 92, 89, 74, 18, 18, 9, 10, 11, 43, 78, 89, 63, 15, 15, 7, 30, 74, 75, 31, 95, 61, 57, 48, 76, 48, 18, 89, 76, 10, 30, 18, 75, 31, 32, 63, 74, 15, 92, 81, 70, 39, 48, 95, 42, 84, 89, 15, 39, 33, 53, 46, 76, 18, 33, 57, 76, 46, 43,
  10, 30, 59, 7, 89, 63, 64, 89, 75, 84, 89, 53, 76, 30, 31, 33, 89, 5, 57, 81, 81, 89, 30, 30, 84, 86, 18, 7, 76, 95, 7, 63, 39, 97, 48, 89};
@@ -47,7 +47,6 @@ public class ChunkShow : MonoBehaviour
         {
             for (float y = -2f; y < 3f; y++)
             {
-                Debug.Log(i);
                 affectingZonePoint[i] = (16 * AffectiongScaleIsland) * (myAffectingZone + new Vector2(x, y));
                 affectingZonePoint[i] += GenerationPseudoAleatoire((new Vector2(x, y) + myAffectingZone) * AffectiongScaleIsland * 16f);
                 i++;
@@ -110,6 +109,10 @@ public class ChunkShow : MonoBehaviour
     }
     public void GenerateMeshPreview()
     {
+
+        mesh.Clear();
+        verticies.Clear();
+        triangles.Clear();
         for (int i = 0; i < previewThinks.Count; i++)
         {
             Destroy(previewThinks[i].gameObject);
@@ -158,35 +161,39 @@ public class ChunkShow : MonoBehaviour
                     }
                     for (int w = 0; w < 3; w++)
                     {
-                        triangles.Add(verticies.IndexOf(positionTemporaire[w]));
+                        triangles.Add(verticies.IndexOf(new Vector3(positionTemporaire[w].x, 1, positionTemporaire[w].y)));
                     }
                     
                 }else if(value == 4)
                 {
                     for (int w = 0; w < 4; w++)
                     {
-                        if (!verticies.Contains(positionTemporaire[w]))
+                        if (!verticies.Contains(new Vector3(positionTemporaire[w].x, 1, positionTemporaire[w].y)))
                         {
                             verticies.Add(new Vector3(positionTemporaire[w].x, 1, positionTemporaire[w].y));
                         }
                     }
-                    ///triangles.Add(verticies.IndexOf(positionTemporaire[0]));
-                    ///Debug.Log(verticies.IndexOf(positionTemporaire[0]));
-                    ///Debug.Log(verticies.IndexOf(positionTemporaire[1]));
-                    ///Debug.Log(verticies.IndexOf(positionTemporaire[2]));
-                    ///Debug.Log(verticies.IndexOf(positionTemporaire[3]));
-                    ///
-                    ///triangles.Add(verticies.IndexOf(positionTemporaire[1]));
-                    ///triangles.Add(verticies.IndexOf(positionTemporaire[2]));
-                    ///triangles.Add(verticies.IndexOf(positionTemporaire[2]));
-                    ///triangles.Add(verticies.IndexOf(positionTemporaire[3]));
-                    ///triangles.Add(verticies.IndexOf(positionTemporaire[0]));
+                    triangles.Add(verticies.IndexOf(new Vector3(positionTemporaire[0].x, 1, positionTemporaire[0].y)));
+                    triangles.Add(verticies.IndexOf(new Vector3(positionTemporaire[1].x, 1, positionTemporaire[1].y)));
+                    triangles.Add(verticies.IndexOf(new Vector3(positionTemporaire[2].x, 1, positionTemporaire[2].y)));
+                    triangles.Add(verticies.IndexOf(new Vector3(positionTemporaire[2].x, 1, positionTemporaire[2].y)));
+                    triangles.Add(verticies.IndexOf(new Vector3(positionTemporaire[3].x, 1, positionTemporaire[3].y)));
+                    triangles.Add(verticies.IndexOf(new Vector3(positionTemporaire[0].x, 1, positionTemporaire[0].y)));
                 }
 
 
             }
         }
 
+        for (int i = 0; i < triangles.Count; i++)
+        {
+            if(triangles[i] == -1)
+            {
+                Debug.LogError(i);
+                triangles[i] = 0;
+            }
+        }
+       
         Vector3[] positionTempo = new Vector3[verticies.Count];
         int[] triangleTempo = new int[triangles.Count];
         for (int i = 0; i < verticies.Count; i++)
