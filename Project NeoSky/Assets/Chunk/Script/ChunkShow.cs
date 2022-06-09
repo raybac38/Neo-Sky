@@ -5,6 +5,7 @@ public class ChunkShow : MonoBehaviour
     Vector2Int myChunk;
     public Vector2Int myAffectingZone;
     public int AffectiongScaleIsland = 8; //scale par rapport a 16
+    public int height = 60;
 
     public GameObject cubePreview;
     public GameObject islandPreview;
@@ -124,25 +125,25 @@ public class ChunkShow : MonoBehaviour
             {
                 Vector2[] positionTemporaire = new Vector2[4];
                 int value = 0;
-                if (baseMap[i, j] > 60f)
+                if (baseMap[i, j] > height)
                 {
                     positionTemporaire[value] = new Vector2(i, j);
 
                     value++;
                 }
-                if (baseMap[i , j + 1] > 60f)
+                if (baseMap[i , j + 1] > height)
                 {
                     positionTemporaire[value] = new Vector2(i, j + 1);
 
                     value++;
                 }
-                if (baseMap[i + 1, j + 1] > 60f)
+                if (baseMap[i + 1, j + 1] > height)
                 {
                     positionTemporaire[value] = new Vector2(i + 1, j + 1);
 
                     value++;
                 }
-                if (baseMap[i + 1, j] > 60f)
+                if (baseMap[i + 1, j] > height)
                 {
                     positionTemporaire[value] = new Vector2(i + 1, j);
 
