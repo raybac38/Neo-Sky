@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public class ChunkShow : MonoBehaviour
 {
-    Vector2Int myChunk;
+    public Vector2Int myChunk;
     public Vector2Int myAffectingZone;
     public int AffectiongScaleIsland = 8; //scale par rapport a 16
     public int height = 60;
