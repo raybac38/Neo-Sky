@@ -31,14 +31,13 @@ public class RefreshChunkView : MonoBehaviour
     private void RefreshChunkListe()
     {
         //ajout des nouveau chunk a chager
-        int x = 0;
         Vector2Int recurence = Vector2Int.zero;
         chunkToLoad.Clear();
         chunkToLoad.Add(actualChunk);
-        for (int render = 0; render < renderDistance; render++)
+        for (int render = 1; render < renderDistance + 1; render++)
         {
-            x--;
-            recurence = actualChunk - Vector2Int.one * x;
+            
+            recurence = actualChunk - Vector2Int.one;
             chunkToLoad.Add(recurence);
 
             for (int i = 0; i < render * 2; i++)
@@ -61,44 +60,45 @@ public class RefreshChunkView : MonoBehaviour
                 recurence += Vector2Int.left;
                 chunkToLoad.Add(recurence);
             }
-
+            recurence += Vector2Int.left;
         }
 
-        int decalage = 0;
+        
         //enleve les doublons
-        for (int i = 0; i < chunkLoad.Count; i++)
+        for (int i = chunkLoad.Count - 1; i != -1; i--)
         {
-            if (chunkToLoad.Contains(chunkLoad[i - decalage].myChunk))
+            if (chunkToLoad.Contains(chunkLoad[i].myChunk))
             {
-                chunkToLoad.RemoveAt(i - decalage);
-                decalage++;
+                chunkToLoad.RemoveAt(i);
             }
         }
 
         ///supression des chunks qui sont trop loins
-        for (int i = 0; i < chunkLoad.Count; i++)
-        {
-            if (chunkLoad[i].myChunk.x > actualChunk.x + renderDistance + offSetChunk)
-            {
-                Destroy(chunkLoad[i].gameObject);
-                chunkLoad.RemoveAt(i);
-            }
-            if (chunkLoad[i].myChunk.x < actualChunk.x - renderDistance - offSetChunk)
-            {
-                Destroy(chunkLoad[i].gameObject);
-                chunkLoad.RemoveAt(i);
-            }
-            if (chunkLoad[i].myChunk.y > actualChunk.y + renderDistance + offSetChunk)
-            {
-                Destroy(chunkLoad[i].gameObject);
-                chunkLoad.RemoveAt(i);
-            }
-            if (chunkLoad[i].myChunk.y < actualChunk.y - renderDistance - offSetChunk)
-            {
-                Destroy(chunkLoad[i].gameObject);
-                chunkLoad.RemoveAt(i);
-            }
-        }
+        //for (int i = chunkLoad.Count - 1; i != 0; i--)
+        //{
+        //
+        //    if (chunkLoad[i].myChunk.x > actualChunk.x + renderDistance + offSetChunk)
+        //    {
+        //        Destroy(chunkLoad[i].gameObject);
+        //        chunkLoad.RemoveAt(i);
+        //    }
+        //    if (chunkLoad[i].myChunk.x < actualChunk.x - renderDistance - offSetChunk)
+        //    {
+        //        Destroy(chunkLoad[i].gameObject);
+        //        chunkLoad.RemoveAt(i);
+        //    }
+        //    if (chunkLoad[i].myChunk.y > actualChunk.y + renderDistance + offSetChunk)
+        //    {
+        //        Destroy(chunkLoad[i].gameObject);
+        //        chunkLoad.RemoveAt(i);
+        //    }
+        //    if (chunkLoad[i].myChunk.y < actualChunk.y - renderDistance - offSetChunk)
+        //    {
+        //        Destroy(chunkLoad[i].gameObject);
+        //        chunkLoad.RemoveAt(i);
+        //    }
+        //}
+        
     }
 
     private void Update()

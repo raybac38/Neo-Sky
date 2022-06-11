@@ -340,6 +340,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 661927386278960131, guid: 76552ab732130b643986e19b52fe352d, type: 3}
+      propertyPath: actualLoadProsesse
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3849899223948263137, guid: 76552ab732130b643986e19b52fe352d, type: 3}
       propertyPath: m_Name
       value: ChunkLoader
