@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -200,13 +200,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 707431976}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: 0.11356506, y: 0.22762904, z: -0.026740259, w: 0.9667332}
+  m_LocalPosition: {x: 5, y: 16.11, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 13.4, y: 26.499, z: 0}
 --- !u!114 &707431980
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -340,10 +340,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 661927386278960131, guid: 76552ab732130b643986e19b52fe352d, type: 3}
-      propertyPath: actualLoadProsesse
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3849899223948263137, guid: 76552ab732130b643986e19b52fe352d, type: 3}
       propertyPath: m_Name
       value: ChunkLoader

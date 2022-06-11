@@ -190,7 +190,7 @@ public class ChunkShow : MonoBehaviour
         {
             if(triangles[i] == -1)
             {
-                Debug.LogError(i);
+                Debug.LogAssertion(i);
                 triangles[i] = 0;
             }
         }
