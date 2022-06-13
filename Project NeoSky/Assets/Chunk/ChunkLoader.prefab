@@ -45,6 +45,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sphere: {fileID: 831427221022525803, guid: d042ab37a52d6b5478e845e417ab8be3, type: 3}
   actualLoadProsesse: 0
+  rapiditerChargement: 1
   chunkToLoad: []
   chunkLoad: []
   actualChunk: {x: 0, y: 0}

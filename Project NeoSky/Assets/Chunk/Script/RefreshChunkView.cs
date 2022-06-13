@@ -69,7 +69,6 @@ public class RefreshChunkView : MonoBehaviour
             if (chunkToLoad.Contains(chunkLoad[i].myChunk))
             {
                 int ram = chunkToLoad.IndexOf(chunkLoad[i].myChunk);
-                Debug.Log(ram);
                 chunkToLoad.RemoveAt(ram);
             }
         }
@@ -111,14 +110,18 @@ public class RefreshChunkView : MonoBehaviour
         actualChunk = CalculeMyChunk();
         RefreshChunkListe();
         //prendre le premier chunk, et le charger
-        if(chunkToLoad.Count != 0)
+        for (int i = 0; i < rapiditerChargement; i++)
         {
-            GameObject obj = Instantiate(sphere);
-            obj.transform.position = new Vector3(chunkToLoad[0].x * 16, 1, chunkToLoad[0].y * 16);
-            chunkLoad.Add(obj.GetComponent<ChunkShow>());
-            chunkLoad[chunkLoad.Count - 1].Refresh();
-            chunkToLoad.RemoveAt(0);
+            if (chunkToLoad.Count != 0)
+            {
+                GameObject obj = Instantiate(sphere);
+                obj.transform.position = new Vector3(chunkToLoad[0].x * 16, 1, chunkToLoad[0].y * 16);
+                chunkLoad.Add(obj.GetComponent<ChunkShow>());
+                chunkLoad[chunkLoad.Count - 1].Refresh();
+                chunkToLoad.RemoveAt(0);
+            }
         }
+        
     }
 
     private Vector2Int CalculeMyChunk()

@@ -5,7 +5,9 @@ public class ChunkShow : MonoBehaviour
     public Vector2Int myChunk;
     public Vector2Int myAffectingZone;
     public int AffectiongScaleIsland = 8; //scale par rapport a 16
-    public int height = 60;
+    public int height = 60; //hauteur du bruit cellulaire
+
+    
 
     public GameObject cubePreview;
     public GameObject islandPreview;
@@ -75,12 +77,12 @@ public class ChunkShow : MonoBehaviour
         {
             for (int y = 0; y < baseMap.GetLength(1); y++)
             {
-                float firstValue = ClosestPoint(new Vector2(position.x + x, position.y + y));
-                baseMap[x, y] = SecondeClosestPoint(firstValue, new Vector2(position.x + x, position.y + y)) - firstValue;
+                float firstValue = ClosestPointDistance(new Vector2(position.x + x, position.y + y));
+                baseMap[x, y] = SecondeClosestPointDistance(firstValue, new Vector2(position.x + x, position.y + y)) - firstValue;
             }
         }
     }
-    private float SecondeClosestPoint(float closestDistance, Vector2 position)
+    private float SecondeClosestPointDistance(float closestDistance, Vector2 position)
     {
         float distance = 50000f;
         for (int i = 0; i < affectingZonePoint.Length; i++)
@@ -96,7 +98,7 @@ public class ChunkShow : MonoBehaviour
         }
         return distance;
     }
-    private float ClosestPoint(Vector2 position)
+    private float ClosestPointDistance(Vector2 position)
     {
         float distance = 50000f;
         for (int i = 0; i < affectingZonePoint.Length; i++)
@@ -107,6 +109,20 @@ public class ChunkShow : MonoBehaviour
             }
         }
         return distance;
+    }
+    private Vector2 ClosestPointVector(Vector2 position)
+    {
+        float distance = 50000f;
+        Vector2 vector2 = Vector2.one;
+        for (int i = 0; i < affectingZonePoint.Length; i++)
+        {
+            if (Vector2.Distance(position, affectingZonePoint[i]) < distance)
+            {
+                distance = Vector2.Distance(position, affectingZonePoint[i]);
+                vector2 = affectingZonePoint[i];
+            }
+        }
+        return vector2;
     }
     public void GenerateMeshPreview()
     {
@@ -185,12 +201,22 @@ public class ChunkShow : MonoBehaviour
 
             }
         }
+        ///calcule des hauteurs des points
 
+        for (int i = 0; i < verticies.Count; i++)
+        {
+            Vector2 position = ClosestPointVector(verticies[i]);
+            int hauteur = GenerationHauteurIls(position);
+            verticies[i] = new Vector3(verticies[i].x, hauteur, verticies[i].z);
+        }
+
+
+        ///mise des listes dans les array du mesh
+        
         for (int i = 0; i < triangles.Count; i++)
         {
             if(triangles[i] == -1)
             {
-                Debug.LogAssertion(i);
                 triangles[i] = 0;
             }
         }
@@ -232,5 +258,25 @@ public class ChunkShow : MonoBehaviour
         y = y / 50;
 
         return new Vector2(x, y) * AffectiongScaleIsland * 16f;
+    }
+
+    /// <summary>
+    /// methode pour calculer la hauteur des ils en fonction de leur point d'influance
+    /// </summary>
+    /// <param name="position"> la position du point d'influance le plus proche</param>
+    /// <returns>une valeur comprise entre 0 et 256</returns>
+    public int GenerationHauteurIls(Vector2 position)
+    {
+        Debug.Log(position);
+        float x = VonNeumanNumber(position.x);
+        float y = VonNeumanNumber(position.y);
+
+        float value = x + y + (x * x) + (y*y);
+        value = seed * value;
+        value = value % 256;
+
+        return Mathf.RoundToInt(value);
+
+        
     }
 }
