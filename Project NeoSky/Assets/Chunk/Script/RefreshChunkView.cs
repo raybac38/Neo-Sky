@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class RefreshChunkView : MonoBehaviour
 {
-    public GameObject sphere;
+    public GameObject chunk;
+    public GameObject chunkGameObjetStorage;
     [Flags] public enum loadProsesse { NormalLoad, HightSpeedLoad };
     ///List<Transform> chunkLoad = new List<Transform>();
     public loadProsesse actualLoadProsesse;
@@ -114,7 +115,8 @@ public class RefreshChunkView : MonoBehaviour
         {
             if (chunkToLoad.Count != 0)
             {
-                GameObject obj = Instantiate(sphere);
+                GameObject obj = Instantiate(chunk);
+                obj.transform.SetParent(chunkGameObjetStorage.transform);
                 obj.transform.position = new Vector3(chunkToLoad[0].x * 16, 1, chunkToLoad[0].y * 16);
                 chunkLoad.Add(obj.GetComponent<ChunkShow>());
                 chunkLoad[chunkLoad.Count - 1].Refresh();

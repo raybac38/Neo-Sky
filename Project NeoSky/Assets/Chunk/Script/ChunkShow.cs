@@ -7,23 +7,26 @@ public class ChunkShow : MonoBehaviour
     public int AffectiongScaleIsland = 8; //scale par rapport a 16
     public int height = 60; //hauteur du bruit cellulaire
 
-    
-
-    public GameObject cubePreview;
-    public GameObject islandPreview;
-    private List<Transform> previewThinks = new List<Transform>();
-
     private List<Vector3> verticies = new List<Vector3>();
+    private List<Vector3> upperVerticies = new List<Vector3>();
+
     private List<int> triangles = new List<int>();
 
     public int seed = 4267984;
 
     private Mesh mesh;
+    public int octaves;
+    public float persistance;
+    public float lacunarity;
+    public float scale;
 
-    private int[] table = { 1, 72, 95, 4, 92, 89, 74, 18, 18, 9, 10, 11, 43, 78, 89, 63, 15, 15, 7, 30, 74, 75, 31, 95, 61, 57, 48, 76, 48, 18, 89, 76, 10, 30, 18, 75, 31, 32, 63, 74, 15, 92, 81, 70, 39, 48, 95, 42, 84, 89, 15, 39, 33, 53, 46, 76, 18, 33, 57, 76, 46, 43,
- 10, 30, 59, 7, 89, 63, 64, 89, 75, 84, 89, 53, 76, 30, 31, 33, 89, 5, 57, 81, 81, 89, 30, 30, 84, 86, 18, 7, 76, 95, 7, 63, 39, 97, 48, 89};
     public Vector2[] affectingZonePoint = new Vector2[25];
     private float[,] baseMap = new float[17, 17];
+
+    public float upperStrenght = 10;
+    public float lowerStrenght = 20;
+    MeshCollider collider;
+
     private void Awake()
     {
         mesh = GetComponent<MeshFilter>().mesh;
@@ -31,7 +34,6 @@ public class ChunkShow : MonoBehaviour
     private void Start()
     {
 
-        Refresh();
     }
     public void Refresh()
     {
@@ -41,6 +43,10 @@ public class ChunkShow : MonoBehaviour
 
         CalculateBaseMap();
         GenerateMeshPreview();
+
+        collider = GetComponent<MeshCollider>();
+        collider.sharedMesh = mesh;
+
     }
     public void CalculateAffectingZonePoint()
     {
@@ -57,21 +63,9 @@ public class ChunkShow : MonoBehaviour
             }
         }
     }
-    ///private Vector2 PseudoRandomeNum(Vector2 position)
-    ///{
-    ///    float nombre = (position.x + position.y) + 2f * position.x - 0.5f * position.y;
-    ///    nombre = Mathf.Pow(nombre, 6);
-    ///    nombre = nombre % 100000;
-    ///    nombre = nombre / 100;
-    ///    nombre = Mathf.Floor(nombre);
-    ///    
-    ///    float witdh = nombre % 98;
-    ///    float height = Mathf.FloorToInt(nombre / 98) % 98;
-    ///
-    ///    return new Vector2(witdh / 1000f + 1f, height / 1000f + 1f) * AffectiongScaleIsland * 16f;
-    ///}
     public void CalculateBaseMap()
     {
+        ///calcule de baseMap
         Vector2 position = myChunk * 16;
         for (int x = 0; x < baseMap.GetLength(0); x++)
         {
@@ -110,31 +104,72 @@ public class ChunkShow : MonoBehaviour
         }
         return distance;
     }
-    private Vector2 ClosestPointVector(Vector2 position)
+
+    private Vector2Int ClosestPointDistanceVector(Vector2 position)
     {
+        Vector2Int pointAffecting = Vector2Int.zero;
         float distance = 50000f;
-        Vector2 vector2 = Vector2.one;
         for (int i = 0; i < affectingZonePoint.Length; i++)
         {
             if (Vector2.Distance(position, affectingZonePoint[i]) < distance)
             {
                 distance = Vector2.Distance(position, affectingZonePoint[i]);
-                vector2 = affectingZonePoint[i];
+                pointAffecting = new Vector2Int(Mathf.RoundToInt(affectingZonePoint[i].x), Mathf.RoundToInt(affectingZonePoint[i].y));
             }
         }
-        return vector2;
+        return pointAffecting;
     }
     public void GenerateMeshPreview()
     {
-
+        List<int> upperTriangles = new List<int>();
         mesh.Clear();
         verticies.Clear();
         triangles.Clear();
-        for (int i = 0; i < previewThinks.Count; i++)
+        ///trouver les points de bordures
+        List<Vector3> borderVerticies = new List<Vector3>();
+        for (int i = 0; i < baseMap.GetLength(0); i++)
         {
-            Destroy(previewThinks[i].gameObject);
+            if (baseMap[i, 0] > height)
+            {
+                borderVerticies.Add(new Vector3(i, 0, 0));
+                Debug.Log("add border firts");
+            }
+            if (baseMap[i, 16] > height)
+            {
+                borderVerticies.Add(new Vector3(i, 0, 16));
+                Debug.Log("add border firts");
+
+            }
         }
-        previewThinks.Clear();
+        for (int i = 1; i < baseMap.GetLength(1) - 1; i++)
+        {
+            if (baseMap[0, i] > height)
+            {
+                borderVerticies.Add(new Vector3(0, 0, i));
+                Debug.Log("add border second");
+
+            }
+            if (baseMap[16, i] > height)
+            {
+                Debug.Log("add border second");
+                borderVerticies.Add(new Vector3(16, 0, i));
+            }
+        }
+        for (int x = 1; x < baseMap.GetLength(0) - 1; x++)
+        {
+            for (int y = 1; y < baseMap.GetLength(1) - 1; y++)
+            {
+                if (baseMap[x, y] > height)
+                {
+                    // check si il y a un voisin qui est trop bas (donc un bord)
+                    if (baseMap[x + 1, y] < height | baseMap[x - 1, y] < height | baseMap[x, y + 1] < height | baseMap[x, y - 1] < height)
+                    {
+                        borderVerticies.Add(new Vector3(x, 0, y));
+                    }
+                }
+            }
+        }
+        /// fait les triangles de la face du desus
         for (int i = 0; i < baseMap.GetLength(0) - 1; i++)
         {
             for (int j = 0; j < baseMap.GetLength(1) - 1; j++)
@@ -144,25 +179,21 @@ public class ChunkShow : MonoBehaviour
                 if (baseMap[i, j] > height)
                 {
                     positionTemporaire[value] = new Vector2(i, j);
-
                     value++;
                 }
-                if (baseMap[i , j + 1] > height)
+                if (baseMap[i, j + 1] > height)
                 {
                     positionTemporaire[value] = new Vector2(i, j + 1);
-
                     value++;
                 }
                 if (baseMap[i + 1, j + 1] > height)
                 {
                     positionTemporaire[value] = new Vector2(i + 1, j + 1);
-
                     value++;
                 }
                 if (baseMap[i + 1, j] > height)
                 {
                     positionTemporaire[value] = new Vector2(i + 1, j);
-
                     value++;
                 }
                 if (value == 3)
@@ -171,56 +202,233 @@ public class ChunkShow : MonoBehaviour
                     /// 
                     for (int w = 0; w < 3; w++)
                     {
-                        if (!verticies.Contains(positionTemporaire[w]))
+                        if (!upperVerticies.Contains(new Vector3(positionTemporaire[w].x, 1, positionTemporaire[w].y)))
                         {
-                            verticies.Add(new Vector3(positionTemporaire[w].x, 1, positionTemporaire[w].y));
+                            upperVerticies.Add(new Vector3(positionTemporaire[w].x, 1, positionTemporaire[w].y));
                         }
                     }
                     for (int w = 0; w < 3; w++)
                     {
-                        triangles.Add(verticies.IndexOf(new Vector3(positionTemporaire[w].x, 1, positionTemporaire[w].y)));
+                        upperTriangles.Add(upperVerticies.IndexOf(new Vector3(positionTemporaire[w].x, 1, positionTemporaire[w].y)));
                     }
-                    
-                }else if(value == 4)
+                }
+                else if (value == 4)
                 {
                     for (int w = 0; w < 4; w++)
                     {
-                        if (!verticies.Contains(new Vector3(positionTemporaire[w].x, 1, positionTemporaire[w].y)))
+                        if (!upperVerticies.Contains(new Vector3(positionTemporaire[w].x, 1, positionTemporaire[w].y)))
                         {
-                            verticies.Add(new Vector3(positionTemporaire[w].x, 1, positionTemporaire[w].y));
+                            upperVerticies.Add(new Vector3(positionTemporaire[w].x, 1, positionTemporaire[w].y));
                         }
                     }
-                    triangles.Add(verticies.IndexOf(new Vector3(positionTemporaire[0].x, 1, positionTemporaire[0].y)));
-                    triangles.Add(verticies.IndexOf(new Vector3(positionTemporaire[1].x, 1, positionTemporaire[1].y)));
-                    triangles.Add(verticies.IndexOf(new Vector3(positionTemporaire[2].x, 1, positionTemporaire[2].y)));
-                    triangles.Add(verticies.IndexOf(new Vector3(positionTemporaire[2].x, 1, positionTemporaire[2].y)));
-                    triangles.Add(verticies.IndexOf(new Vector3(positionTemporaire[3].x, 1, positionTemporaire[3].y)));
-                    triangles.Add(verticies.IndexOf(new Vector3(positionTemporaire[0].x, 1, positionTemporaire[0].y)));
+                    upperTriangles.Add(upperVerticies.IndexOf(new Vector3(positionTemporaire[0].x, 1, positionTemporaire[0].y)));
+                    upperTriangles.Add(upperVerticies.IndexOf(new Vector3(positionTemporaire[1].x, 1, positionTemporaire[1].y)));
+                    upperTriangles.Add(upperVerticies.IndexOf(new Vector3(positionTemporaire[2].x, 1, positionTemporaire[2].y)));
+                    upperTriangles.Add(upperVerticies.IndexOf(new Vector3(positionTemporaire[2].x, 1, positionTemporaire[2].y)));
+                    upperTriangles.Add(upperVerticies.IndexOf(new Vector3(positionTemporaire[3].x, 1, positionTemporaire[3].y)));
+                    upperTriangles.Add(upperVerticies.IndexOf(new Vector3(positionTemporaire[0].x, 1, positionTemporaire[0].y)));
                 }
-
-
             }
         }
-        ///calcule des hauteurs des points
+        ///ajouter la partie basse 
+        ///dupliquer les verticles de upperTriangle
+        ///ajouter le liste upperTriangles en modifiant l'odre (sens anti horaire)
+        for (int i = 0; i < upperVerticies.Count; i++)
+        {
+            verticies.Add(upperVerticies[i]);
+            verticies.Add(new Vector3(upperVerticies[i].x, 0, upperVerticies[i].z));
 
+        }
+        for (int i = 0; i < Mathf.RoundToInt(upperTriangles.Count / 3); i++)
+        {
+            triangles.Add(verticies.IndexOf(upperVerticies[upperTriangles[i * 3]]));
+            triangles.Add(verticies.IndexOf(upperVerticies[upperTriangles[i * 3 + 1]]));
+            triangles.Add(verticies.IndexOf(upperVerticies[upperTriangles[i * 3 + 2]]));
+
+            triangles.Add(verticies.IndexOf(upperVerticies[upperTriangles[i * 3 + 2]] + Vector3.down));
+            triangles.Add(verticies.IndexOf(upperVerticies[upperTriangles[i * 3 + 1]] + Vector3.down));
+            triangles.Add(verticies.IndexOf(upperVerticies[upperTriangles[i * 3]] + Vector3.down));
+
+        }
+
+        ///construire les faces des bords
+        for (int i = -1; i < baseMap.GetLength(0) + 1; i++)
+        {
+            for (int j = -1; j < baseMap.GetLength(1) + 1; j++)
+            {
+                //effectue un recherche par carrer de 1 de taille
+                int value = 0;
+                List<Vector3> point = new List<Vector3>();
+                point.Clear();
+                if (borderVerticies.Contains(new Vector3(i, 0, j)))
+                {
+                    value++;
+                    point.Add(new Vector3(i, 0, j));
+                }
+                if (borderVerticies.Contains(new Vector3(i + 1, 0, j)))
+                {
+                    value++;
+                    point.Add(new Vector3(i + 1, 0, j));
+                }
+                if (borderVerticies.Contains(new Vector3(i, 0, j + 1)))
+                {
+                    value++;
+                    point.Add(new Vector3(i, 0, j + 1));
+                }
+                if (borderVerticies.Contains(new Vector3(i + 1, 0, j + 1)))
+                {
+                    value++;
+                    point.Add(new Vector3(i + 1, 0, j + 1));
+                }
+                if (value == 2)
+                {
+                    //ajout de la face (double face) ==> voir commment ammeliorer le processus
+                    triangles.Add(verticies.IndexOf(point[0]));
+                    triangles.Add(verticies.IndexOf(point[1]));
+                    triangles.Add(verticies.IndexOf(point[0] - Vector3.down));
+                    triangles.Add(verticies.IndexOf(point[0] - Vector3.down));
+                    triangles.Add(verticies.IndexOf(point[1]));
+                    triangles.Add(verticies.IndexOf(point[0]));
+
+                    triangles.Add(verticies.IndexOf(point[0] - Vector3.down));
+                    triangles.Add(verticies.IndexOf(point[1]));
+                    triangles.Add(verticies.IndexOf(point[1] - Vector3.down));
+                    triangles.Add(verticies.IndexOf(point[1] - Vector3.down));
+                    triangles.Add(verticies.IndexOf(point[1]));
+                    triangles.Add(verticies.IndexOf(point[0] - Vector3.down));
+                }
+                if (value == 3)
+                {
+                    //
+                    for (int w = 0; w < 2; w++)
+                    {
+                        triangles.Add(verticies.IndexOf(point[0 + w]));
+                        triangles.Add(verticies.IndexOf(point[1 + w]));
+                        triangles.Add(verticies.IndexOf(point[0 + w] - Vector3.down));
+                        triangles.Add(verticies.IndexOf(point[0 + w] - Vector3.down));
+                        triangles.Add(verticies.IndexOf(point[1 + w]));
+                        triangles.Add(verticies.IndexOf(point[0 + w]));
+
+                        triangles.Add(verticies.IndexOf(point[0 + w] - Vector3.down));
+                        triangles.Add(verticies.IndexOf(point[1 + w]));
+                        triangles.Add(verticies.IndexOf(point[1 + w] - Vector3.down));
+                        triangles.Add(verticies.IndexOf(point[1 + w] - Vector3.down));
+                        triangles.Add(verticies.IndexOf(point[1 + w]));
+                        triangles.Add(verticies.IndexOf(point[0 + w] - Vector3.down));
+                    }
+                    triangles.Add(verticies.IndexOf(point[2]));
+                    triangles.Add(verticies.IndexOf(point[0]));
+                    triangles.Add(verticies.IndexOf(point[2] - Vector3.down));
+                    triangles.Add(verticies.IndexOf(point[2] - Vector3.down));
+                    triangles.Add(verticies.IndexOf(point[0]));
+                    triangles.Add(verticies.IndexOf(point[2]));
+
+                    triangles.Add(verticies.IndexOf(point[2] - Vector3.down));
+                    triangles.Add(verticies.IndexOf(point[0]));
+                    triangles.Add(verticies.IndexOf(point[0] - Vector3.down));
+                    triangles.Add(verticies.IndexOf(point[0] - Vector3.down));
+                    triangles.Add(verticies.IndexOf(point[0]));
+                    triangles.Add(verticies.IndexOf(point[2] - Vector3.down));
+
+                }
+            }
+        }
+        /// application du perlin noise sur le terrain 
+        /// a faire: 
+        /// noiseTextue du desus
+
+        upperVerticies.Clear();
         for (int i = 0; i < verticies.Count; i++)
         {
-            Vector2 position = ClosestPointVector(verticies[i]);
-            int hauteur = GenerationHauteurIls(position);
-            verticies[i] = new Vector3(verticies[i].x, hauteur, verticies[i].z);
+            if (verticies[i].y == 1)
+            {
+                //chaque y qui doit etre modifier
+                float amplitude = 1;
+                float frequency = 1;
+                float noiseHeight = 0;
+                for (int w = 0; w < octaves; w++)
+                {
+                    float newX = (verticies[i].x + (16 * myChunk.x)) / scale * frequency;
+                    float newY = (verticies[i].z + (16 * myChunk.y)) / scale * frequency;
+
+                    float perlinValue = Mathf.PerlinNoise(newX, newY) * 2 - 0.5f;
+                    noiseHeight = perlinValue * amplitude;
+                    amplitude += amplitude * persistance;
+                    frequency *= lacunarity;
+                }
+                float bord = (baseMap[Mathf.RoundToInt(verticies[i].x), Mathf.RoundToInt(verticies[i].z)] / height) - 0.99f;
+                if (bord < 1)
+                {
+                    noiseHeight *= bord;
+                }
+                verticies[i] += Vector3.up * noiseHeight * upperStrenght;
+                upperVerticies.Add(verticies[i]);
+            }
         }
+
+
+        //noiseTexture du desous
+        for (int i = 0; i < verticies.Count - 1; i++)
+        {
+            if (verticies[i].y == 0)
+            {
+                //chaque y qui doit etre modifier
+                float amplitude = 1;
+                float frequency = 1;
+                float noiseHeight = 0;
+                for (int w = 0; w < octaves - 3; w++)
+                {
+                    float newX = (verticies[i].x + (16 * myChunk.x)) / scale * frequency;
+                    float newY = (verticies[i].z + (16 * myChunk.y)) / scale * frequency;
+
+                    float perlinValue = Mathf.PerlinNoise(newX, newY) * 2 - 0.5f;
+                    noiseHeight = perlinValue * amplitude;
+                    amplitude += amplitude * persistance;
+                    frequency *= lacunarity;
+                }
+                float bord = (baseMap[Mathf.RoundToInt(verticies[i].x), Mathf.RoundToInt(verticies[i].z)] - height) / 4;
+
+
+                noiseHeight *= bord;
+
+                verticies[i] += Vector3.down * noiseHeight * lowerStrenght + Vector3.up;
+            }
+        }
+
+
+        
+
+
+        ///calcule des hauteurs des points
+        for (int i = 0; i < verticies.Count - 1; i++)
+        {
+            Vector2 point = ClosestPointDistanceVector(new Vector2(transform.position.x + verticies[i].x, transform.position.z + verticies[i].z));
+            int hauteur = GenerationHauteurIls(point);
+            verticies[i] = new Vector3(verticies[i].x, verticies[i].y + hauteur * 5, verticies[i].z);
+
+        }
+
 
 
         ///mise des listes dans les array du mesh
-        
+
         for (int i = 0; i < triangles.Count; i++)
         {
-            if(triangles[i] == -1)
+            if (triangles[i] == -1)
             {
                 triangles[i] = 0;
+                Debug.LogWarning("verticies faux");
             }
         }
-       
+
+        if (verticies.Count == 0)
+        {
+            return;
+        }
+        if (triangles.Count == 0)
+        {
+            return;
+        }
         Vector3[] positionTempo = new Vector3[verticies.Count];
         int[] triangleTempo = new int[triangles.Count];
         for (int i = 0; i < verticies.Count; i++)
@@ -231,6 +439,7 @@ public class ChunkShow : MonoBehaviour
         {
             triangleTempo[i] = triangles[i];
         }
+
 
         mesh.vertices = positionTempo;
         mesh.triangles = triangleTempo;
@@ -267,16 +476,31 @@ public class ChunkShow : MonoBehaviour
     /// <returns>une valeur comprise entre 0 et 256</returns>
     public int GenerationHauteurIls(Vector2 position)
     {
-        Debug.Log(position);
+        position = new Vector2(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.y));
         float x = VonNeumanNumber(position.x);
         float y = VonNeumanNumber(position.y);
 
-        float value = x + y + (x * x) + (y*y);
-        value = seed * value;
+        float value = x + y + (x * x) + (y * y);
+
+        value = value * seed;
         value = value % 256;
 
-        return Mathf.RoundToInt(value);
 
-        
+        return Mathf.FloorToInt(value);
+
+
+    }
+    public Vector2 CalculateOffSetVector(Vector2 position)
+    {
+        Vector2 offSet = Vector2.zero;
+        float decalage = GenerationHauteurIls(position);
+        decalage *= seed;
+
+        offSet = new Vector2(decalage / 256, decalage / 256);
+
+        return offSet;
+
     }
 }
+
+

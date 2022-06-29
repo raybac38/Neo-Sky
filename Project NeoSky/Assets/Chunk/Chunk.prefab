@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7828444603245249946}
   - component: {fileID: 1783521161745583879}
   - component: {fileID: 855905410105258757}
+  - component: {fileID: 385121093370981133}
   m_Layer: 0
   m_Name: Chunk
   m_TagString: Untagged
@@ -52,7 +53,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 022d48a26fb681544a06dca85a417890, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -86,12 +87,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9591af4a96cf81c40a5d1f2837cfb79d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myChunk: {x: 0, y: 0}
   myAffectingZone: {x: 0, y: 0}
-  AffectiongScaleIsland: 25
-  height: 120
+  AffectiongScaleIsland: 22
+  height: 150
   cubePreview: {fileID: 3779004532629654556, guid: d343c912a91af1d44b2dc864640fcefa, type: 3}
   islandPreview: {fileID: 2273103507493847013, guid: f62c344e545aaf04badd4d479746fa7b, type: 3}
   seed: 4267984
+  octaves: 5
+  persistance: 0.5
+  lacunarity: 1.31
+  scale: 200
   affectingZonePoint:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
@@ -102,6 +108,7 @@ MonoBehaviour:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
   - {x: 0, y: 0}
+  strenght: 10
 --- !u!33 &855905410105258757
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -109,4 +116,18 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 831427221022525803}
+  m_Mesh: {fileID: 0}
+--- !u!64 &385121093370981133
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 831427221022525803}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
   m_Mesh: {fileID: 0}
