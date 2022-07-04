@@ -89,10 +89,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myChunk: {x: 0, y: 0}
   myAffectingZone: {x: 0, y: 0}
-  AffectiongScaleIsland: 22
-  height: 150
-  cubePreview: {fileID: 3779004532629654556, guid: d343c912a91af1d44b2dc864640fcefa, type: 3}
-  islandPreview: {fileID: 2273103507493847013, guid: f62c344e545aaf04badd4d479746fa7b, type: 3}
+  AffectiongScaleIsland: 50
+  height: 320
   seed: 4267984
   octaves: 5
   persistance: 0.5
@@ -108,7 +106,8 @@ MonoBehaviour:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
   - {x: 0, y: 0}
-  strenght: 10
+  upperStrenght: 15
+  lowerStrenght: 25
 --- !u!33 &855905410105258757
 MeshFilter:
   m_ObjectHideFlags: 0

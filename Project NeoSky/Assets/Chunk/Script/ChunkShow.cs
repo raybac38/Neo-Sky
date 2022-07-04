@@ -20,6 +20,8 @@ public class ChunkShow : MonoBehaviour
     public float lacunarity;
     public float scale;
 
+    private Vector2 offset = new Vector2(0, 0);
+
     public Vector2[] affectingZonePoint = new Vector2[25];
     private float[,] baseMap = new float[17, 17];
 
@@ -37,6 +39,7 @@ public class ChunkShow : MonoBehaviour
     }
     public void Refresh()
     {
+        CalculeOffsetVector();
         myAffectingZone = myChunk = new Vector2Int(Mathf.FloorToInt(transform.position.x / (16 * AffectiongScaleIsland)), Mathf.FloorToInt(transform.position.z / (16 * AffectiongScaleIsland)));
         myChunk = new Vector2Int(Mathf.FloorToInt(transform.position.x / 16), Mathf.FloorToInt(transform.position.z / 16));
         CalculateAffectingZonePoint();
@@ -132,12 +135,10 @@ public class ChunkShow : MonoBehaviour
             if (baseMap[i, 0] > height)
             {
                 borderVerticies.Add(new Vector3(i, 0, 0));
-                Debug.Log("add border firts");
             }
             if (baseMap[i, 16] > height)
             {
                 borderVerticies.Add(new Vector3(i, 0, 16));
-                Debug.Log("add border firts");
 
             }
         }
@@ -146,12 +147,10 @@ public class ChunkShow : MonoBehaviour
             if (baseMap[0, i] > height)
             {
                 borderVerticies.Add(new Vector3(0, 0, i));
-                Debug.Log("add border second");
 
             }
             if (baseMap[16, i] > height)
             {
-                Debug.Log("add border second");
                 borderVerticies.Add(new Vector3(16, 0, i));
             }
         }
@@ -348,59 +347,52 @@ public class ChunkShow : MonoBehaviour
                 float noiseHeight = 0;
                 for (int w = 0; w < octaves; w++)
                 {
-                    float newX = (verticies[i].x + (16 * myChunk.x)) / scale * frequency;
-                    float newY = (verticies[i].z + (16 * myChunk.y)) / scale * frequency;
+                    float newX = ((verticies[i].x + offset.x + (16 * myChunk.x)) / scale * frequency) + (offset.x * octaves);
+                    float newY = ((verticies[i].z + offset.y + (16 * myChunk.y)) / scale * frequency) + (offset.y * octaves);
 
                     float perlinValue = Mathf.PerlinNoise(newX, newY) * 2 - 0.5f;
                     noiseHeight = perlinValue * amplitude;
                     amplitude += amplitude * persistance;
                     frequency *= lacunarity;
                 }
-                float bord = (baseMap[Mathf.RoundToInt(verticies[i].x), Mathf.RoundToInt(verticies[i].z)] / height) - 0.99f;
+                float bord = ((baseMap[Mathf.RoundToInt(verticies[i].x), Mathf.RoundToInt(verticies[i].z)] / height) - 0.99f) / 1.5f;
                 if (bord < 1)
                 {
                     noiseHeight *= bord;
                 }
-                verticies[i] += Vector3.up * noiseHeight * upperStrenght;
-                upperVerticies.Add(verticies[i]);
-            }
-        }
+                verticies[i] += Vector3.up * noiseHeight * 5 * upperStrenght;
 
-
-        //noiseTexture du desous
-        for (int i = 0; i < verticies.Count - 1; i++)
-        {
-            if (verticies[i].y == 0)
+            }else if (verticies[i].y == 0)
             {
                 //chaque y qui doit etre modifier
                 float amplitude = 1;
                 float frequency = 1;
                 float noiseHeight = 0;
-                for (int w = 0; w < octaves - 3; w++)
+                for (int w = 0; w < octaves - 2; w++)
                 {
-                    float newX = (verticies[i].x + (16 * myChunk.x)) / scale * frequency;
-                    float newY = (verticies[i].z + (16 * myChunk.y)) / scale * frequency;
+                    float newX = ((verticies[i].x + (16 * myChunk.x)) / scale * frequency) + (offset.x * octaves);
+                    float newY = ((verticies[i].z + (16 * myChunk.y)) / scale * frequency) + (offset.y * octaves);
 
-                    float perlinValue = Mathf.PerlinNoise(newX, newY) * 2 - 0.5f;
+                    float perlinValue = Mathf.PerlinNoise(newX, newY) * 2 + 0.5f;
                     noiseHeight = perlinValue * amplitude;
                     amplitude += amplitude * persistance;
                     frequency *= lacunarity;
                 }
-                float bord = (baseMap[Mathf.RoundToInt(verticies[i].x), Mathf.RoundToInt(verticies[i].z)] - height) / 4;
-
-
-                noiseHeight *= bord;
-
-                verticies[i] += Vector3.down * noiseHeight * lowerStrenght + Vector3.up;
+                float bord = ((baseMap[Mathf.RoundToInt(verticies[i].x), Mathf.RoundToInt(verticies[i].z)] / height) - 0.99f) / 1.8f;
+                if (bord < 3)
+                {
+                    noiseHeight *= bord;
+                }
+                verticies[i] += (Vector3.down * noiseHeight * 10 * lowerStrenght) + Vector3.up;
             }
-        }
 
+        }
 
         
 
 
         ///calcule des hauteurs des points
-        for (int i = 0; i < verticies.Count - 1; i++)
+        for (int i = 0; i < verticies.Count; i++)
         {
             Vector2 point = ClosestPointDistanceVector(new Vector2(transform.position.x + verticies[i].x, transform.position.z + verticies[i].z));
             int hauteur = GenerationHauteurIls(point);
@@ -417,7 +409,7 @@ public class ChunkShow : MonoBehaviour
             if (triangles[i] == -1)
             {
                 triangles[i] = 0;
-                Debug.LogWarning("verticies faux");
+                //Debug.LogWarning("verticies faux");
             }
         }
 
@@ -499,6 +491,15 @@ public class ChunkShow : MonoBehaviour
         offSet = new Vector2(decalage / 256, decalage / 256);
 
         return offSet;
+
+    }
+
+    public void CalculeOffsetVector()
+    {
+        int moduloX = Mathf.RoundToInt(seed % 100);
+        int moduloY = Mathf.RoundToInt((seed % 10000) / 100);
+
+        offset = new Vector2(seed % moduloX, seed % moduloY);
 
     }
 }

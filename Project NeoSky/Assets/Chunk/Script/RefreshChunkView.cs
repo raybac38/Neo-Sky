@@ -75,11 +75,11 @@ public class RefreshChunkView : MonoBehaviour
         }
 
         ///supression des chunks qui sont trop loins
-        if(chunkLoad.Count != 0)
+        if (chunkLoad.Count != 0)
         {
             for (int i = chunkLoad.Count - 1; i != 0; i--)
             {
-        
+
                 if (chunkLoad[i].myChunk.x > actualChunk.x + renderDistance + offSetChunk)
                 {
                     Destroy(chunkLoad[i].gameObject);
@@ -123,7 +123,7 @@ public class RefreshChunkView : MonoBehaviour
                 chunkToLoad.RemoveAt(0);
             }
         }
-        
+
     }
 
     private Vector2Int CalculeMyChunk()

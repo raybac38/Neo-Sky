@@ -81,4 +81,4 @@ MonoBehaviour:
   chunkToLoad: []
   chunkLoad: []
   actualChunk: {x: 0, y: 0}
-  renderDistance: 10
+  renderDistance: 20
