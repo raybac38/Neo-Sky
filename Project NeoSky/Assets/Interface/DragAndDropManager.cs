@@ -44,11 +44,23 @@ public class DragAndDropManager : MonoBehaviour
 
         //check si il y a de la place a l'endroit voulu
 
-        bool move = dropGrille.RequestPlaceItem(dropCase, itemDrag);
+        bool move = false;
+        Item item1 = ScriptableObject.CreateInstance<Item>();
+        item1.number = itemDrag.number;
+        item1.data = itemDrag.data;
+        item1.ID = Random.Range(0, 10000000);
+        move = dropGrille.RequestPlaceItem(dropCase, item1);
         if (move)
         {
+            Debug.Log("delet old Item");
             dragGrille.DeleteItem(itemDrag);
         }
+
+
+        itemDrag = null;
+        dragGrille = null;
+        dropGrille = null;
+        dropCase = null;
 
     }
 

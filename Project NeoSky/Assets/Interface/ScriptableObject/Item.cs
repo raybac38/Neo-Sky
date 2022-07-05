@@ -7,5 +7,6 @@ public class Item : ScriptableObject
 {
     public ItemData data;
     public int number;
-
+    public int ID;
+    public bool isRotate = false;
 }

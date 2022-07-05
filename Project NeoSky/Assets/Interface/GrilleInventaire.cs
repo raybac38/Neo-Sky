@@ -19,12 +19,12 @@ public class GrilleInventaire : MonoBehaviour
     public DragAndDropManager dragAndDropManager;
     [SerializeField]
     public List<Item> itemIndex = new List<Item>();
+
     public void Awake()
     {
         itemIndex.Clear();
         if (taille.x < 1 | taille.y < 1)
         {
-            Debug.LogError("taille d'une grille d'inventaire invalide");
             taille = Vector2Int.one * 3;
 
         }
@@ -101,7 +101,6 @@ public class GrilleInventaire : MonoBehaviour
         item = FindStackablePlace(item);
         if (item == null)
         {
-            Debug.Log("item stack qq part");
             //item stack qq part
         }
         else
@@ -109,7 +108,6 @@ public class GrilleInventaire : MonoBehaviour
             item = FindNewPlace(item);
             if (item == null)
             {
-                Debug.Log("nouveau stack de creer");
                 //nouveau stack de creer
             }
             else
@@ -130,22 +128,18 @@ public class GrilleInventaire : MonoBehaviour
     {
         if (item.number == 0)
         {
-            Debug.Log("annulation du stack, pas assez d'item");
             return item;
         }
         if (itemIndex.Count == 0)
         {
-            Debug.Log("annulation du stack, pas d'endroit possible a stack");
             return item;
         }
-        Debug.Log("recherche de stack possible");
         for (int i = 0; i < itemIndex.Count; i++)
         {
             if (itemIndex[i].data.itemName == item.data.itemName)
             {
                 if (itemIndex[i].number < item.data.maxItem)
                 {
-                    Debug.Log("place trouver, re stack en cours");
                     //y'a de la place, youpi ^^
                     itemIndex[i].number += item.number;
                     item.number = 0;
@@ -188,11 +182,12 @@ public class GrilleInventaire : MonoBehaviour
                 if (canPlace == true)
                 {
                     //placer l'item
-                    int nouvelleIndex = itemIndex.Count;
 
                     Item item1 = ScriptableObject.CreateInstance<Item>();
                     item1.number = item.number;
                     item1.data = item.data;
+                    itemIndex.Add(item1);
+                    int nouvelleIndex = itemIndex.IndexOf(item1);
                     if (item1.number > item1.data.maxItem)
                     {
                         int difference = item1.number - item1.data.maxItem;
@@ -203,7 +198,6 @@ public class GrilleInventaire : MonoBehaviour
                     {
                         item.number = 0;
                     }
-                    itemIndex.Add(item1);
 
                     for (int i = 0; i < item.data.dimention.x; i++)
                     {
@@ -216,23 +210,21 @@ public class GrilleInventaire : MonoBehaviour
                     if (item.number == 0)
                     {
                         //si il n'y a plus d'item, sert a rien de chercher de la place
-                        Debug.Log("stack de cree");
                         return null;
                     }
                 }
             }
         }
-        Debug.Log("plus de place");
         return item;
     }
 
     public void RefreshCaseInventoryDisplay()
     {
-        Debug.Log("refresh effectuer");
         for (int i = 0; i < positionItem.GetLength(0); i++)
         {
             for (int j = 0; j < positionItem.GetLength(1); j++)
             {
+                Debug.Log(positionItem[i, j]);
                 if (positionItem[i, j] == -1)
                 {
                     caseArrray[i, j].caseUse = false;
@@ -248,39 +240,48 @@ public class GrilleInventaire : MonoBehaviour
         //mise en place des nombres pour savoir le compte des items
 
         //rendre le systeme plus optimiser pour eviter les coups de lags ^^
-
+        Debug.Log("ah");
         bool texteMit = false;
         for (int i = 0; i < itemIndex.Count; i++)
         {
-            texteMit = false;
-            for (int x = 0; x < positionItem.GetLength(0); x++)
+            if(itemIndex[i] == null)
             {
-                for (int y = 0; y < positionItem.GetLength(1); y++)
-                {
-                    if (i == positionItem[x, y])
-                    {
-                        //firt occurance
-                        TextMeshProUGUI text;
-                        GameObject obj;
 
-                        if (caseArrray[x, y].textMesh == null)
+            }
+            else
+            {                
+                texteMit = false;
+                for (int x = 0; x < positionItem.GetLength(0); x++)
+                {
+                    for (int y = 0; y < positionItem.GetLength(1); y++)
+                    {
+                        if (i == positionItem[x, y])
                         {
-                            obj = Instantiate(new GameObject("numero (clone)"), caseArrray[x, y].transform);
-                            text = obj.AddComponent<TextMeshProUGUI>();
-                            caseArrray[x, y].textMesh = text;
+                            //firt occurance
+                            TextMeshProUGUI text;
+                            GameObject obj;
+
+                            if (caseArrray[x, y].textMesh == null)
+                            {
+
+                                obj = new GameObject("numero (clone)");
+                                obj.transform.SetParent(caseArrray[x, y].gameObject.transform, false);
+                                text = obj.AddComponent<TextMeshProUGUI>();
+                                caseArrray[x, y].textMesh = text;
+                            }
+                            else
+                            {
+                                text = caseArrray[x, y].textMesh;
+                            }
+                            text.text = itemIndex[i].number.ToString();
+                            text.fontSize = 0.7f;
+                            text.rectTransform.sizeDelta = new Vector2(1, 1);
+                            texteMit = true;
+                            break;
                         }
-                        else
-                        {
-                            text = caseArrray[x, y].textMesh;
-                        }
-                        text.text = itemIndex[i].number.ToString();
-                        text.fontSize = 0.7f;
-                        text.rectTransform.sizeDelta = new Vector2(1, 1);
-                        texteMit = true;
-                        break;
                     }
+                    if (texteMit) break;
                 }
-                if (texteMit) break;
             }
         }
 
@@ -294,6 +295,7 @@ public class GrilleInventaire : MonoBehaviour
         item2 = ScriptableObject.CreateInstance<Item>();
         item2.number = woodPrefab.number;
         item2.data = woodPrefab.data;
+        item2.ID = Random.Range(0, 10000000);
         RequestAddItem(item2);
     }
     public void AddIron()
@@ -302,14 +304,20 @@ public class GrilleInventaire : MonoBehaviour
 
         item2.number = ironPrefab.number;
         item2.data = ironPrefab.data;
+        item2.ID = Random.Range(0, 10000000);
+
         RequestAddItem(item2);
     }
 
     public bool RequestPlaceItem(CaseInventory caseInventory, Item item)
     {
         Vector2Int position = caseInventory.index;
-        if (taille.x > position.x + item.data.dimention.x | taille.y < position.y - item.data.dimention.y)
+        if (taille.x < position.x + (item.data.dimention.x - 1) | taille.y < position.y - (item.data.dimention.y - 1) | position.y - (item.data.dimention.y - 1) < 0 | position.x + (item.data.dimention.x - 1) < 0)
         {
+            Debug.Log("hors de l'array");
+            Debug.Log(position.y + "posi y");
+            
+            Debug.Log(new Vector2(position.x + (item.data.dimention.x - 1), position.y - (item.data.dimention.y - 1)));
             return false;
             //hors de l'array (on vas eviter les erreur de out of range xD)
 
@@ -320,20 +328,24 @@ public class GrilleInventaire : MonoBehaviour
             {
                 if (positionItem[position.x + i, position.y - j] != -1)
                 {
+                    Debug.Log("une case deja prise");
+                    Debug.Log(new Vector2(position.x + i, position.y - j));
                     return false;
                 }
 
             }
 
         }
+        Debug.Log("place de libre");
         //placer l'item xD
-        int newIndex = itemIndex.Count;
         itemIndex.Add(item);
+        int newIndex = itemIndex.IndexOf(item);
+        Debug.Log(newIndex);
         for (int i = 0; i < item.data.dimention.x; i++)
         {
             for (int j = 0; j < item.data.dimention.y; j++)
             {
-                positionItem[position.x + i, position.y + j] = newIndex;
+                positionItem[position.x + i, position.y - j] = newIndex;
             }
         }
         RefreshCaseInventoryDisplay();
@@ -343,28 +355,38 @@ public class GrilleInventaire : MonoBehaviour
     public void DeleteItem(Item item)
     {
         int index = itemIndex.IndexOf(item);
+        Debug.Log(index + "remove");
         for (int x = 0; x < positionItem.GetLength(0); x++)
         {
             for (int y = 0; y < positionItem.GetLength(1); y++)
             {
                 if (positionItem[x, y] == index)
                 {
+                    Debug.Log("erase Data");
                     positionItem[x, y] = -1;
                     caseArrray[x, y].rawImage.color = new Color(230f, 230f, 230f, 0.6f);
                     caseArrray[x, y].caseUse = false;
-                    TextMeshProUGUI textMeshProUGUI = GetComponentInChildren<TextMeshProUGUI>();
-
-                    if (textMeshProUGUI != null)
-                    {
-                        Destroy(textMeshProUGUI.transform.gameObject);
-                    }
+                    TextMeshProUGUI textMeshProUGUI = caseArrray[x, y].gameObject.GetComponentInChildren<TextMeshProUGUI>();
+                    if(textMeshProUGUI != null) Destroy(textMeshProUGUI.transform.gameObject);
+                    
+                }
+            }
+        }
+        itemIndex.RemoveAt(index);
+        for (int i = 0; i < positionItem.GetLength(0); i++)
+        {
+            for (int j = 0; j < positionItem.GetLength(1); j++)
+            {
+                if(positionItem[i,j] != -1)
+                {
+                    positionItem[i, j]--;
                 }
             }
         }
         RefreshCaseInventoryDisplay();
     }
 
-
+   
 
 
 }
