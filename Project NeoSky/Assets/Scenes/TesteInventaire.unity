@@ -542,6 +542,7 @@ GameObject:
   - component: {fileID: 463127324}
   - component: {fileID: 463127326}
   - component: {fileID: 463127327}
+  - component: {fileID: 463127328}
   m_Layer: 5
   m_Name: Inventaire
   m_TagString: Untagged
@@ -626,6 +627,7 @@ MonoBehaviour:
   prefabItemForground: {fileID: 0}
   UIscale: 50
   taille: {x: 10, y: 3}
+  dragAndDropManager: {fileID: 463127328}
   itemIndex: []
   woodPrefab: {fileID: 11400000, guid: 5ebb31d1f94db0849971ac06813f2946, type: 2}
   ironPrefab: {fileID: 11400000, guid: 080298049dba3a34f97586a880361513, type: 2}
@@ -649,10 +651,25 @@ MonoBehaviour:
   prefabItemForground: {fileID: 0}
   UIscale: 50
   taille: {x: 10, y: 11}
+  dragAndDropManager: {fileID: 463127328}
   itemIndex: []
   woodPrefab: {fileID: 11400000, guid: 5ebb31d1f94db0849971ac06813f2946, type: 2}
   ironPrefab: {fileID: 11400000, guid: 080298049dba3a34f97586a880361513, type: 2}
   item2: {fileID: 0}
+--- !u!114 &463127328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 463127322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 821be0afc866f754caa521800e18f1b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poche: {fileID: 463127326}
+  backpack: {fileID: 463127327}
 --- !u!1 &679255722
 GameObject:
   m_ObjectHideFlags: 0

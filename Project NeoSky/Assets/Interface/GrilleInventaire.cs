@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 public class GrilleInventaire : MonoBehaviour
 {
@@ -16,8 +16,9 @@ public class GrilleInventaire : MonoBehaviour
     public CaseInventory[,] caseArrray;
     [SerializeField]
     public int[,] positionItem;
+    public DragAndDropManager dragAndDropManager;
     [SerializeField]
-    List<Item> itemIndex = new List<Item>();
+    public List<Item> itemIndex = new List<Item>();
     public void Awake()
     {
         itemIndex.Clear();
@@ -47,6 +48,7 @@ public class GrilleInventaire : MonoBehaviour
                 CaseInventory caseInventory = obj.GetComponent<CaseInventory>();
                 caseArrray[x, y] = caseInventory;
                 caseInventory.index = new Vector2Int(x, y);
+                caseInventory.dragAndDropManager = dragAndDropManager;
                 caseInventory.grilleInventaire = this;
                 obj.transform.localPosition = new Vector3(x * UIscale, UIscale * y, 0);
 
@@ -95,9 +97,9 @@ public class GrilleInventaire : MonoBehaviour
 
     public void RequestAddItem(Item item)
     {
-        
+
         item = FindStackablePlace(item);
-        if(item == null)
+        if (item == null)
         {
             Debug.Log("item stack qq part");
             //item stack qq part
@@ -105,7 +107,7 @@ public class GrilleInventaire : MonoBehaviour
         else
         {
             item = FindNewPlace(item);
-            if(item == null)
+            if (item == null)
             {
                 Debug.Log("nouveau stack de creer");
                 //nouveau stack de creer
@@ -118,7 +120,7 @@ public class GrilleInventaire : MonoBehaviour
         RefreshCaseInventoryDisplay();
 
     }
-    
+
     /// <summary>
     /// permet de stacker automatiquement un item
     /// </summary>
@@ -231,7 +233,7 @@ public class GrilleInventaire : MonoBehaviour
         {
             for (int j = 0; j < positionItem.GetLength(1); j++)
             {
-                if(positionItem[i,j] == -1)
+                if (positionItem[i, j] == -1)
                 {
                     caseArrray[i, j].caseUse = false;
                 }
@@ -255,13 +257,13 @@ public class GrilleInventaire : MonoBehaviour
             {
                 for (int y = 0; y < positionItem.GetLength(1); y++)
                 {
-                    if(i == positionItem[x, y])
+                    if (i == positionItem[x, y])
                     {
                         //firt occurance
                         TextMeshProUGUI text;
                         GameObject obj;
 
-                        if(caseArrray[x,y].textMesh == null)
+                        if (caseArrray[x, y].textMesh == null)
                         {
                             obj = Instantiate(new GameObject("numero (clone)"), caseArrray[x, y].transform);
                             text = obj.AddComponent<TextMeshProUGUI>();
@@ -276,7 +278,7 @@ public class GrilleInventaire : MonoBehaviour
                         text.rectTransform.sizeDelta = new Vector2(1, 1);
                         texteMit = true;
                         break;
-                    }                    
+                    }
                 }
                 if (texteMit) break;
             }
@@ -302,6 +304,68 @@ public class GrilleInventaire : MonoBehaviour
         item2.data = ironPrefab.data;
         RequestAddItem(item2);
     }
+
+    public bool RequestPlaceItem(CaseInventory caseInventory, Item item)
+    {
+        Vector2Int position = caseInventory.index;
+        if (taille.x > position.x + item.data.dimention.x | taille.y < position.y - item.data.dimention.y)
+        {
+            return false;
+            //hors de l'array (on vas eviter les erreur de out of range xD)
+
+        }
+        for (int i = 0; i < item.data.dimention.x; i++)
+        {
+            for (int j = 0; j < item.data.dimention.y; j++)
+            {
+                if (positionItem[position.x + i, position.y - j] != -1)
+                {
+                    return false;
+                }
+
+            }
+
+        }
+        //placer l'item xD
+        int newIndex = itemIndex.Count;
+        itemIndex.Add(item);
+        for (int i = 0; i < item.data.dimention.x; i++)
+        {
+            for (int j = 0; j < item.data.dimention.y; j++)
+            {
+                positionItem[position.x + i, position.y + j] = newIndex;
+            }
+        }
+        RefreshCaseInventoryDisplay();
+        return true;
+    }
+
+    public void DeleteItem(Item item)
+    {
+        int index = itemIndex.IndexOf(item);
+        for (int x = 0; x < positionItem.GetLength(0); x++)
+        {
+            for (int y = 0; y < positionItem.GetLength(1); y++)
+            {
+                if (positionItem[x, y] == index)
+                {
+                    positionItem[x, y] = -1;
+                    caseArrray[x, y].rawImage.color = new Color(230f, 230f, 230f, 0.6f);
+                    caseArrray[x, y].caseUse = false;
+                    TextMeshProUGUI textMeshProUGUI = GetComponentInChildren<TextMeshProUGUI>();
+
+                    if (textMeshProUGUI != null)
+                    {
+                        Destroy(textMeshProUGUI.transform.gameObject);
+                    }
+                }
+            }
+        }
+        RefreshCaseInventoryDisplay();
+    }
+
+
+
 
 }
 
