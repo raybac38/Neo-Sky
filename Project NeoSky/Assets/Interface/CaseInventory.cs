@@ -60,26 +60,38 @@ public class CaseInventory : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
             ///deuxieme partie
             ///
-            dragAndDropManager.DeclareDragPoint(itemDrag, grilleInventaire);
+            dragAndDropManager.DeclareDragPoint(itemDrag, grilleInventaire, this);
         }
     }
 
 
     public void OnDrag(PointerEventData eventData)
     {
+        if(itemDrag == null)
+        {
+            return;
+        }
+        Vector2Int dimention = itemDrag.data.dimention;
+        if (itemDrag.isRotate)
+        {
+            dimention = new Vector2Int(dimention.y, dimention.x);
+        }
         if (caseUse)
         {
-            ghostItem.transform.position = Input.mousePosition + (new Vector3(itemDrag.data.dimention.x / 2, itemDrag.data.dimention.y / -2, 0) * 50);
+            ghostItem.transform.position = Input.mousePosition + (new Vector3(dimention.x / 2, dimention.y / -2, 0) * 50);
         }
-        //if (Input.GetKeyDown(KeyCode.R))
-        //{
-        //    //rotate la piece
-        //    Debug.Log("rorate");
-        //    itemDrag.isRotate = !itemDrag.isRotate;
-        //    Destroy(ghostItem);
-        //    CreateGhostItem();
-        //}
-
+    }
+    public void RotateItem()
+    {
+        Debug.Log("rorate");
+        Destroy(ghostItem);
+        CreateGhostItem();
+        Vector2Int dimention = itemDrag.data.dimention;
+        if (itemDrag.isRotate)
+        {
+            dimention = new Vector2Int(dimention.y, dimention.x);
+        }
+        ghostItem.transform.position = Input.mousePosition + (new Vector3(dimention.x / 2, dimention.y / -2, 0) * 50);
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -102,8 +114,7 @@ public class CaseInventory : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             dimention = new Vector2Int(dimention.y, dimention.x);
         }
-        
-        dimention = itemDrag.data.dimention; //gg pour cette ligne de code sans fin xD
+
         position = transform.position;
         ghostItem = new GameObject("ghostItem");
         ghostItem.AddComponent<RawImage>().color = itemDrag.data.itemColor;
@@ -128,7 +139,7 @@ public class CaseInventory : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         textMesh.fontSize = 0.7f;
         textMesh.color = Color.white;
 
-
+        ghostItem.transform.localScale = new Vector3(48f, 48f, 0f);
         /// partie qui bug
         number.transform.SetAsLastSibling();
         ghostItem.transform.SetAsLastSibling();

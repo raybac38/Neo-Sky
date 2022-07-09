@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1eeafeac5c6999242af82f176f58607b, type: 3}
+  m_Name: Pistolet
+  m_EditorClassIdentifier: 
+  nameOfItem: Pistolet
+  needCraftStation: 0
+  ressources:
+  - metal
+  - wood
+  quantiter: 3200000019000000
+  output: {fileID: 11400000, guid: 0199385f28a31f94fabbe6325cbddd6b, type: 2}
+  craftingTime: 2

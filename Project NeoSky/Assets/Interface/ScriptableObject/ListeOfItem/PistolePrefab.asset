@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c1d9895c2ca8e7a4ca819be92304228c, type: 3}
-  m_Name: WoodPrefab
+  m_Name: PistolePrefab
   m_EditorClassIdentifier: 
-  itemName: woodPrefab
-  type: wood
-  maxItem: 40
-  dimention: {x: 4, y: 2}
-  itemColor: {r: 0.4245283, g: 0.15432633, b: 0.11814703, a: 1}
+  itemName: Pistolet
+  type: baseWeapon
+  maxItem: 1
+  dimention: {x: 3, y: 2}
+  itemColor: {r: 0.8679245, g: 0.21698113, b: 0.21698113, a: 0}

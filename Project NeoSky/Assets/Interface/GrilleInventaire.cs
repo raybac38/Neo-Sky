@@ -55,53 +55,16 @@ public class GrilleInventaire : MonoBehaviour
             }
         }
     }
-    ///public bool RequestAddItem(Vector2Int tailleItem)
-    ///{
-    ///    if(tailleItem.x > taille.x | tailleItem.y > taille.y)
-    ///    {
-    ///        return false;
-    ///        //item plus grand que l'inventaire xD
-    ///    }
-    ///    bool canPlace = true;
-    ///
-    ///    for (int x = 0; x < positionItem.GetLength(0) - (tailleItem.x - 1); x++)
-    ///    {
-    ///        for (int y = 0; y < positionItem.GetLength(1) - (tailleItem.y - 1); y++)
-    ///        {
-    ///            for (int i = 0; i < tailleItem.x; i++)
-    ///            {
-    ///                for (int j = 0; j < tailleItem.y; j++)
-    ///                {
-    ///                    if(positionItem[x+i,y+j] != null)
-    ///                    {
-    ///                        canPlace = false;
-    ///                        break;
-    ///                    }
-    ///                    
-    ///                }
-    ///                if (!canPlace)
-    ///                {
-    ///                    break;
-    ///                }
-    ///            }
-    ///            if (canPlace == true)
-    ///            {
-    ///                return true;
-    ///            }
-    ///
-    ///        }
-    ///    }
-    ///    return false;
-    ///}
-
-
-    public void RequestAddItem(Item item)
+    public Item RequestAddItem(Item item)
     {
-
         item = FindStackablePlace(item);
         if (item == null)
         {
             //item stack qq part
+        }
+        else if (item.number == 0)
+        {
+            return null;
         }
         else
         {
@@ -110,12 +73,17 @@ public class GrilleInventaire : MonoBehaviour
             {
                 //nouveau stack de creer
             }
-            else
-            {
-
-            }
+            //sinon plus de place
         }
         RefreshCaseInventoryDisplay();
+        if (item == null)
+        {
+            return null;
+        }
+        else
+        {
+            return item;
+        }
 
     }
 
@@ -126,6 +94,7 @@ public class GrilleInventaire : MonoBehaviour
     /// <returns></returns>
     public Item FindStackablePlace(Item item)
     {
+        if (item == null) return item;
         if (item.number == 0)
         {
             return item;
@@ -155,17 +124,23 @@ public class GrilleInventaire : MonoBehaviour
         }
         return item;
     }
+
     public Item FindNewPlace(Item item)
     {
-        bool canPlace = true;
-        for (int x = 0; x < positionItem.GetLength(0) - (item.data.dimention.x - 1); x++)
+        Vector2Int dimention = item.data.dimention;
+        if (item.isRotate)
         {
-            for (int y = 0; y < positionItem.GetLength(1) - (item.data.dimention.y - 1); y++)
+            dimention = new Vector2Int(dimention.y, dimention.x);
+        }
+        bool canPlace = true;
+        for (int x = 0; x < positionItem.GetLength(0) - (dimention.x - 1); x++)
+        {
+            for (int y = 0; y < positionItem.GetLength(1) - (dimention.y - 1); y++)
             {
                 canPlace = true;
-                for (int i = 0; i < item.data.dimention.x; i++)
+                for (int i = 0; i < dimention.x; i++)
                 {
-                    for (int j = 0; j < item.data.dimention.y; j++)
+                    for (int j = 0; j < dimention.y; j++)
                     {
 
                         if (positionItem[x + i, y + j] != -1)
@@ -199,10 +174,11 @@ public class GrilleInventaire : MonoBehaviour
                         item.number = 0;
                     }
 
-                    for (int i = 0; i < item.data.dimention.x; i++)
+                    for (int i = 0; i < dimention.x; i++)
                     {
-                        for (int j = 0; j < item.data.dimention.y; j++)
+                        for (int j = 0; j < dimention.y; j++)
                         {
+
                             positionItem[x + i, y + j] = nouvelleIndex;
                         }
                     }
@@ -224,7 +200,6 @@ public class GrilleInventaire : MonoBehaviour
         {
             for (int j = 0; j < positionItem.GetLength(1); j++)
             {
-                Debug.Log(positionItem[i, j]);
                 if (positionItem[i, j] == -1)
                 {
                     caseArrray[i, j].caseUse = false;
@@ -237,19 +212,23 @@ public class GrilleInventaire : MonoBehaviour
                 }
             }
         }
+
+
+
+
+
         //mise en place des nombres pour savoir le compte des items
 
         //rendre le systeme plus optimiser pour eviter les coups de lags ^^
-        Debug.Log("ah");
         bool texteMit = false;
         for (int i = 0; i < itemIndex.Count; i++)
         {
-            if(itemIndex[i] == null)
+            if (itemIndex[i] == null)
             {
 
             }
             else
-            {                
+            {
                 texteMit = false;
                 for (int x = 0; x < positionItem.GetLength(0); x++)
                 {
@@ -260,7 +239,6 @@ public class GrilleInventaire : MonoBehaviour
                             //firt occurance
                             TextMeshProUGUI text;
                             GameObject obj;
-
                             if (caseArrray[x, y].textMesh == null)
                             {
 
@@ -312,39 +290,48 @@ public class GrilleInventaire : MonoBehaviour
     public bool RequestPlaceItem(CaseInventory caseInventory, Item item)
     {
         Vector2Int position = caseInventory.index;
-        if (taille.x < position.x + (item.data.dimention.x - 1) | taille.y < position.y - (item.data.dimention.y - 1) | position.y - (item.data.dimention.y - 1) < 0 | position.x + (item.data.dimention.x - 1) < 0)
+        Vector2Int dimention = item.data.dimention;
+        if (item.isRotate)
+        {
+            dimention = new Vector2Int(dimention.y, dimention.x);
+        }
+        if (taille.x < position.x + (dimention.x - 1) | taille.y < position.y - (dimention.y - 1) | position.y - (dimention.y - 1) < 0 | position.x + (dimention.x - 1) < 0)
         {
             Debug.Log("hors de l'array");
             Debug.Log(position.y + "posi y");
-            
-            Debug.Log(new Vector2(position.x + (item.data.dimention.x - 1), position.y - (item.data.dimention.y - 1)));
+
+            Debug.Log(new Vector2(position.x + (dimention.x - 1), position.y - (dimention.y - 1)));
             return false;
             //hors de l'array (on vas eviter les erreur de out of range xD)
 
         }
-        for (int i = 0; i < item.data.dimention.x; i++)
+        for (int i = 0; i < dimention.x; i++)
         {
-            for (int j = 0; j < item.data.dimention.y; j++)
+            for (int j = 0; j < dimention.y; j++)
             {
                 if (positionItem[position.x + i, position.y - j] != -1)
                 {
-                    Debug.Log("une case deja prise");
-                    Debug.Log(new Vector2(position.x + i, position.y - j));
-                    return false;
+                    Item item2 = itemIndex[positionItem[position.x + i, position.y - j]];
+                    if (item2 != item)
+                    {
+                        Debug.Log("une case deja prise");
+                        Debug.Log(new Vector2(position.x + i, position.y - j));
+                        return false;
+                    }
                 }
-
             }
-
         }
         Debug.Log("place de libre");
         //placer l'item xD
         itemIndex.Add(item);
         int newIndex = itemIndex.IndexOf(item);
         Debug.Log(newIndex);
-        for (int i = 0; i < item.data.dimention.x; i++)
+        for (int i = 0; i < dimention.x; i++)
         {
-            for (int j = 0; j < item.data.dimention.y; j++)
+            for (int j = 0; j < dimention.y; j++)
             {
+                AdaptiveScaleItem(dimention, new Vector2Int(i, j), position);
+
                 positionItem[position.x + i, position.y - j] = newIndex;
             }
         }
@@ -354,40 +341,167 @@ public class GrilleInventaire : MonoBehaviour
 
     public void DeleteItem(Item item)
     {
-        int index = itemIndex.IndexOf(item);
-        Debug.Log(index + "remove");
+
+        int index = 0;
+        for (int i = 0; i < itemIndex.Count; i++)
+        {
+            if (item.ID == itemIndex[i].ID)
+            {
+                //meme ID
+                index = i;
+                break;
+            }
+        }
+        Debug.Log(index);
+        itemIndex.RemoveAt(index);
         for (int x = 0; x < positionItem.GetLength(0); x++)
         {
             for (int y = 0; y < positionItem.GetLength(1); y++)
             {
                 if (positionItem[x, y] == index)
                 {
-                    Debug.Log("erase Data");
                     positionItem[x, y] = -1;
                     caseArrray[x, y].rawImage.color = new Color(230f, 230f, 230f, 0.6f);
                     caseArrray[x, y].caseUse = false;
+
+                    RectTransform rectTransform = caseArrray[x, y].GetComponent<RectTransform>();
+                    rectTransform.pivot = new Vector2(0.5f, 0.5f);
+                    rectTransform.localScale = Vector3.one * 50;
+                    rectTransform.localPosition = new Vector3(caseArrray[x, y].index.x * 50, caseArrray[x, y].index.y * 50, 0);
                     TextMeshProUGUI textMeshProUGUI = caseArrray[x, y].gameObject.GetComponentInChildren<TextMeshProUGUI>();
-                    if(textMeshProUGUI != null) Destroy(textMeshProUGUI.transform.gameObject);
-                    
+                    if (textMeshProUGUI != null) Destroy(textMeshProUGUI.transform.gameObject);
                 }
-            }
-        }
-        itemIndex.RemoveAt(index);
-        for (int i = 0; i < positionItem.GetLength(0); i++)
-        {
-            for (int j = 0; j < positionItem.GetLength(1); j++)
-            {
-                if(positionItem[i,j] != -1)
+                else
                 {
-                    positionItem[i, j]--;
+                    if (positionItem[x, y] > index)
+                    {
+
+                        positionItem[x, y]--;
+                    }
                 }
             }
+
         }
+
         RefreshCaseInventoryDisplay();
     }
 
-   
 
+    // permet de stack sans probleme
+
+    public Item StackItem(CaseInventory caseInventoryDrop, Item item)
+    {
+        //verifier si c'est le bon type d'item
+
+        Item item1 = itemIndex[positionItem[caseInventoryDrop.index.x, caseInventoryDrop.index.y]];
+        if (item1.data != item.data)
+        {
+            return item;
+        }
+
+        //item = item que l'on veut stack
+        //item1 = item qui se fait stack
+        item1.number += item.number;
+        int difference;
+        if (item1.number > item1.data.maxItem)
+        {
+            difference = item1.number - item.data.maxItem;
+            item1.number -= difference;
+            item.number = difference;
+
+        }
+        else
+        {
+            item.number = 0;
+        }
+        RefreshCaseInventoryDisplay();
+        return item;
+
+
+    }
+
+    public bool PlaceItem(CaseInventory caseInventoryDrop, Item item)
+    {
+        Vector2Int position = caseInventoryDrop.index;
+        Vector2Int dimention = item.data.dimention;
+        if (item.isRotate)
+        {
+            dimention = new Vector2Int(dimention.y, dimention.x);
+        }
+        for (int i = 0; i < dimention.x; i++)
+        {
+            for (int j = 0; j < dimention.y; j++)
+            {
+                if (positionItem[i + position.x, position.y - j] != -1)
+                {
+                    return false;
+                }
+            }
+        }
+        //il y a assez de place;
+        itemIndex.Add(item);
+        int newIndex = itemIndex.IndexOf(item);
+
+        for (int i = 0; i < dimention.x; i++)
+        {
+            for (int j = 0; j < dimention.y; j++)
+            {
+                AdaptiveScaleItem(dimention, new Vector2Int(i, j), position);
+
+                positionItem[position.x + i, position.y - j] = newIndex;
+
+            }
+        }
+        RefreshCaseInventoryDisplay();
+
+        return true;
+    }
+
+    private void AdaptiveScaleItem(Vector2Int dimention, Vector2Int positionRelative, Vector2Int position)
+    {
+        //attention, pour position relative le x vas en positif mais le y doit aller en nagétif
+        Vector3 pivot = new Vector3(0f, 0f, 0);
+        Vector3 scale = new Vector3(48, 48, 0);
+
+        if (positionRelative.x == 0)
+        {
+            pivot += new Vector3(-0.5f, 0f, 0f);
+        }
+        if (positionRelative.x == (dimention.x - 1))
+        {
+            pivot += new Vector3(0.5f, 0f, 0f);
+        }
+        if (positionRelative.y == 0)
+        {
+            pivot += new Vector3(0f, 0.5f, 0f);
+        }
+        if (positionRelative.y == (dimention.y - 1))
+        {
+            pivot += new Vector3(0f, -0.5f, 0f);
+        }
+        if (pivot.y == 0 & pivot.x != 0)
+        {
+            scale = new Vector3(48, 50, 0);
+        }
+        if (pivot.y != 0 & pivot.x == 0)
+        {
+            scale = new Vector3(50, 48, 0);
+        }
+        if (pivot.x == 0 & pivot.y == 0)
+        {
+            scale = new Vector3(50, 50, 0);
+
+        }
+
+        RectTransform rectTransform = caseArrray[position.x + positionRelative.x, position.y - positionRelative.y].GetComponent<RectTransform>();
+        rectTransform.localScale = Vector3.one * 50;
+        rectTransform.pivot -= new Vector2(pivot.x, pivot.y);
+        rectTransform.transform.position -= pivot * 50;
+        rectTransform.localScale = scale;
+        Debug.Log(positionRelative);
+        Debug.Log(pivot);
+
+    }
 
 }
 

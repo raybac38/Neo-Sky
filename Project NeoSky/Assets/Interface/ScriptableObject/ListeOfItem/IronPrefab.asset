@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: IronPrefab
   m_EditorClassIdentifier: 
   itemName: IronPrefab
-  type: Metal
+  type: metal
   maxItem: 40
   dimention: {x: 3, y: 2}
   itemColor: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 1}
