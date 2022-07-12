@@ -352,7 +352,6 @@ public class GrilleInventaire : MonoBehaviour
                 break;
             }
         }
-        Debug.Log(index);
         itemIndex.RemoveAt(index);
         for (int x = 0; x < positionItem.GetLength(0); x++)
         {
@@ -373,9 +372,8 @@ public class GrilleInventaire : MonoBehaviour
                 }
                 else
                 {
-                    if (positionItem[x, y] > index)
+                    if (positionItem[x, y] >= index)
                     {
-
                         positionItem[x, y]--;
                     }
                 }
@@ -428,6 +426,12 @@ public class GrilleInventaire : MonoBehaviour
         {
             dimention = new Vector2Int(dimention.y, dimention.x);
         }
+
+        if(position.x + (dimention.x - 1) > taille.x | position.y - (dimention.y - 1) < 0)
+        {
+            return false;
+        }
+
         for (int i = 0; i < dimention.x; i++)
         {
             for (int j = 0; j < dimention.y; j++)
@@ -498,8 +502,7 @@ public class GrilleInventaire : MonoBehaviour
         rectTransform.pivot -= new Vector2(pivot.x, pivot.y);
         rectTransform.transform.position -= pivot * 50;
         rectTransform.localScale = scale;
-        Debug.Log(positionRelative);
-        Debug.Log(pivot);
+
 
     }
 

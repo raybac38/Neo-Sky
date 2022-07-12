@@ -8,6 +8,7 @@ public class DragAndDropManager : MonoBehaviour
     private Item itemDrag;
     private GrilleInventaire dragGrille;
 
+    private bool defaultRotation;
 
     private GrilleInventaire dropGrille;
     private CaseInventory dropCase;
@@ -24,6 +25,7 @@ public class DragAndDropManager : MonoBehaviour
     {
         dragCase = caseInventory;
         itemDrag = item;
+        defaultRotation = itemDrag.isRotate;
         dragGrille = grille;
     }
     public void DeclareDropPoint(GrilleInventaire grille, CaseInventory caseInventore)
@@ -52,11 +54,13 @@ public class DragAndDropManager : MonoBehaviour
     {
         if (itemDrag == null | dragGrille == null | dropGrille == null | dropCase == null)
         {
+            itemDrag.isRotate = defaultRotation;
             itemDrag = null;
             dragGrille = null;
             dropGrille = null;
             dropCase = null;
             dragCase = null;
+
             return;
         }
 
@@ -67,6 +71,8 @@ public class DragAndDropManager : MonoBehaviour
 
             if (dragGrille.positionItem[drag.x, drag.y] == dragGrille.positionItem[drop.x, drop.y])
             {
+                itemDrag.isRotate = defaultRotation;
+
                 itemDrag = null;
                 dragGrille = null;
                 dropGrille = null;
@@ -90,6 +96,10 @@ public class DragAndDropManager : MonoBehaviour
                 dragGrille.DeleteItem(itemDrag);
                 dropCase.grilleInventaire.RefreshCaseInventoryDisplay();
                 dragGrille.RefreshCaseInventoryDisplay();
+            }
+            else
+            {
+                itemDrag.isRotate = defaultRotation;
             }
         } //la case drop a qq chose
         else if (dropCase.grilleInventaire.itemIndex[dropCase.grilleInventaire.positionItem[dropCase.index.x, dropCase.index.y]].data == item1.data)
@@ -131,10 +141,14 @@ public class DragAndDropManager : MonoBehaviour
         else
         {
             RequestDragAndDropCraft(craftCase);
+            itemDrag = null;
+            dragCase = null;
+            dragGrille = null;
         }
     }
     public void RequestDragAndDropCraft(CraftCase craft)
     {
+        Debug.Log(itemDrag.data.itemName);
         itemDrag = craftPersonelle.AddItem(craft, itemDrag);
         if(itemDrag.number == 0)
         {

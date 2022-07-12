@@ -1,17 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
 public class CraftManager : MonoBehaviour
 {
     //script pour le craft personel
+    public TextMeshProUGUI itemCraftName;
     private int taille;
     private Item[] items;
     private ItemCraft itemCraft;
     public List<CraftCase> craftCases = new List<CraftCase>();
     public List<GrilleInventaire> grilleInventaires = new List<GrilleInventaire>();
 
+    public bool craftingStation = false;
+
     private void Start()
     {
+        itemCraftName.text = " ";
+        itemCraft = null;
         items = new Item[craftCases.Count];
         RefreshDisplayCraft();
     }
@@ -22,6 +29,15 @@ public class CraftManager : MonoBehaviour
     public void ChangeItemToCrat(ItemCraft craft)
     {
         itemCraft = craft;
+        if(itemCraft != null)
+        {
+            itemCraftName.text = itemCraft.nameOfItem;
+
+        }
+        else
+        {
+            itemCraftName.text = " ";
+        }
         for (int i = 0; i < items.GetLength(0); i++)
         {
             if (items[i] == null)
@@ -125,7 +141,7 @@ public class CraftManager : MonoBehaviour
     {
         int index = craftCases.IndexOf(craft);
         Item item1 = ScriptableObject.CreateInstance<Item>();
-        if (items[index] == null)
+        if (items[index] == null || items[index].number == 0)
         {
             return;
         }
@@ -133,32 +149,22 @@ public class CraftManager : MonoBehaviour
         item1.number = items[index].number;
         item1.isRotate = items[index].isRotate;
         item1.ID = Random.Range(0, 10000000);
-        if (items[index] == null)
-        {
-            return;
-        }
+        
         for (int i = 0; i < grilleInventaires.Count; i++)
         {
 
             item1 = grilleInventaires[i].RequestAddItem(item1);
-            if (item1 == null)
+            if (item1 == null || item1.number == 0)
             {
-                items[index].number = 0;
-                RefreshDisplayCraft();
-                return;
-            }
-            if (item1.number == 0) //pk sa plante ... ????
-            {
-                items[index].number = 0;
-                RefreshDisplayCraft();
 
+                items[index].number = 0;
+                RefreshDisplayCraft();
                 return;
             }
+            
         }
         items[index].number = 0;
-        items[index] = null;
         RefreshDisplayCraft();
-
         return;
 
     }
@@ -227,7 +233,7 @@ public class CraftManager : MonoBehaviour
             for (int i = 0; i < craftCases.Count; i++)
             {
                 craftCases[i].inscription.text = " ";
-                craftCases[i].progressionBar.GetComponent<RectTransform>().localScale = new Vector3(0, 1, 1);
+                craftCases[i].progressionBar.transform.localScale = new Vector3(0, 1, 1);
                 craftCases[i].image.color = Color.white;
 
             }
@@ -237,24 +243,22 @@ public class CraftManager : MonoBehaviour
         {
             if (items[i] != null && items[i].number != 0)
             {
-                Debug.Log("hhh");
                 craftCases[i].inscription.text = items[i].data.itemName.ToString() + "\n" + items[i].number.ToString()
                     + " / " + itemCraft.quantiter[i].ToString();
                 craftCases[i].image.color = items[i].data.itemColor;
-                craftCases[i].progressionBar.transform.localScale = new Vector3(items[i].number / itemCraft.quantiter[i], 1, 1);
-
+                craftCases[i].progressionBar.transform.localScale = new Vector3((float)items[i].number/ (float)itemCraft.quantiter[i], 1, 1);
             }
-            else if (itemCraft.ressources[i] != null || items[i].number == 0)
+            else if (itemCraft.ressources[i] != null)
             {
                 craftCases[i].image.color = Color.white;
                 craftCases[i].inscription.text = itemCraft.ressources[i].ToString();
-                craftCases[i].progressionBar.GetComponent<RectTransform>().localScale = new Vector3(0, 1, 1);
+                craftCases[i].progressionBar.transform.localScale = new Vector3(0, 1, 1);
 
             }
             else
             {
                 craftCases[i].inscription.text = " ";
-                craftCases[i].progressionBar.GetComponent<RectTransform>().localScale = new Vector3(0, 1, 1);
+                craftCases[i].progressionBar.transform.localScale = new Vector3(0, 1, 1);
 
             }
         }
