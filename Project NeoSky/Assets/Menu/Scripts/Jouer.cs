@@ -33,4 +33,6 @@ public class Jouer : MonoBehaviour
         menuJouer.SetActive(show);
         menuPrincipale.SetActive(!show);
     }
+
+    
 }

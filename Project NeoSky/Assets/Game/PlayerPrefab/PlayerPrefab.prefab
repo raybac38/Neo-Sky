@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 875343808148519967}
   - component: {fileID: 3764589103752137512}
   - component: {fileID: 5450628209705617724}
+  - component: {fileID: -3653345197635473346}
   m_Layer: 0
   m_Name: PlayerPrefab
   m_TagString: Untagged
@@ -248,6 +249,23 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &-3653345197635473346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 875343808148519937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  visible: 0
+  m_AssetId: 64cabc23bc71fe840bda75eab0f3a57a
+  hasSpawned: 0
 --- !u!1 &8899512967464440115
 GameObject:
   m_ObjectHideFlags: 0

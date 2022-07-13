@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class Animation : MonoBehaviour
+public class AnimationChargement : MonoBehaviour
 {
     public List<Transform> pierres = new List<Transform>();
     public GameObject logoCasser;
@@ -75,7 +76,6 @@ public class Animation : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         logoEntier.SetActive(true);
         logoCasser.SetActive(false);
-        StartCoroutine(LoadAnimation());
         yield return null;
     }
 
@@ -84,17 +84,28 @@ public class Animation : MonoBehaviour
     /// </summary>
     public Material loadMaterial;
 
-    IEnumerator LoadAnimation()
+
+    public void LoadBarProgress(float pourcentage)
     {
-        float pourcentage = 100;
-        while(pourcentage > 0)
+        pourcentage = 1 - pourcentage;
+        loadMaterial.SetFloat("Vector1_0711e0ba407146f985b924dce8e25d12", (pourcentage * 17.7f) - 10.3f);
+    }
+    
+    public void LoadScene()
+    {
+        StartCoroutine(LoadAsyncScene());
+    }
+    IEnumerator LoadAsyncScene()
+    {
+        AsyncOperation asyncOperation = SceneManager.LoadSceneAsync("Game", LoadSceneMode.Additive);
+        asyncOperation.allowSceneActivation = true;
+        while (!asyncOperation.isDone)
         {
             
-            pourcentage--;
-            loadMaterial.SetFloat("Vector1_0711e0ba407146f985b924dce8e25d12", (pourcentage / 100 * 17.7f) - 10.3f);
-            yield return new WaitForSeconds(0.04f);
+            LoadBarProgress(asyncOperation.progress);
+            yield return null;
         }
-        yield return null;
+        SceneManager.UnloadSceneAsync("Menu");
     }
 }
 
