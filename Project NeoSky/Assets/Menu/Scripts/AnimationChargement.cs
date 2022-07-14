@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class AnimationChargement : MonoBehaviour
 {
+    public Jouer jouer;
     public List<Transform> pierres = new List<Transform>();
     public GameObject logoCasser;
     public GameObject logoEntier;
@@ -13,7 +14,15 @@ public class AnimationChargement : MonoBehaviour
     public float cadance = 0.03f;
     public float speed = 1.5f;
 
+    bool cut = false;
     int nombreDebris = 0;
+    private void Update()
+    {
+        if(Input.anyKeyDown | Input.GetMouseButton(0) | Input.GetMouseButton(1))
+        {
+            cut = true;
+        }
+    }
     private void Awake()
     {
         logoEntier.SetActive(false);
@@ -46,10 +55,15 @@ public class AnimationChargement : MonoBehaviour
         {
             i--;
             StartCoroutine(Launch());
+            if (cut)
+            {
+                StartCoroutine(SwitchActive());
+                break;
+            }
             yield return new WaitForSeconds(cadance);
         }
     }
-
+    
     IEnumerator Launch()
     {
         Transform transform = animationAvenir[animationAvenir.Count - 1];
@@ -72,10 +86,14 @@ public class AnimationChargement : MonoBehaviour
     IEnumerator SwitchActive()
     {
         loadMaterial.SetFloat("Vector1_0711e0ba407146f985b924dce8e25d12", (17.7f) - 10.3f);
+        jouer.jouer.SetInteger("event", 2);
+        jouer.principale.SetInteger("event", 2);
+        jouer.titre.SetInteger("event", 2);
 
         yield return new WaitForSeconds(0.3f);
         logoEntier.SetActive(true);
         logoCasser.SetActive(false);
+
         yield return null;
     }
 

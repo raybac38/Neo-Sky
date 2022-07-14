@@ -6,16 +6,21 @@ using UnityEngine;
 
 public class Jouer : MonoBehaviour
 {
+    public Animator titre;
+    public Animator jouer;
+    public Animator principale;
+
     public bool show = false;
     public GameObject menuJouer;
     public GameObject menuPrincipale;
 
     private void Start()
     {
+
         //desactivation des deux bouton au debut pour rendre tout ca moins charger
         show = false;
-        menuJouer.SetActive(false);
         menuPrincipale.SetActive(true);
+        menuJouer.SetActive(true);
     }
     public void menuSwap()
     {
@@ -30,8 +35,17 @@ public class Jouer : MonoBehaviour
     private void MenuJouerShow()
     {
         show = !show;
-        menuJouer.SetActive(show);
-        menuPrincipale.SetActive(!show);
+
+        if (show)
+        {
+            jouer.SetInteger("event", 1);
+            principale.SetInteger("event", 1);
+        }
+        else
+        {
+            jouer.SetInteger("event", 0);
+            principale.SetInteger("event", 0);
+        }
     }
 
     
