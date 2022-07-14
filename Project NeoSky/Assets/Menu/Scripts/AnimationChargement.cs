@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Mirror;
 
 public class AnimationChargement : MonoBehaviour
 {
@@ -45,6 +46,8 @@ public class AnimationChargement : MonoBehaviour
 
     private void Start()
     {
+        lumiere.SetActive(true);
+
         StartCoroutine(LancementDesPierres());
     }
     IEnumerator LancementDesPierres()
@@ -106,10 +109,12 @@ public class AnimationChargement : MonoBehaviour
     public void LoadBarProgress(float pourcentage)
     {
         pourcentage = 1 - pourcentage;
-        loadMaterial.SetFloat("Vector1_0711e0ba407146f985b924dce8e25d12", (pourcentage * 17.7f) - 10.3f);
+        loadMaterial.SetFloat("Vector1_0711e0ba407146f985b924dce8e25d12", (pourcentage * 0.5f * 17.7f) - 10.3f);
     }
-    
-    public void LoadScene()
+
+    public GameObject lumiere;
+    public NetworkManager networkManager;
+    public void LoadSceneAsHost()
     {
         StartCoroutine(LoadAsyncScene());
     }
@@ -123,7 +128,16 @@ public class AnimationChargement : MonoBehaviour
             LoadBarProgress(asyncOperation.progress);
             yield return null;
         }
-        SceneManager.UnloadSceneAsync("Menu");
+
+        //faire spawn le joueur
+        lumiere.SetActive(false);
+        networkManager.StartHost();
+
+        //charger le terrain autours de lui
+
+        //dire adieux a se monde cruel xD
+        //SceneManager.UnloadSceneAsync("Menu");
+        
     }
 }
 

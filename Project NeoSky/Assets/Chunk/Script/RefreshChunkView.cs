@@ -105,7 +105,7 @@ public class RefreshChunkView : MonoBehaviour
         }
 
     }
-
+   
     private void Update()
     {
         actualChunk = CalculeMyChunk();
