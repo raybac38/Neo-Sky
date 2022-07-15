@@ -113,7 +113,6 @@ public class AnimationChargement : MonoBehaviour
     }
 
     public GameObject lumiere;
-    public NetworkManager networkManager;
     public void LoadSceneAsHost()
     {
         StartCoroutine(LoadAsyncScene());
@@ -131,13 +130,9 @@ public class AnimationChargement : MonoBehaviour
 
         //faire spawn le joueur
         lumiere.SetActive(false);
-        networkManager.StartHost();
 
-        //charger le terrain autours de lui
 
-        //dire adieux a se monde cruel xD
-        //SceneManager.UnloadSceneAsync("Menu");
-        
+        //bcp du script a ete demenager sur le script NET 
     }
 }
 
