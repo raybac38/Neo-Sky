@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     public Transform orientation;
     
     public float groundDrag;
+    public float flyDrag;
 
     public float jumpForce;
     public float jumpCooldown;
@@ -49,12 +50,13 @@ public class PlayerMovement : MonoBehaviour
         if (grounded)
             rb.drag = groundDrag;
         else
-            rb.drag = 0;
+            rb.drag = flyDrag;
     }
 
     private void FixedUpdate()
     {
         MovePlayer();
+
     }
     private void MyInput()
     {
@@ -75,6 +77,10 @@ public class PlayerMovement : MonoBehaviour
     {
         moveDirection = orientation.forward * verticalinput + orientation.right * horizontalInput;
 
+        if(Physics.Raycast(transform.position, moveDirection, 1.1f))
+        {
+            moveDirection = Vector3.zero;
+        }
         if(grounded)
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
         
@@ -103,4 +109,6 @@ public class PlayerMovement : MonoBehaviour
     {
         readyToJump = true;
     }
+
+    
 }

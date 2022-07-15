@@ -109,7 +109,7 @@ public class AnimationChargement : MonoBehaviour
     public void LoadBarProgress(float pourcentage)
     {
         pourcentage = 1 - pourcentage;
-        loadMaterial.SetFloat("Vector1_0711e0ba407146f985b924dce8e25d12", (pourcentage * 0.5f * 17.7f) - 10.3f);
+        loadMaterial.SetFloat("Vector1_0711e0ba407146f985b924dce8e25d12", -992f + (- 19.1f * pourcentage));
     }
 
     public GameObject lumiere;
@@ -129,9 +129,8 @@ public class AnimationChargement : MonoBehaviour
         }
 
         //faire spawn le joueur
-        lumiere.SetActive(false);
 
-
+        
         //bcp du script a ete demenager sur le script NET 
     }
 }

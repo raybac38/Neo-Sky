@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class RefreshChunkView : MonoBehaviour
 {
+    public bool load = false;
     public GameObject chunk;
     public GameObject chunkGameObjetStorage;
     [Flags] public enum loadProsesse { NormalLoad, HightSpeedLoad };
@@ -20,6 +21,7 @@ public class RefreshChunkView : MonoBehaviour
     private int offSetChunk = 5;
     private void Start()
     {
+        transform.position = Vector3.zero;
         actualLoadProsesse = loadProsesse.NormalLoad;
         actualChunk = CalculeMyChunk();
         ///FirtsChunkLoad();
@@ -108,22 +110,25 @@ public class RefreshChunkView : MonoBehaviour
    
     private void Update()
     {
-        actualChunk = CalculeMyChunk();
-        RefreshChunkListe();
-        //prendre le premier chunk, et le charger
-        for (int i = 0; i < rapiditerChargement; i++)
+        transform.position = Vector3.zero;
+        if (load)
         {
-            if (chunkToLoad.Count != 0)
+            actualChunk = CalculeMyChunk();
+            RefreshChunkListe();
+            //prendre le premier chunk, et le charger
+            for (int i = 0; i < rapiditerChargement; i++)
             {
-                GameObject obj = Instantiate(chunk);
-                obj.transform.SetParent(chunkGameObjetStorage.transform);
-                obj.transform.position = new Vector3(chunkToLoad[0].x * 16, 1, chunkToLoad[0].y * 16);
-                chunkLoad.Add(obj.GetComponent<ChunkShow>());
-                chunkLoad[chunkLoad.Count - 1].Refresh();
-                chunkToLoad.RemoveAt(0);
+                if (chunkToLoad.Count != 0)
+                {
+                    GameObject obj = Instantiate(chunk);
+                    obj.transform.SetParent(chunkGameObjetStorage.transform);
+                    obj.transform.position = new Vector3(chunkToLoad[0].x * 16, 1, chunkToLoad[0].y * 16);
+                    chunkLoad.Add(obj.GetComponent<ChunkShow>());
+                    chunkLoad[chunkLoad.Count - 1].Refresh();
+                    chunkToLoad.RemoveAt(0);
+                }
             }
         }
-
     }
 
     private Vector2Int CalculeMyChunk()
