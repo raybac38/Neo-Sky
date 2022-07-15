@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3705,7 +3705,6 @@ PrefabInstance:
     - target: {fileID: 3020262592346270404, guid: 6c5780a5228865b4496848c6cfe4776e, type: 3}
       propertyPath: basicCam
       value: 
-<<<<<<< Updated upstream
       objectReference: {fileID: 10119907}
     - target: {fileID: 3020262592346270404, guid: 6c5780a5228865b4496848c6cfe4776e, type: 3}
       propertyPath: combatCam
@@ -3737,14 +3736,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2277842685740395904, guid: 6c8078a783824bf43acaa3025bd31b27, type: 3}
-=======
-      objectReference: {fileID: 1577044428}
-    - target: {fileID: 2160281115219201606, guid: 68feaa66a84eda047ab344cde1a8a8dd, type: 3}
-      propertyPath: m_XAxis.m_InvertInput
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2160281115219201607, guid: 68feaa66a84eda047ab344cde1a8a8dd, type: 3}
->>>>>>> Stashed changes
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
