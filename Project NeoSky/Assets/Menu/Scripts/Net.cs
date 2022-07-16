@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Mirror;
-using UnityEngine.Networking;
 
-public class Net : NetworkBehaviour
+public class Net : MonoBehaviour
 {
     // Start is called before the first frame update
     public GameObject game;

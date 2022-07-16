@@ -130,6 +130,7 @@ public class AnimationChargement : MonoBehaviour
 
         //faire spawn le joueur
 
+        SceneManager.UnloadSceneAsync("Menu");
         
         //bcp du script a ete demenager sur le script NET 
     }

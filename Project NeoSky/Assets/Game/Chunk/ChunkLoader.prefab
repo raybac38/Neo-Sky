@@ -40,6 +40,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8147563773149960431}
   - component: {fileID: 661927386278960131}
+  - component: {fileID: 724151531256663495}
   m_Layer: 0
   m_Name: ChunkLoader
   m_TagString: Untagged
@@ -74,11 +75,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 799a3073828ad18409869de7f02f40e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  load: 0
   chunk: {fileID: 831427221022525803, guid: d042ab37a52d6b5478e845e417ab8be3, type: 3}
   chunkGameObjetStorage: {fileID: 663667845097314301}
   actualLoadProsesse: 0
+  chunkStorage: {fileID: 663667845097314301}
   rapiditerChargement: 3
   chunkToLoad: []
   chunkLoad: []
   actualChunk: {x: 0, y: 0}
   renderDistance: 20
+--- !u!114 &724151531256663495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3849899223948263137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cf99ae5271adda47bfc155f3f587782, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  towerSpawnPrefab: {fileID: 0}
+  regionScale: 5
+  frequence: 0
+  tower: {fileID: 0}

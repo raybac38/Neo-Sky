@@ -10,7 +10,7 @@ public class RefreshChunkView : MonoBehaviour
     [Flags] public enum loadProsesse { NormalLoad, HightSpeedLoad };
     ///List<Transform> chunkLoad = new List<Transform>();
     public loadProsesse actualLoadProsesse;
-
+    public GameObject chunkStorage;
     public int rapiditerChargement = 0;
     ///
     public List<Vector2Int> chunkToLoad = new List<Vector2Int>();
@@ -110,7 +110,7 @@ public class RefreshChunkView : MonoBehaviour
    
     private void Update()
     {
-        transform.position = Vector3.zero;
+        chunkStorage.transform.position = Vector3.zero;
         if (load)
         {
             actualChunk = CalculeMyChunk();
