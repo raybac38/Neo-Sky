@@ -762,10 +762,6 @@ PrefabInstance:
       propertyPath: chargement
       value: 
       objectReference: {fileID: 591876027}
-    - target: {fileID: 0}
-      propertyPath: sceneId
-      value: 277391937
-      objectReference: {fileID: 0}
     - target: {fileID: 5729854944855286103, guid: 321816ee11682e94c8caf5f20fdc44c0, type: 3}
       propertyPath: m_RootOrder
       value: 4

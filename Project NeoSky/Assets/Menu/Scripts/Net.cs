@@ -54,7 +54,6 @@ public class Net : MonoBehaviour
         int nbrequie = 40;
         while(refreshChunk.chunkLoad.Count < nbrequie)
         {
-            Debug.Log(refreshChunk.chunkLoad.Count);
             chargement.LoadBarProgress(0.6f + (refreshChunk.chunkLoad.Count / 100));
             yield return null;
         }

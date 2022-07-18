@@ -8,15 +8,13 @@ public class SpawnPlayer : MonoBehaviour
     private RefreshChunkView refreshChunk;
     private SpawnTower spawn;
     private GameObject player;
-    private void Awake()
+
+    private void Start()
     {
         refreshChunk = GetComponentInChildren<RefreshChunkView>();
         refreshChunk.load = false;
         spawn = GetComponentInChildren<SpawnTower>();
         player = GetComponentInChildren<PlayerMovement>().gameObject;
-    }
-    private void Start()
-    {
         StartCoroutine(SpawnZone());
     }
     IEnumerator SpawnZone()

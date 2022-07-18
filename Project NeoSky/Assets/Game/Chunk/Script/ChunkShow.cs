@@ -29,12 +29,10 @@ public class ChunkShow : MonoBehaviour
     public float lowerStrenght = 20;
     MeshCollider collider;
 
+
     private void Awake()
     {
         mesh = GetComponent<MeshFilter>().mesh;
-    }
-    private void Start()
-    {
 
     }
     public void Refresh()
@@ -432,9 +430,16 @@ public class ChunkShow : MonoBehaviour
             triangleTempo[i] = triangles[i];
         }
 
-
         mesh.vertices = positionTempo;
         mesh.triangles = triangleTempo;
+
+        Vector2[] uvs = new Vector2[positionTempo.Length];
+        for (int i = 0; i < uvs.Length; i++)
+        {
+            uvs[i] = new Vector2(positionTempo[i].x, positionTempo[i].z);
+        }
+        mesh.uv = uvs;
+
     }
 
     public int VonNeumanNumber(float value)
