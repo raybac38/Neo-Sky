@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-9133968251232484632
+--- !u!114 &-2646767447164907884
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,22 +20,19 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: LoadColor
-  m_Shader: {fileID: -6465566751694194690, guid: 4c38291a8bca4854bbab50e2e411070f, type: 3}
+  m_Name: Logo
+  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
   m_ShaderKeywords: 
-  m_LightmapFlags: 2
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
+  m_CustomRenderQueue: 2000
+  stringTagMap:
+    RenderType: Opaque
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - Texture3D_020426abd7964498882ea7389b78a973:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -93,11 +90,6 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_0711e0ba407146f985b924dce8e25d12: 7.4000006
-    - Vector1_5b875757f2f441eead9ef37464ba31a0: 2.27
-    - Vector1_72e8c49c9e8140c3933aafc5b709f1ee: -10.37
-    - Vector1_be273258236d4046acbbb18e6fe32ba6: -3
-    - Vector1_d8530ff987cc450f893516c4a2c7df03: 0.94
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
@@ -125,8 +117,6 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - Color_bd79fea572ec424592488052f3c089f1: {r: 0.2216981, g: 0.8843665, b: 1, a: 1}
-    - Color_cc1d83c7497145b5aba3c51479ea07b6: {r: 0, g: 0, b: 0, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}

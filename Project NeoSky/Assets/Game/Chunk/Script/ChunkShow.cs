@@ -439,6 +439,7 @@ public class ChunkShow : MonoBehaviour
             uvs[i] = new Vector2(positionTempo[i].x, positionTempo[i].z);
         }
         mesh.uv = uvs;
+        mesh.RecalculateNormals();
 
     }
 
